@@ -6,6 +6,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 
 public final class FrogInteractionHandler {
     private FrogInteractionHandler() {}
@@ -34,6 +36,14 @@ public final class FrogInteractionHandler {
             }
 
             Identifier requested = FrogFormRegistry.fromItem(stack.getItem());
+            if (requested != null && requested.equals(FrogFormRegistry.WATER)
+                    && !stack.is(Items.POTION)) {
+                requested = null;
+            }
+            if (requested != null && requested.equals(FrogFormRegistry.WATER)
+                    && !stack.getOrDefault(net.minecraft.core.component.DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER)) {
+                requested = null;
+            }
             if (requested == null || requested.equals(current)) {
                 return InteractionResult.PASS;
             }
@@ -41,7 +51,11 @@ public final class FrogInteractionHandler {
             if (!level.isClientSide()) {
                 access.prettyfrogs$setForm(requested);
                 if (!player.getAbilities().instabuild) {
-                    stack.shrink(1);
+                    if (requested.equals(FrogFormRegistry.WATER)) {
+                        player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                    } else {
+                        stack.shrink(1);
+                    }
                 }
             }
 
