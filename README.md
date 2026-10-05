@@ -37,7 +37,7 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 - **Muddy Frog:** movement leaves cosmetic ground-level mud-like particles.
 - **Water Frog:** water particles plus a translucent animated outer shell.
 - **Magma Frog:** harmless flame/smoke particles and a full-bright emissive layer.
-- **Ice Frog:** snowflake particles.
+- **Ice Frog:** snowflake particles plus a translucent icy shell.
 - **Skeleton Frog:** dedicated animated skeletal geometry using the vanilla frog animation hierarchy.
 - **Rainbow Frog:** RGB form with a full-bright emissive layer.
 
@@ -45,4 +45,4 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 
 Core form persistence, synchronization, interactions, particles, custom render-state plumbing, Water shell rendering, Magma/Rainbow emissive rendering, and Skeleton model geometry are implemented and compile against Minecraft 26.2.
 
-Visual texture/mask assets and further polish are still in progress.
+A complete functional 48x48 technical texture/mask set is included for every implemented form and render layer. Detailed final pixel-art replacements remain visual polish only; no code changes are required to swap them in.
