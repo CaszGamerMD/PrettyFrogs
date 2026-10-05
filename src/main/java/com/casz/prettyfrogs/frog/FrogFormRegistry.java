@@ -69,6 +69,10 @@ public final class FrogFormRegistry {
         return FORMS.getOrDefault(id, FORMS.get(NORMAL));
     }
 
+    public static boolean isKnown(Identifier id) {
+        return FORMS.containsKey(id);
+    }
+
     public static boolean isRgbEndRod(Item item) {
         return BuiltInRegistries.ITEM.getKey(item).equals(RGB_END_ROD);
     }
