@@ -1,10 +1,11 @@
 package com.casz.prettyfrogs.client;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 
 public final class PrettyFrogsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        // Wire the exact Minecraft 26.2 frog render-state hook here.
+        ModelLayerRegistry.registerModelLayer(SkeletonFrogModel.LAYER_LOCATION, SkeletonFrogModel::createBodyLayer);
     }
 }
