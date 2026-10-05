@@ -27,6 +27,7 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 - Milk removes a transformation and reveals the original vanilla frog.
 - Transformation state is synchronized and saved with the frog.
 - Survival transformations consume the triggering item; creative mode does not.
+- Transformations play a short confirmation chime and briefly stop the frog's current navigation so the visual change reads cleanly.
 - Water Bottle leaves a Glass Bottle and Milk Bucket leaves a Bucket in survival.
 - Water buckets are deliberately not used as transformation triggers, preserving compatibility with frog-bucketing mods.
 - Caszual Additions is optional; Rainbow Frog integration detects its RGB End Rod by registry ID.
