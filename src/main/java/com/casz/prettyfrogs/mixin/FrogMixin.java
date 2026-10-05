@@ -3,6 +3,8 @@ package com.casz.prettyfrogs.mixin;
 import com.casz.prettyfrogs.frog.FrogFormRegistry;
 import com.casz.prettyfrogs.frog.PrettyFrogAccess;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -56,7 +58,7 @@ public abstract class FrogMixin implements PrettyFrogAccess {
                 && frog.getDeltaMovement().horizontalDistanceSqr() > 0.001
                 && frog.onGround()
                 && random.nextInt(2) == 0) {
-            frog.level().addParticle(ParticleTypes.ITEM_SLIME, x, frog.getY() + 0.02, z, 0.0, 0.0, 0.0);
+            frog.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.MUD.defaultBlockState()), x, frog.getY() + 0.02, z, 0.0, 0.015, 0.0);
         }
     }
 
