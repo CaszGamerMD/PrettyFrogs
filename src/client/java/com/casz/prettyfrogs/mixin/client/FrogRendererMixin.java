@@ -9,18 +9,23 @@ import net.minecraft.client.renderer.entity.state.FrogRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.animal.frog.Frog;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import net.minecraft.client.model.animal.frog.FrogModel;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 @Mixin(FrogRenderer.class)
 public abstract class FrogRendererMixin {
+    @Shadow
+    protected abstract boolean addLayer(RenderLayer<FrogRenderState, FrogModel> layer);
+
     @Inject(method = "<init>", at = @At("TAIL"))
     private void prettyfrogs$addLayers(EntityRendererProvider.Context context, CallbackInfo ci) {
         FrogRenderer renderer = (FrogRenderer)(Object)this;
-        renderer.addLayer(new PrettyFrogGlowLayer(renderer));
+        this.addLayer(new PrettyFrogGlowLayer(renderer));
     }
 
     @Inject(method = "extractRenderState", at = @At("TAIL"))
