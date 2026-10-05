@@ -2,6 +2,7 @@ package com.casz.prettyfrogs.mixin.client;
 
 import com.casz.prettyfrogs.client.FrogTextureResolver;
 import com.casz.prettyfrogs.client.PrettyFrogRenderStateAccess;
+import com.casz.prettyfrogs.client.PrettyFrogGlowLayer;
 import com.casz.prettyfrogs.frog.PrettyFrogAccess;
 import net.minecraft.client.renderer.entity.FrogRenderer;
 import net.minecraft.client.renderer.entity.state.FrogRenderState;
@@ -11,9 +12,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
 @Mixin(FrogRenderer.class)
 public abstract class FrogRendererMixin {
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void prettyfrogs$addLayers(EntityRendererProvider.Context context, CallbackInfo ci) {
+        FrogRenderer renderer = (FrogRenderer)(Object)this;
+        renderer.addLayer(new PrettyFrogGlowLayer(renderer));
+    }
+
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void prettyfrogs$applyFormTexture(Frog frog, FrogRenderState state, float partialTicks, CallbackInfo ci) {
         if (!(frog instanceof PrettyFrogAccess access)) {
