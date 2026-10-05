@@ -12,6 +12,8 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 
 public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, FrogModel> {
     private static final Identifier MAGMA_GLOW = PrettyFrogs.id("textures/entity/frog/magma_glow.png");
@@ -26,17 +28,20 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
                        FrogRenderState state, float yRot, float xRot) {
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
         RenderType renderType = null;
+        int color = -1;
 
         if (access.prettyfrogs$isForm(FrogFormRegistry.MAGMA)) {
             renderType = RenderTypes.eyes(MAGMA_GLOW);
         } else if (access.prettyfrogs$isForm(FrogFormRegistry.RAINBOW)) {
             renderType = RenderTypes.eyes(RAINBOW_GLOW);
+            float hue = (state.ageInTicks * 0.0125F) % 1.0F;
+            color = ARGB.opaque(Mth.hsvToRgb(hue, 0.85F, 1.0F));
         }
 
         if (renderType != null && !state.isInvisible) {
             collector.order(1).submitModel(
                     getParentModel(), state, poseStack, renderType,
-                    0xF000F0, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+                    0xF000F0, OverlayTexture.NO_OVERLAY, color, null, state.outlineColor, null);
         }
     }
 }
