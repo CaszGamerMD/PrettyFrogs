@@ -2,6 +2,7 @@ package com.casz.prettyfrogs.mixin;
 
 import com.casz.prettyfrogs.frog.FrogFormRegistry;
 import com.casz.prettyfrogs.frog.PrettyFrogAccess;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -27,6 +28,36 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
     private void prettyfrogs$defineFormData(SynchedEntityData.Builder builder, CallbackInfo ci) {
         builder.define(PRETTYFROGS_FORM, FrogFormRegistry.NORMAL.toString());
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void prettyfrogs$elementalParticles(CallbackInfo ci) {
+        Frog frog = (Frog)(Object)this;
+        if (!frog.level().isClientSide()) {
+            return;
+        }
+
+        Identifier form = prettyfrogs$getForm();
+        var random = frog.getRandom();
+        double x = frog.getX() + (random.nextDouble() - 0.5) * frog.getBbWidth();
+        double y = frog.getY() + random.nextDouble() * frog.getBbHeight();
+        double z = frog.getZ() + (random.nextDouble() - 0.5) * frog.getBbWidth();
+
+        if (form.equals(FrogFormRegistry.MAGMA) && random.nextInt(3) == 0) {
+            frog.level().addParticle(ParticleTypes.SMALL_FLAME, x, y, z, 0.0, 0.01, 0.0);
+            if (random.nextInt(4) == 0) {
+                frog.level().addParticle(ParticleTypes.SMOKE, x, y, z, 0.0, 0.01, 0.0);
+            }
+        } else if (form.equals(FrogFormRegistry.WATER) && random.nextInt(6) == 0) {
+            frog.level().addParticle(ParticleTypes.DRIPPING_WATER, x, frog.getY() + 0.1, z, 0.0, 0.0, 0.0);
+        } else if (form.equals(FrogFormRegistry.ICE) && random.nextInt(5) == 0) {
+            frog.level().addParticle(ParticleTypes.SNOWFLAKE, x, y, z, 0.0, 0.005, 0.0);
+        } else if (form.equals(FrogFormRegistry.MUDDY)
+                && frog.getDeltaMovement().horizontalDistanceSqr() > 0.001
+                && frog.onGround()
+                && random.nextInt(2) == 0) {
+            frog.level().addParticle(ParticleTypes.ITEM_SLIME, x, frog.getY() + 0.02, z, 0.0, 0.0, 0.0);
+        }
     }
 
     @Override
