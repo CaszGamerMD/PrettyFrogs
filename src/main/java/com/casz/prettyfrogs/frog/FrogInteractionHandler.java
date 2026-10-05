@@ -8,6 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 public final class FrogInteractionHandler {
     private FrogInteractionHandler() {}
@@ -28,6 +30,7 @@ public final class FrogInteractionHandler {
 
                 if (!level.isClientSide()) {
                     access.prettyfrogs$setForm(FrogFormRegistry.NORMAL);
+                    level.playSound(null, frog.blockPosition(), SoundEvents.BUCKET_EMPTY, SoundSource.NEUTRAL, 0.7F, 1.15F);
                     if (!player.getAbilities().instabuild) {
                         player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                     }
@@ -58,6 +61,7 @@ public final class FrogInteractionHandler {
 
             if (!level.isClientSide()) {
                 access.prettyfrogs$setForm(requested);
+                level.playSound(null, frog.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 0.65F, 1.0F + frog.getRandom().nextFloat() * 0.2F);
                 if (!player.getAbilities().instabuild) {
                     if (requested.equals(FrogFormRegistry.WATER)) {
                         player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
