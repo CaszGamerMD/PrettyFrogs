@@ -27,6 +27,7 @@ public final class FrogFormRegistry {
     public static final Identifier DART_GREEN = PrettyFrogs.id("dart_green");
     public static final Identifier DART_ORANGE = PrettyFrogs.id("dart_orange");
     public static final Identifier RAINBOW = PrettyFrogs.id("rainbow");
+    public static final Identifier CHERRY_BLOSSOM = PrettyFrogs.id("cherry_blossom");
     public static final Identifier RGB_END_ROD = Identifier.fromNamespaceAndPath("colorful_rods", "rgb_end_rod");
 
     private FrogFormRegistry() {}
@@ -47,6 +48,7 @@ public final class FrogFormRegistry {
         register(DART_GREEN, "dart_green");
         register(DART_ORANGE, "dart_orange");
         register(RAINBOW, "rainbow");
+        register(CHERRY_BLOSSOM, "cherry_blossom");
 
         TRANSFORM_ITEMS.put(Items.MELON_SLICE, WATERMELON);
         TRANSFORM_ITEMS.put(Items.CARVED_PUMPKIN, PUMPKIN);
@@ -56,6 +58,7 @@ public final class FrogFormRegistry {
         TRANSFORM_ITEMS.put(Items.POTION, WATER);
         TRANSFORM_ITEMS.put(Items.MAGMA_CREAM, MAGMA);
         TRANSFORM_ITEMS.put(Items.ICE, ICE);
+        TRANSFORM_ITEMS.put(Items.PINK_PETALS, CHERRY_BLOSSOM);
     }
 
     private static void register(Identifier id, String textureName) {
