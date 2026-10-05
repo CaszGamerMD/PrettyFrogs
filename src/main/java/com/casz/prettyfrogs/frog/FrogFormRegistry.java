@@ -91,7 +91,7 @@ public final class FrogFormRegistry {
         TRANSFORM_ITEMS.put(Items.SOUL_SAND, GHOST);
         TRANSFORM_ITEMS.put(Items.GLOW_INK_SAC, GLOW);
         TRANSFORM_ITEMS.put(Items.CACTUS, CACTUS);
-        TRANSFORM_ITEMS.put(Blocks.LIGHTNING_ROD.unaffected().asItem(), STORM);
+        TRANSFORM_ITEMS.put(Blocks.LIGHTNING_ROD.asList().getFirst().asItem(), STORM);
         TRANSFORM_ITEMS.put(Items.SOUL_TORCH, SOULFIRE);
         TRANSFORM_ITEMS.put(Items.SCULK, SCULK);
         TRANSFORM_ITEMS.put(Items.CAKE, CAKE);
