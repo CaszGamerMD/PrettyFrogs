@@ -60,6 +60,9 @@ public abstract class FrogMixin implements PrettyFrogAccess {
             }
         } else if (form.equals(FrogFormRegistry.ICE) && random.nextInt(5) == 0) {
             frog.level().addParticle(ParticleTypes.SNOWFLAKE, x, y, z, 0.0, 0.005, 0.0);
+            if (frog.getDeltaMovement().horizontalDistanceSqr() > 0.001 && random.nextInt(3) == 0) {
+                frog.level().addParticle(ParticleTypes.WHITE_ASH, x, frog.getY() + 0.03, z, 0.0, 0.0, 0.0);
+            }
         } else if (form.equals(FrogFormRegistry.RAINBOW) && random.nextInt(7) == 0) {
             frog.level().addParticle(ParticleTypes.END_ROD, x, y, z, 0.0, 0.005, 0.0);
         } else if (form.equals(FrogFormRegistry.MUDDY)
