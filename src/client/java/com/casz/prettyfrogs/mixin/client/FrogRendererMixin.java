@@ -4,6 +4,7 @@ import com.casz.prettyfrogs.client.FrogTextureResolver;
 import com.casz.prettyfrogs.client.PrettyFrogRenderStateAccess;
 import com.casz.prettyfrogs.client.PrettyFrogGlowLayer;
 import com.casz.prettyfrogs.client.WaterFrogShellLayer;
+import com.casz.prettyfrogs.client.SkeletonFrogLayer;
 import com.casz.prettyfrogs.frog.PrettyFrogAccess;
 import net.minecraft.client.renderer.entity.FrogRenderer;
 import net.minecraft.client.renderer.entity.state.FrogRenderState;
@@ -28,6 +29,7 @@ public abstract class FrogRendererMixin {
         FrogRenderer renderer = (FrogRenderer)(Object)this;
         this.addLayer(new PrettyFrogGlowLayer(renderer));
         this.addLayer(new WaterFrogShellLayer(renderer));
+        this.addLayer(new SkeletonFrogLayer(renderer, context.getModelSet()));
     }
 
     @Inject(method = "extractRenderState", at = @At("TAIL"))
