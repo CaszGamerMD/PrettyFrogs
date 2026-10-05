@@ -16,6 +16,19 @@ Fabric 26.2 mod for cosmetic transformations of vanilla frogs.
 | Ice Block | Ice Frog |
 | Poisonous Potato | Random-color Dart Frog |
 | `colorful_rods:rgb_end_rod` | Rainbow Frog |
+| Pink Petals | Cherry Blossom Frog |
+| Honeycomb | Bumblefrog |
+| Red Mushroom | Mushroom Frog |
+| Moss Block | Moss Frog |
+| Chorus Fruit | Ender Frog |
+| Soul Sand | Ghost Frog |
+| Glow Ink Sac | Glow Frog |
+| Cactus | Cactus Frog |
+| Lightning Rod | Storm Frog |
+| Soul Torch | Soulfire Frog |
+| Sculk | Sculk Frog |
+| Cake | Cake Frog |
+| Slime Block | Slimy Frog |
 | Milk Bucket | Reset to normal |
 
 ## Behavior
@@ -40,6 +53,15 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 - **Ice Frog:** snowflake particles plus a translucent icy shell.
 - **Skeleton Frog:** dedicated animated skeletal geometry using the vanilla frog animation hierarchy.
 - **Rainbow Frog:** RGB form with a full-bright emissive layer.
+- **Cherry Blossom Frog:** drifting cherry-leaf petals, denser while airborne.
+- **Ender Frog:** subtle portal particles.
+- **Ghost Frog:** occasional soul wisps.
+- **Glow Frog:** soft glow particles.
+- **Soulfire Frog:** harmless cyan soul-fire particles.
+- **Sculk Frog:** occasional sculk particles near the ground.
+- **Bumblefrog:** light wax/pollen-like particles while airborne.
+- **Moss Frog:** sparse spore-blossom particles.
+- **Slimy Frog:** slime droplets, much more active while hopping.
 
 ## Development status
 
