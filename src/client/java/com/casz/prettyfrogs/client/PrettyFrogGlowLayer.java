@@ -18,6 +18,10 @@ import net.minecraft.util.Mth;
 public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, FrogModel> {
     private static final Identifier MAGMA_GLOW = PrettyFrogs.id("textures/entity/frog/magma_glow.png");
     private static final Identifier RAINBOW_GLOW = PrettyFrogs.id("textures/entity/frog/rainbow_glow.png");
+    private static final Identifier GLOW_GLOW = PrettyFrogs.id("textures/entity/frog/glow_glow.png");
+    private static final Identifier SOULFIRE_GLOW = PrettyFrogs.id("textures/entity/frog/soulfire_glow.png");
+    private static final Identifier STORM_GLOW = PrettyFrogs.id("textures/entity/frog/storm_glow.png");
+    private static final Identifier SCULK_GLOW = PrettyFrogs.id("textures/entity/frog/sculk_glow.png");
 
     public PrettyFrogGlowLayer(RenderLayerParent<FrogRenderState, FrogModel> renderer) {
         super(renderer);
@@ -32,6 +36,14 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
 
         if (access.prettyfrogs$isForm(FrogFormRegistry.MAGMA)) {
             renderType = RenderTypes.eyes(MAGMA_GLOW);
+        } else if (access.prettyfrogs$isForm(FrogFormRegistry.GLOW)) {
+            renderType = RenderTypes.eyes(GLOW_GLOW);
+        } else if (access.prettyfrogs$isForm(FrogFormRegistry.SOULFIRE)) {
+            renderType = RenderTypes.eyes(SOULFIRE_GLOW);
+        } else if (access.prettyfrogs$isForm(FrogFormRegistry.STORM)) {
+            renderType = RenderTypes.eyes(STORM_GLOW);
+        } else if (access.prettyfrogs$isForm(FrogFormRegistry.SCULK)) {
+            renderType = RenderTypes.eyes(SCULK_GLOW);
         } else if (access.prettyfrogs$isForm(FrogFormRegistry.RAINBOW)) {
             renderType = RenderTypes.eyes(RAINBOW_GLOW);
             float hue = (state.ageInTicks * 0.0125F) % 1.0F;
