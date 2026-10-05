@@ -35,6 +35,10 @@ public final class FrogInteractionHandler {
                 return InteractionResult.SUCCESS;
             }
 
+            if (stack.is(Items.POISONOUS_POTATO) && FrogFormRegistry.isDart(current)) {
+                return InteractionResult.PASS;
+            }
+
             Identifier requested = stack.is(Items.POISONOUS_POTATO)
                     ? FrogFormRegistry.randomDart(frog.getRandom())
                     : FrogFormRegistry.isRgbEndRod(stack.getItem())
