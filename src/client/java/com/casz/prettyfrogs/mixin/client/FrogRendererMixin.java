@@ -4,6 +4,7 @@ import com.casz.prettyfrogs.client.FrogTextureResolver;
 import com.casz.prettyfrogs.client.PrettyFrogRenderStateAccess;
 import com.casz.prettyfrogs.client.PrettyFrogGlowLayer;
 import com.casz.prettyfrogs.client.WaterFrogShellLayer;
+import com.casz.prettyfrogs.client.IceFrogShellLayer;
 import com.casz.prettyfrogs.client.SkeletonFrogLayer;
 import com.casz.prettyfrogs.frog.PrettyFrogAccess;
 import net.minecraft.client.renderer.entity.FrogRenderer;
@@ -29,6 +30,7 @@ public abstract class FrogRendererMixin {
         FrogRenderer renderer = (FrogRenderer)(Object)this;
         this.addLayer(new PrettyFrogGlowLayer(renderer));
         this.addLayer(new WaterFrogShellLayer(renderer));
+        this.addLayer(new IceFrogShellLayer(renderer));
         this.addLayer(new SkeletonFrogLayer(renderer, context.getModelSet()));
     }
 
