@@ -46,6 +46,9 @@ public final class FrogFormRegistry {
     private FrogFormRegistry() {}
 
     public static void bootstrap() {
+        FORMS.clear();
+        TRANSFORM_ITEMS.clear();
+
         register(NORMAL, null);
         register(WATERMELON, "watermelon");
         register(PUMPKIN, "pumpkin");
