@@ -62,6 +62,7 @@ public final class FrogInteractionHandler {
             if (!level.isClientSide()) {
                 access.prettyfrogs$setForm(requested);
                 level.playSound(null, frog.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 0.65F, 1.0F + frog.getRandom().nextFloat() * 0.2F);
+                frog.getNavigation().stop();
                 if (!player.getAbilities().instabuild) {
                     if (requested.equals(FrogFormRegistry.WATER)) {
                         player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
