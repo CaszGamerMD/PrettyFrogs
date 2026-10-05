@@ -35,7 +35,7 @@ public final class FrogInteractionHandler {
                 if (!level.isClientSide()) {
                     access.prettyfrogs$setForm(FrogFormRegistry.NORMAL);
                     level.playSound(null, frog.blockPosition(), SoundEvents.BUCKET_EMPTY, SoundSource.NEUTRAL, 0.7F, 1.15F);
-                    level.broadcastEntityEvent(frog, (byte) 20);
+                    level.broadcastEntityEvent(frog, (byte) 60);
                     if (!player.getAbilities().instabuild) {
                         player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                     }
