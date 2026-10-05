@@ -95,6 +95,8 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     private void prettyfrogs$loadForm(ValueInput input, CallbackInfo ci) {
         input.getString(PRETTYFROGS_SAVE_KEY)
                 .map(Identifier::tryParse)
+                .filter(java.util.Objects::nonNull)
+                .filter(FrogFormRegistry::isKnown)
                 .ifPresent(this::prettyfrogs$setForm);
     }
 }
