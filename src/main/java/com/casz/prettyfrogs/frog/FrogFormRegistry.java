@@ -4,6 +4,7 @@ import com.casz.prettyfrogs.PrettyFrogs;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import net.minecraft.resources.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
@@ -25,6 +26,8 @@ public final class FrogFormRegistry {
     public static final Identifier DART_YELLOW = PrettyFrogs.id("dart_yellow");
     public static final Identifier DART_GREEN = PrettyFrogs.id("dart_green");
     public static final Identifier DART_ORANGE = PrettyFrogs.id("dart_orange");
+    public static final Identifier RAINBOW = PrettyFrogs.id("rainbow");
+    public static final Identifier RGB_END_ROD = Identifier.fromNamespaceAndPath("colorful_rods", "rgb_end_rod");
 
     private FrogFormRegistry() {}
 
@@ -43,6 +46,7 @@ public final class FrogFormRegistry {
         register(DART_YELLOW, "dart_yellow");
         register(DART_GREEN, "dart_green");
         register(DART_ORANGE, "dart_orange");
+        register(RAINBOW, "rainbow");
 
         TRANSFORM_ITEMS.put(Items.MELON_SLICE, WATERMELON);
         TRANSFORM_ITEMS.put(Items.CARVED_PUMPKIN, PUMPKIN);
@@ -63,6 +67,10 @@ public final class FrogFormRegistry {
 
     public static FrogForm get(Identifier id) {
         return FORMS.getOrDefault(id, FORMS.get(NORMAL));
+    }
+
+    public static boolean isRgbEndRod(Item item) {
+        return BuiltInRegistries.ITEM.getKey(item).equals(RGB_END_ROD);
     }
 
     public static Identifier fromItem(Item item) {
