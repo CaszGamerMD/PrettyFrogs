@@ -77,6 +77,11 @@ public final class FrogFormRegistry {
         return TRANSFORM_ITEMS.get(item);
     }
 
+    public static boolean isDart(Identifier form) {
+        return form.equals(DART_RED) || form.equals(DART_BLUE) || form.equals(DART_YELLOW)
+                || form.equals(DART_GREEN) || form.equals(DART_ORANGE);
+    }
+
     public static Identifier randomDart(net.minecraft.util.RandomSource random) {
         Identifier[] colors = {DART_RED, DART_BLUE, DART_YELLOW, DART_GREEN, DART_ORANGE};
         return colors[random.nextInt(colors.length)];
