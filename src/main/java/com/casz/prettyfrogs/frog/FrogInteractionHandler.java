@@ -23,6 +23,10 @@ public final class FrogInteractionHandler {
             ItemStack stack = player.getItemInHand(hand);
             Identifier current = access.prettyfrogs$getForm();
 
+            if (frog.isBaby()) {
+                return InteractionResult.PASS;
+            }
+
             if (FrogFormRegistry.isResetItem(stack.getItem())) {
                 if (current.equals(FrogFormRegistry.NORMAL)) {
                     return InteractionResult.PASS;
