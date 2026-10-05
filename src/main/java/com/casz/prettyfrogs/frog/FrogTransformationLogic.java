@@ -17,4 +17,11 @@ public final class FrogTransformationLogic {
     public static Identifier resetForm() {
         return FrogFormRegistry.NORMAL;
     }
+
+    public static boolean isAlreadyTransformed(Identifier current, Identifier requested) {
+        if (current.equals(requested)) {
+            return true;
+        }
+        return FrogFormRegistry.isDart(current) && FrogFormRegistry.isDart(requested);
+    }
 }
