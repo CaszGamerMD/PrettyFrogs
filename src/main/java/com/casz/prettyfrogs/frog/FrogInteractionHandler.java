@@ -43,10 +43,6 @@ public final class FrogInteractionHandler {
                 return InteractionResult.SUCCESS;
             }
 
-            if (stack.is(Items.POISONOUS_POTATO) && FrogFormRegistry.isDart(current)) {
-                return InteractionResult.PASS;
-            }
-
             Identifier requested = stack.is(Items.POISONOUS_POTATO)
                     ? FrogFormRegistry.randomDart(frog.getRandom())
                     : FrogFormRegistry.isRgbEndRod(stack.getItem())
@@ -60,7 +56,7 @@ public final class FrogInteractionHandler {
                     && !stack.getOrDefault(net.minecraft.core.component.DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER)) {
                 requested = null;
             }
-            if (requested == null || requested.equals(current)) {
+            if (requested == null || FrogTransformationLogic.isAlreadyTransformed(current, requested)) {
                 return InteractionResult.PASS;
             }
 
