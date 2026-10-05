@@ -55,13 +55,13 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 - **Rainbow Frog:** RGB form with a full-bright emissive layer.
 - **Cherry Blossom Frog:** drifting cherry-leaf petals, denser while airborne.
 - **Ender Frog:** subtle portal particles.
-- **Ghost Frog:** occasional soul wisps.
-- **Glow Frog:** soft glow particles.
-- **Soulfire Frog:** harmless cyan soul-fire particles.
-- **Sculk Frog:** occasional sculk particles near the ground.
+- **Ghost Frog:** occasional soul wisps plus a translucent spectral shell.
+- **Glow Frog:** soft glow particles plus a full-bright emissive layer.
+- **Soulfire Frog:** harmless cyan soul-fire particles plus a full-bright emissive layer.
+- **Sculk Frog:** occasional sculk particles near the ground plus a full-bright emissive layer.
 - **Bumblefrog:** light wax/pollen-like particles while airborne.
 - **Moss Frog:** sparse spore-blossom particles.
-- **Slimy Frog:** slime droplets, much more active while hopping.
+- **Storm Frog:** harmless electric sparks plus a full-bright emissive layer.\n- **Slimy Frog:** slime droplets, much more active while hopping, plus a translucent slime shell.
 
 ## Development status
 
