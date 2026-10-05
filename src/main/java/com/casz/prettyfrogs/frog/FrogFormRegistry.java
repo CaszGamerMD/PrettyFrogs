@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 
 public final class FrogFormRegistry {
     private static final Map<Identifier, FrogForm> FORMS = new LinkedHashMap<>();
@@ -90,7 +91,7 @@ public final class FrogFormRegistry {
         TRANSFORM_ITEMS.put(Items.SOUL_SAND, GHOST);
         TRANSFORM_ITEMS.put(Items.GLOW_INK_SAC, GLOW);
         TRANSFORM_ITEMS.put(Items.CACTUS, CACTUS);
-        TRANSFORM_ITEMS.put(Items.LIGHTNING_ROD.unaffected, STORM);
+        TRANSFORM_ITEMS.put(Blocks.LIGHTNING_ROD.unaffected().asItem(), STORM);
         TRANSFORM_ITEMS.put(Items.SOUL_TORCH, SOULFIRE);
         TRANSFORM_ITEMS.put(Items.SCULK, SCULK);
         TRANSFORM_ITEMS.put(Items.CAKE, CAKE);
