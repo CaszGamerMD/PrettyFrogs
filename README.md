@@ -2,7 +2,7 @@
 
 Fabric 26.2 mod for cosmetic transformations of vanilla frogs.
 
-## Planned transformations
+## Transformations
 
 | Item used on frog | Form |
 | --- | --- |
@@ -10,24 +10,38 @@ Fabric 26.2 mod for cosmetic transformations of vanilla frogs.
 | Carved Pumpkin | Pumpkin Frog |
 | Ender Pearl | Red-Eyed Tree Frog |
 | Bone | Skeleton Frog |
+| Mud Block | Muddy Frog |
+| Water Bottle | Water Frog |
+| Magma Cream | Magma Frog |
+| Ice Block | Ice Frog |
+| Poisonous Potato | Random-color Dart Frog |
+| `colorful_rods:rgb_end_rod` | Rainbow Frog |
 | Milk Bucket | Reset to normal |
 
 ## Behavior
 
-A PrettyFrogs form is layered on top of the frog's vanilla identity. The vanilla frog variant is not replaced.
+PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underlying vanilla warm/temperate/cold variant is never replaced.
 
-- Breeding remains normal vanilla behavior.
-- Special forms are not inherited.
-- Froglight behavior remains linked to the frog's underlying vanilla variant.
-- Milk removes the transformation.
-- Using the item for the form a frog already has should not consume another item.
+- Breeding remains normal vanilla behavior and special forms are not inherited.
+- Froglight behavior stays linked to the underlying vanilla frog variant.
+- Milk removes a transformation and reveals the original vanilla frog.
+- Transformation state is synchronized and saved with the frog.
+- Survival transformations consume the triggering item; creative mode does not.
+- Water Bottle leaves a Glass Bottle and Milk Bucket leaves a Bucket in survival.
+- Water buckets are deliberately not used as transformation triggers, preserving compatibility with frog-bucketing mods.
+- Caszual Additions is optional; Rainbow Frog integration detects its RGB End Rod by registry ID.
 
-## Next milestone
+## Special rendering and effects
 
-Compile against Minecraft 26.2 and implement:
-1. synced/persistent form data on vanilla Frog
-2. right-click transformation interactions
-3. survival item consumption and milk bucket reset
-4. 26.2 client render-state integration
-5. a development command for setting frog forms
-6. custom textures
+- **Muddy Frog:** movement leaves cosmetic ground-level mud-like particles.
+- **Water Frog:** water particles plus a translucent animated outer shell.
+- **Magma Frog:** harmless flame/smoke particles and a full-bright emissive layer.
+- **Ice Frog:** snowflake particles.
+- **Skeleton Frog:** dedicated animated skeletal geometry using the vanilla frog animation hierarchy.
+- **Rainbow Frog:** RGB form with a full-bright emissive layer.
+
+## Development status
+
+Core form persistence, synchronization, interactions, particles, custom render-state plumbing, Water shell rendering, Magma/Rainbow emissive rendering, and Skeleton model geometry are implemented and compile against Minecraft 26.2.
+
+Visual texture/mask assets and further polish are still in progress.
