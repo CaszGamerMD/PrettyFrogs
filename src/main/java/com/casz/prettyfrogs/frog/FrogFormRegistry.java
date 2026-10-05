@@ -28,6 +28,17 @@ public final class FrogFormRegistry {
     public static final Identifier DART_ORANGE = PrettyFrogs.id("dart_orange");
     public static final Identifier RAINBOW = PrettyFrogs.id("rainbow");
     public static final Identifier CHERRY_BLOSSOM = PrettyFrogs.id("cherry_blossom");
+    public static final Identifier BUMBLE = PrettyFrogs.id("bumble");
+    public static final Identifier MUSHROOM = PrettyFrogs.id("mushroom");
+    public static final Identifier MOSS = PrettyFrogs.id("moss");
+    public static final Identifier ENDER = PrettyFrogs.id("ender");
+    public static final Identifier GHOST = PrettyFrogs.id("ghost");
+    public static final Identifier GLOW = PrettyFrogs.id("glow");
+    public static final Identifier CACTUS = PrettyFrogs.id("cactus");
+    public static final Identifier STORM = PrettyFrogs.id("storm");
+    public static final Identifier SOULFIRE = PrettyFrogs.id("soulfire");
+    public static final Identifier SCULK = PrettyFrogs.id("sculk");
+    public static final Identifier CAKE = PrettyFrogs.id("cake");
     public static final Identifier RGB_END_ROD = Identifier.fromNamespaceAndPath("colorful_rods", "rgb_end_rod");
 
     private FrogFormRegistry() {}
@@ -49,6 +60,17 @@ public final class FrogFormRegistry {
         register(DART_ORANGE, "dart_orange");
         register(RAINBOW, "rainbow");
         register(CHERRY_BLOSSOM, "cherry_blossom");
+        register(BUMBLE, "bumble");
+        register(MUSHROOM, "mushroom");
+        register(MOSS, "moss");
+        register(ENDER, "ender");
+        register(GHOST, "ghost");
+        register(GLOW, "glow");
+        register(CACTUS, "cactus");
+        register(STORM, "storm");
+        register(SOULFIRE, "soulfire");
+        register(SCULK, "sculk");
+        register(CAKE, "cake");
 
         TRANSFORM_ITEMS.put(Items.MELON_SLICE, WATERMELON);
         TRANSFORM_ITEMS.put(Items.CARVED_PUMPKIN, PUMPKIN);
@@ -59,6 +81,17 @@ public final class FrogFormRegistry {
         TRANSFORM_ITEMS.put(Items.MAGMA_CREAM, MAGMA);
         TRANSFORM_ITEMS.put(Items.ICE, ICE);
         TRANSFORM_ITEMS.put(Items.PINK_PETALS, CHERRY_BLOSSOM);
+        TRANSFORM_ITEMS.put(Items.HONEYCOMB, BUMBLE);
+        TRANSFORM_ITEMS.put(Items.RED_MUSHROOM, MUSHROOM);
+        TRANSFORM_ITEMS.put(Items.MOSS_BLOCK, MOSS);
+        TRANSFORM_ITEMS.put(Items.CHORUS_FRUIT, ENDER);
+        TRANSFORM_ITEMS.put(Items.SOUL_SAND, GHOST);
+        TRANSFORM_ITEMS.put(Items.GLOW_INK_SAC, GLOW);
+        TRANSFORM_ITEMS.put(Items.CACTUS, CACTUS);
+        TRANSFORM_ITEMS.put(Items.LIGHTNING_ROD, STORM);
+        TRANSFORM_ITEMS.put(Items.SOUL_TORCH, SOULFIRE);
+        TRANSFORM_ITEMS.put(Items.SCULK, SCULK);
+        TRANSFORM_ITEMS.put(Items.CAKE, CAKE);
     }
 
     private static void register(Identifier id, String textureName) {
