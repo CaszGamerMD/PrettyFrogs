@@ -35,7 +35,9 @@ public final class FrogInteractionHandler {
                 return InteractionResult.SUCCESS;
             }
 
-            Identifier requested = FrogFormRegistry.fromItem(stack.getItem());
+            Identifier requested = stack.is(Items.POISONOUS_POTATO)
+                    ? FrogFormRegistry.randomDart(frog.getRandom())
+                    : FrogFormRegistry.fromItem(stack.getItem());
             if (requested != null && requested.equals(FrogFormRegistry.WATER)
                     && !stack.is(Items.POTION)) {
                 requested = null;
