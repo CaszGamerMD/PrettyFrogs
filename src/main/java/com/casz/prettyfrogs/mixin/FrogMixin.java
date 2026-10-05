@@ -73,6 +73,20 @@ public abstract class FrogMixin implements PrettyFrogAccess {
                 double pz = frog.getZ() + (random.nextDouble() - 0.5) * frog.getBbWidth() * 1.5;
                 frog.level().addParticle(ParticleTypes.CHERRY_LEAVES, px, py, pz, 0.0, 0.01, 0.0);
             }
+        } else if (form.equals(FrogFormRegistry.ENDER) && random.nextInt(5) == 0) {
+            frog.level().addParticle(ParticleTypes.PORTAL, x, y, z, 0.0, 0.01, 0.0);
+        } else if (form.equals(FrogFormRegistry.GHOST) && random.nextInt(6) == 0) {
+            frog.level().addParticle(ParticleTypes.SOUL, x, y, z, 0.0, 0.01, 0.0);
+        } else if (form.equals(FrogFormRegistry.GLOW) && random.nextInt(7) == 0) {
+            frog.level().addParticle(ParticleTypes.GLOW, x, y, z, 0.0, 0.005, 0.0);
+        } else if (form.equals(FrogFormRegistry.SOULFIRE) && random.nextInt(4) == 0) {
+            frog.level().addParticle(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0.0, 0.01, 0.0);
+        } else if (form.equals(FrogFormRegistry.SCULK) && frog.onGround() && random.nextInt(8) == 0) {
+            frog.level().addParticle(ParticleTypes.SCULK_CHARGE_POP, x, frog.getY() + 0.03, z, 0.0, 0.0, 0.0);
+        } else if (form.equals(FrogFormRegistry.BUMBLE) && !frog.onGround() && random.nextInt(5) == 0) {
+            frog.level().addParticle(ParticleTypes.WAX_ON, x, y, z, 0.0, 0.0, 0.0);
+        } else if (form.equals(FrogFormRegistry.MOSS) && random.nextInt(9) == 0) {
+            frog.level().addParticle(ParticleTypes.SPORE_BLOSSOM_AIR, x, y, z, 0.0, 0.0, 0.0);
         } else if (form.equals(FrogFormRegistry.MUDDY)
                 && frog.getDeltaMovement().horizontalDistanceSqr() > 0.001
                 && frog.onGround()
