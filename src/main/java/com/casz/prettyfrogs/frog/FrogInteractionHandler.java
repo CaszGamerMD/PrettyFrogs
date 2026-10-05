@@ -10,7 +10,6 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.core.particles.ParticleTypes;
 
 public final class FrogInteractionHandler {
     private FrogInteractionHandler() {}
