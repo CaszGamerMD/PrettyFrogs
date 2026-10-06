@@ -10,6 +10,8 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.item.ItemStack;
@@ -48,7 +50,9 @@ public final class FrogGuideScreen extends Screen {
 
     private void updatePreview() {
         if (minecraft.level == null) return;
-        preview = EntityType.FROG.create(minecraft.level, EntitySpawnReason.COMMAND);
+        EntityType<?> frogType = BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.withDefaultNamespace("frog"));
+        var created = frogType == null ? null : frogType.create(minecraft.level, EntitySpawnReason.COMMAND);
+        preview = created instanceof Frog frog ? frog : null;
         if (preview instanceof PrettyFrogAccess access) {
             access.prettyfrogs$setForm(entries.get(page).form());
         }
