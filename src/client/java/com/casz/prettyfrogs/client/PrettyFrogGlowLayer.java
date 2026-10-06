@@ -48,6 +48,13 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
             renderType = RenderTypes.eyes(RAINBOW_GLOW);
             float hue = (state.ageInTicks * 0.0125F) % 1.0F;
             color = ARGB.opaque(Mth.hsvToRgb(hue, 0.85F, 1.0F));
+        } else if (access.prettyfrogs$isForm(FrogFormRegistry.RAINBOW_DART)
+                || access.prettyfrogs$isForm(FrogFormRegistry.RAINBOW_EYES)
+                || access.prettyfrogs$isForm(FrogFormRegistry.RAINBOW_SOLID)
+                || access.prettyfrogs$isForm(FrogFormRegistry.RAINBOW_DISCO)) {
+            // These variants carry their RGB pattern directly in their base texture.
+            // Keeping them out of the spotted overlay prevents patterns from stacking.
+            renderType = null;
         }
 
         if (renderType != null && !state.isInvisible) {
