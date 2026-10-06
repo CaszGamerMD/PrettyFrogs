@@ -8,6 +8,7 @@ import com.casz.prettyfrogs.client.IceFrogShellLayer;
 import com.casz.prettyfrogs.client.SkeletonFrogLayer;
 import com.casz.prettyfrogs.client.GhostSlimeFrogLayer;
 import com.casz.prettyfrogs.client.CrystalFrogLayer;
+import com.casz.prettyfrogs.client.PumpkinStemLayer;
 import com.casz.prettyfrogs.frog.PrettyFrogAccess;
 import net.minecraft.client.renderer.entity.FrogRenderer;
 import net.minecraft.client.renderer.entity.state.FrogRenderState;
@@ -35,6 +36,7 @@ public abstract class FrogRendererMixin extends net.minecraft.client.renderer.en
         this.addLayer(new GhostSlimeFrogLayer(renderer));
         this.addLayer(new CrystalFrogLayer(renderer));
         this.addLayer(new SkeletonFrogLayer(renderer, context.getModelSet()));
+        this.addLayer(new PumpkinStemLayer(renderer, context.getModelSet()));
     }
 
     @Inject(method = "extractRenderState", at = @At("TAIL"))
