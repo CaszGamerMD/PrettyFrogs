@@ -10,6 +10,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.ItemTags;
 
 public final class FrogInteractionHandler {
     private FrogInteractionHandler() {}
@@ -110,22 +111,7 @@ public final class FrogInteractionHandler {
     }
 
     private static boolean isCandle(ItemStack stack) {
-        return stack.is(Items.CANDLE)
-                || stack.is(Items.WHITE_CANDLE)
-                || stack.is(Items.ORANGE_CANDLE)
-                || stack.is(Items.MAGENTA_CANDLE)
-                || stack.is(Items.LIGHT_BLUE_CANDLE)
-                || stack.is(Items.YELLOW_CANDLE)
-                || stack.is(Items.LIME_CANDLE)
-                || stack.is(Items.PINK_CANDLE)
-                || stack.is(Items.GRAY_CANDLE)
-                || stack.is(Items.LIGHT_GRAY_CANDLE)
-                || stack.is(Items.CYAN_CANDLE)
-                || stack.is(Items.PURPLE_CANDLE)
-                || stack.is(Items.BLUE_CANDLE)
-                || stack.is(Items.BROWN_CANDLE)
-                || stack.is(Items.GREEN_CANDLE)
-                || stack.is(Items.RED_CANDLE)
-                || stack.is(Items.BLACK_CANDLE);
+        return stack.is(ItemTags.CANDLES);
+
     }
 }
