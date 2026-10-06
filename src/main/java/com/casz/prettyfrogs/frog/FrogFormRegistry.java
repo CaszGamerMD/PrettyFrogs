@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -43,6 +45,7 @@ public final class FrogFormRegistry {
     public static final Identifier SLIMY = PrettyFrogs.id("slimy");
     public static final Identifier CRYSTAL = PrettyFrogs.id("crystal");
     public static final Identifier RGB_END_ROD = Identifier.fromNamespaceAndPath("colorful_rods", "rgb_end_rod");
+    public static final TagKey<Item> CRYSTAL_CLUSTERS = TagKey.create(Registries.ITEM, PrettyFrogs.id("crystal_clusters"));
 
     private FrogFormRegistry() {}
 
@@ -120,6 +123,14 @@ public final class FrogFormRegistry {
 
     public static boolean isRgbEndRod(Item item) {
         return BuiltInRegistries.ITEM.getKey(item).equals(RGB_END_ROD);
+    }
+
+    public static boolean isCrystalCluster(net.minecraft.world.item.ItemStack stack) {
+        return stack.is(CRYSTAL_CLUSTERS);
+    }
+
+    public static Identifier crystalId(Item item) {
+        return BuiltInRegistries.ITEM.getKey(item);
     }
 
     public static Identifier fromItem(Item item) {
