@@ -12,7 +12,8 @@ GENERAL RULES
 - The underlying vanilla warm/temperate/cold frog identity is preserved.
 - Forms are cosmetic and are not inherited through breeding.
 - Froglight behavior still uses the underlying vanilla variant.
-- Reapplying the same form does not consume another item.
+- Reapplying a single-version form does not consume another item.
+- If one trigger item has multiple frog variants, using that item again cycles to the next variant and consumes the item normally.
 - Survival consumes transformation items where appropriate; Creative does not.
 - Milk Bucket removes the custom form and restores the normal appearance.
 - Water Bucket is intentionally not a transformation trigger.
@@ -22,7 +23,9 @@ CUSTOM FROGS
 
 1. Watermelon Frog
    Trigger: Melon Slice
-   Look: Red/pink watermelon flesh, seeds, and rind-colored legs.
+   Variants: 2. The first Melon Slice randomly selects one; additional Melon Slices cycle between them.
+   - Green striped top / red-pink seeded belly
+   - Red-pink seeded top / green striped belly
 
 2. Pumpkin Frog
    Trigger: Carved Pumpkin
@@ -57,7 +60,7 @@ CUSTOM FROGS
 
 9. Dart Frog
    Trigger: Poisonous Potato
-   Result: Random Dart Frog color:
+   Result: First use selects a random Dart Frog color. Additional Poisonous Potatoes cycle through:
    - Red
    - Blue
    - Yellow
@@ -174,7 +177,8 @@ When adding, renaming, removing, or changing a frog:
 2. Update this CUSTOM_FROGS.txt reference in the same commit.
 3. Update FrogGuideEntries so the in-game Field Guide matches this reference.
 4. Add/update the frog texture, overlay, particles, and trigger information as applicable.
-5. Keep special families (Dart Frog and Crystal Frog) represented accurately in the guide.
+5. Keep special families (Watermelon, Dart Frog, and Crystal Frog) represented accurately in the guide.
+6. When multiple variants share one trigger item, repeated uses of that item must cycle through the variants.
 
 Current main forms: 24
 Dart Frog colors: 5
