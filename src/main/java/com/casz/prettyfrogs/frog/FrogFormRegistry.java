@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 public final class FrogFormRegistry {
     private static final Map<Identifier, FrogForm> FORMS = new LinkedHashMap<>();
     private static final Map<Item, Identifier> TRANSFORM_ITEMS = new LinkedHashMap<>();
+    private static final Map<Item, Identifier[]> VARIANT_ITEMS = new LinkedHashMap<>();
 
     public static final Identifier NORMAL = PrettyFrogs.id("normal");
     public static final Identifier WATERMELON = PrettyFrogs.id("watermelon");
@@ -31,6 +32,10 @@ public final class FrogFormRegistry {
     public static final Identifier DART_GREEN = PrettyFrogs.id("dart_green");
     public static final Identifier DART_ORANGE = PrettyFrogs.id("dart_orange");
     public static final Identifier RAINBOW = PrettyFrogs.id("rainbow");
+    public static final Identifier RAINBOW_DART = PrettyFrogs.id("rainbow_dart");
+    public static final Identifier RAINBOW_EYES = PrettyFrogs.id("rainbow_eyes");
+    public static final Identifier RAINBOW_SOLID = PrettyFrogs.id("rainbow_solid");
+    public static final Identifier RAINBOW_DISCO = PrettyFrogs.id("rainbow_disco");
     public static final Identifier CHERRY_BLOSSOM = PrettyFrogs.id("cherry_blossom");
     public static final Identifier BUMBLE = PrettyFrogs.id("bumble");
     public static final Identifier MUSHROOM = PrettyFrogs.id("mushroom");
@@ -53,6 +58,7 @@ public final class FrogFormRegistry {
     public static void bootstrap() {
         FORMS.clear();
         TRANSFORM_ITEMS.clear();
+        VARIANT_ITEMS.clear();
 
         register(NORMAL, null);
         register(WATERMELON, "watermelon");
@@ -70,6 +76,10 @@ public final class FrogFormRegistry {
         register(DART_GREEN, "dart_green");
         register(DART_ORANGE, "dart_orange");
         register(RAINBOW, "rainbow");
+        register(RAINBOW_DART, "rainbow_dart");
+        register(RAINBOW_EYES, "rainbow_eyes");
+        register(RAINBOW_SOLID, "rainbow_solid");
+        register(RAINBOW_DISCO, "rainbow_disco");
         register(CHERRY_BLOSSOM, "cherry_blossom");
         register(BUMBLE, "bumble");
         register(MUSHROOM, "mushroom");
@@ -86,6 +96,8 @@ public final class FrogFormRegistry {
         register(CRYSTAL, "crystal");
 
         TRANSFORM_ITEMS.put(Items.MELON_SLICE, WATERMELON);
+        VARIANT_ITEMS.put(Items.MELON_SLICE, new Identifier[]{WATERMELON, WATERMELON_RED_TOP});
+        VARIANT_ITEMS.put(Items.POISONOUS_POTATO, new Identifier[]{DART_RED, DART_BLUE, DART_YELLOW, DART_GREEN, DART_ORANGE});
         TRANSFORM_ITEMS.put(Items.CARVED_PUMPKIN, PUMPKIN);
         TRANSFORM_ITEMS.put(Items.ENDER_PEARL, RED_EYED_TREE);
         TRANSFORM_ITEMS.put(Items.BONE, SKELETON);
@@ -106,6 +118,11 @@ public final class FrogFormRegistry {
         TRANSFORM_ITEMS.put(Items.SCULK, SCULK);
         TRANSFORM_ITEMS.put(Items.CAKE, CAKE);
         TRANSFORM_ITEMS.put(Items.SLIME_BLOCK, SLIMY);
+
+        Item rgbRod = BuiltInRegistries.ITEM.getValue(RGB_END_ROD);
+        if (rgbRod != null && rgbRod != Items.AIR) {
+            VARIANT_ITEMS.put(rgbRod, new Identifier[]{RAINBOW, RAINBOW_DART, RAINBOW_EYES, RAINBOW_SOLID, RAINBOW_DISCO});
+        }
     }
 
     private static void register(Identifier id, String textureName) {
@@ -137,6 +154,23 @@ public final class FrogFormRegistry {
 
     public static Identifier fromItem(Item item) {
         return TRANSFORM_ITEMS.get(item);
+    }
+
+
+    public static boolean isVariant(Item item, Identifier form) {
+        Identifier[] variants = VARIANT_ITEMS.get(item);
+        if (variants == null) return false;
+        for (Identifier variant : variants) if (variant.equals(form)) return true;
+        return false;
+    }
+
+    public static Identifier variantForUse(Item item, Identifier current, net.minecraft.util.RandomSource random) {
+        Identifier[] variants = VARIANT_ITEMS.get(item);
+        if (variants == null || variants.length == 0) return fromItem(item);
+        for (int i = 0; i < variants.length; i++) {
+            if (variants[i].equals(current)) return variants[(i + 1) % variants.length];
+        }
+        return variants[random.nextInt(variants.length)];
     }
 
     public static boolean isDart(Identifier form) {
