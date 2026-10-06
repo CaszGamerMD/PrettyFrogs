@@ -43,7 +43,9 @@ public abstract class FrogRendererMixin {
         }
 
         Identifier form = access.prettyfrogs$getForm();
-        ((PrettyFrogRenderStateAccess) state).prettyfrogs$setForm(form);
+        PrettyFrogRenderStateAccess renderAccess = (PrettyFrogRenderStateAccess) state;
+        renderAccess.prettyfrogs$setForm(form);
+        renderAccess.prettyfrogs$setCrystal(access.prettyfrogs$getCrystal());
         Identifier customTexture = form.equals(com.casz.prettyfrogs.frog.FrogFormRegistry.SKELETON)
                 ? com.casz.prettyfrogs.PrettyFrogs.id("textures/entity/frog/skeleton_base.png")
                 : FrogTextureResolver.customTexture(form);
