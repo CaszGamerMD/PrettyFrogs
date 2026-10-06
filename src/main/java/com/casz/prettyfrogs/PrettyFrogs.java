@@ -14,6 +14,7 @@ public final class PrettyFrogs implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        PrettyFrogsItems.register();
         FrogFormRegistry.bootstrap();
         FrogInteractionHandler.register();
     }
