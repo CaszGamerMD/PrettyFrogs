@@ -65,6 +65,6 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 
 ## Development status
 
-Core form persistence, synchronization, interactions, particles, custom render-state plumbing, Water shell rendering, Magma/Rainbow emissive rendering, and Skeleton model geometry are implemented and compile against Minecraft 26.2.
+Core form persistence, synchronization, interactions, particles, custom render-state plumbing, Water/Ghost/Slime shell rendering, Magma/Rainbow/Glow/Soulfire/Storm/Sculk emissive rendering, and Skeleton model geometry are implemented and compile against Minecraft 26.2.
 
 A complete functional 48x48 technical texture/mask set is included for every implemented form and render layer. Detailed final pixel-art replacements remain visual polish only; no code changes are required to swap them in.
