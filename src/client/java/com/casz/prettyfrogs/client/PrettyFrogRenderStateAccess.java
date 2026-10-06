@@ -6,6 +6,8 @@ import net.minecraft.resources.Identifier;
 public interface PrettyFrogRenderStateAccess {
     Identifier prettyfrogs$getForm();
     void prettyfrogs$setForm(Identifier form);
+    Identifier prettyfrogs$getCrystal();
+    void prettyfrogs$setCrystal(Identifier crystal);
 
     default boolean prettyfrogs$isForm(Identifier form) {
         return prettyfrogs$getForm().equals(form);
