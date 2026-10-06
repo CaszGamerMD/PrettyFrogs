@@ -1,0 +1,181 @@
+PRETTYFROGS - CUSTOM FROG REFERENCE
+===================================
+
+This file is the canonical human-readable reference for PrettyFrogs custom forms.
+IMPORTANT FOR DEVELOPMENT: Whenever a new frog form is added, update this file in the same change.
+The Field Guide / book GUI should use this list as a content reference and stay synchronized with FrogFormRegistry / FrogGuideEntries.
+
+GENERAL RULES
+-------------
+- Adult frogs only. Tadpoles and baby frogs remain vanilla.
+- Right-click an adult frog with the listed transformation item.
+- The underlying vanilla warm/temperate/cold frog identity is preserved.
+- Forms are cosmetic and are not inherited through breeding.
+- Froglight behavior still uses the underlying vanilla variant.
+- Reapplying the same form does not consume another item.
+- Survival consumes transformation items where appropriate; Creative does not.
+- Milk Bucket removes the custom form and restores the normal appearance.
+- Water Bucket is intentionally not a transformation trigger.
+
+CUSTOM FROGS
+============
+
+1. Watermelon Frog
+   Trigger: Melon Slice
+   Look: Red/pink watermelon flesh, seeds, and rind-colored legs.
+
+2. Pumpkin Frog
+   Trigger: Carved Pumpkin
+   Look: Orange pumpkin styling, grooves, green stem, and jack-o'-lantern details.
+
+3. Red-Eyed Tree Frog
+   Trigger: Ender Pearl
+   Look: Green body, red eyes, blue/orange accents.
+
+4. Skeleton Frog
+   Trigger: Bone
+   Look: Custom animated skeletal frog geometry.
+
+5. Muddy Frog
+   Trigger: Mud Block
+   Effect: Mud particles.
+
+6. Water Frog
+   Trigger: Water Bottle
+   Look: Translucent water-like shell.
+   Effect: Water/bubble particles.
+
+7. Magma Frog
+   Trigger: Magma Cream
+   Look: Emissive magma cracks.
+   Effect: Harmless flame, smoke, and lava-style particles.
+
+8. Ice Frog
+   Trigger: Ice Block
+   Look: Translucent icy shell.
+   Effect: Snowflake/white-ash-style particles.
+
+9. Dart Frog
+   Trigger: Poisonous Potato
+   Result: Random Dart Frog color:
+   - Red
+   - Blue
+   - Yellow
+   - Green
+   - Orange
+
+10. Rainbow Frog
+    Trigger: colorful_rods:rgb_end_rod
+    Look: Animated RGB/fullbright appearance.
+    Effect: End Rod particles.
+
+11. Cherry Blossom Frog
+    Trigger: Pink Petals
+    Look: Pink/white blossom styling.
+    Effect: Cherry blossom/leaf particles.
+
+12. Bumblefrog
+    Trigger: Honeycomb
+    Look: Bumblebee-inspired frog.
+    Effect: Pollen/wax-like airborne particles.
+
+13. Mushroom Frog
+    Trigger: Red Mushroom
+    Look: Red mushroom-inspired styling.
+
+14. Moss Frog
+    Trigger: Moss Block
+    Look: Moss-covered green styling.
+    Effect: Spore Blossom Air particles.
+
+15. Ender Frog
+    Trigger: Chorus Fruit
+    Look: End-themed styling.
+    Effect: Portal particles.
+
+16. Ghost Frog
+    Trigger: Soul Sand
+    Look: Translucent spectral shell.
+    Effect: Soul particles.
+
+17. Glow Frog
+    Trigger: Glow Ink Sac
+    Look: Emissive glow layer.
+    Effect: Glow particles.
+
+18. Cactus Frog
+    Trigger: Cactus
+    Look: Cactus-inspired styling.
+
+19. Storm Frog
+    Trigger: Lightning Rod
+    Look: Emissive storm/electric details.
+    Effect: Electric spark particles.
+
+20. Soulfire Frog
+    Trigger: Soul Torch
+    Look: Emissive soul-fire styling.
+    Effect: Soul Fire Flame particles.
+
+21. Sculk Frog
+    Trigger: Sculk
+    Look: Emissive sculk styling.
+    Effect: Sculk Charge Pop effects while grounded.
+
+22. Cake Frog
+    Trigger: Cake
+    Look: Cake-inspired styling.
+
+23. Slimy Frog
+    Trigger: Slime Block
+    Look: Translucent slime shell.
+    Effect: Slime particles, especially while airborne.
+
+24. Crystal Frog
+    Trigger: Any item in #prettyfrogs:crystal_clusters
+    Look: Shared crystal overlay tinted to the exact cluster used.
+    Exact crystal identity is persisted and synchronized.
+
+    Built-in supported clusters:
+    Minecraft:
+    - Amethyst Cluster
+
+    Crystal Depths:
+    - Coal Cluster
+    - Iron Cluster
+    - Gold Cluster
+    - Lapis Cluster
+    - Diamond Cluster
+    - Emerald Cluster
+
+    Mythic Upgrades:
+    - Ametrine Crystal Cluster
+    - Aquamarine Crystal Cluster
+    - Citrine Crystal Cluster
+    - Jade Crystal Cluster
+    - Peridot Crystal Cluster
+    - Ruby Crystal Cluster
+    - Sapphire Crystal Cluster
+    - Topaz Crystal Cluster
+
+    Other mods/datapacks can extend Crystal Frog support through:
+    #prettyfrogs:crystal_clusters
+
+RESET
+=====
+Milk Bucket
+- Removes the PrettyFrogs cosmetic form.
+- Leaves the frog's underlying vanilla variant intact.
+
+DEVELOPMENT / FIELD GUIDE RULE
+==============================
+When adding, renaming, removing, or changing a frog:
+1. Update FrogFormRegistry / transformation logic.
+2. Update this CUSTOM_FROGS.txt reference in the same commit.
+3. Update FrogGuideEntries so the in-game Field Guide matches this reference.
+4. Add/update the frog texture, overlay, particles, and trigger information as applicable.
+5. Keep special families (Dart Frog and Crystal Frog) represented accurately in the guide.
+
+Current main forms: 24
+Dart Frog colors: 5
+Crystal Frog appearances: determined by the exact supported crystal cluster.
