@@ -28,7 +28,7 @@ Fabric 26.2 mod for cosmetic transformations of vanilla frogs.
 | Soul Torch | Soulfire Frog |
 | Sculk | Sculk Frog |
 | Cake | Cake Frog |
-| Slime Block | Slimy Frog |
+| Slime Block | Slimy Frog |\n| Full crystal cluster | Crystal Frog matching that crystal |
 | Milk Bucket | Reset to normal |
 
 ## Behavior
@@ -43,7 +43,7 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 - Transformations play a short confirmation chime and briefly stop the frog's current navigation so the visual change reads cleanly.
 - Water Bottle leaves a Glass Bottle and Milk Bucket leaves a Bucket in survival.
 - Water buckets are deliberately not used as transformation triggers, preserving compatibility with frog-bucketing mods.
-- Caszual Additions is optional; Rainbow Frog integration detects its RGB End Rod by registry ID.
+- Caszual Additions is optional; Rainbow Frog integration detects its RGB End Rod by registry ID.\n- Crystal Frogs accept full clusters through the `prettyfrogs:crystal_clusters` item tag. Vanilla Amethyst, Crystal Depths 1.4.0, and Mythic Upgrades 5.1.1 clusters are included as optional entries. Other mods/datapacks can extend the tag without Java changes.\n- Crystal Frogs remember the exact source cluster; using a different supported cluster changes their crystal color, while using the same cluster again consumes nothing.
 
 ## Special rendering and effects
 
@@ -61,7 +61,7 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 - **Sculk Frog:** occasional sculk particles near the ground plus a full-bright emissive layer.
 - **Bumblefrog:** light wax/pollen-like particles while airborne.
 - **Moss Frog:** sparse spore-blossom particles.
-- **Storm Frog:** harmless electric sparks plus a full-bright emissive layer.\n- **Slimy Frog:** slime droplets, much more active while hopping, plus a translucent slime shell.
+- **Storm Frog:** harmless electric sparks plus a full-bright emissive layer.\n- **Slimy Frog:** slime droplets, much more active while hopping, plus a translucent slime shell.\n- **Crystal Frog:** tinted crystal markings derived from the exact full cluster used; crystal identity persists and synchronizes to clients.
 
 ## Development status
 
