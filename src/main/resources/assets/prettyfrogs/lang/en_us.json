@@ -1,3 +1,6 @@
 {
-  "mod.prettyfrogs.name": "PrettyFrogs"
+  "mod.prettyfrogs.name": "PrettyFrogs",
+  "item.prettyfrogs.frog_guide": "PrettyFrogs Field Guide",
+  "screen.prettyfrogs.frog_guide": "PrettyFrogs Field Guide",
+  "screen.prettyfrogs.use_on_adult_frog": "Use this item on an adult frog"
 }
