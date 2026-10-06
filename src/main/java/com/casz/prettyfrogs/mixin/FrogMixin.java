@@ -24,6 +24,8 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     private static final String PRETTYFROGS_SAVE_KEY = "PrettyFrogsForm";
     @Unique
     private static final String PRETTYFROGS_CRYSTAL_SAVE_KEY = "PrettyFrogsCrystal";
+    @Unique
+    private static final String PRETTYFROGS_CAKE_CANDLES_SAVE_KEY = "PrettyFrogsCakeCandles";
 
     @Unique
     private static final EntityDataAccessor<String> PRETTYFROGS_FORM =
@@ -31,11 +33,15 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     @Unique
     private static final EntityDataAccessor<String> PRETTYFROGS_CRYSTAL =
             SynchedEntityData.defineId(Frog.class, EntityDataSerializers.STRING);
+    @Unique
+    private static final EntityDataAccessor<Integer> PRETTYFROGS_CAKE_CANDLES =
+            SynchedEntityData.defineId(Frog.class, EntityDataSerializers.INT);
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
     private void prettyfrogs$defineFormData(SynchedEntityData.Builder builder, CallbackInfo ci) {
         builder.define(PRETTYFROGS_FORM, FrogFormRegistry.NORMAL.toString());
         builder.define(PRETTYFROGS_CRYSTAL, "minecraft:amethyst_cluster");
+        builder.define(PRETTYFROGS_CAKE_CANDLES, 0);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -102,6 +108,12 @@ public abstract class FrogMixin implements PrettyFrogAccess {
                 && frog.onGround()
                 && random.nextInt(2) == 0) {
             frog.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.MUD.defaultBlockState()), x, frog.getY() + 0.02, z, 0.0, 0.015, 0.0);
+        } else if (form.equals(FrogFormRegistry.CAKE) && prettyfrogs$getCakeCandles() > 0
+                && random.nextInt(4) == 0) {
+            double flameX = frog.getX() + (random.nextDouble() - 0.5) * 0.35;
+            double flameY = frog.getY() + frog.getBbHeight() + 0.18;
+            double flameZ = frog.getZ() + (random.nextDouble() - 0.5) * 0.30;
+            frog.level().addParticle(ParticleTypes.SMALL_FLAME, flameX, flameY, flameZ, 0.0, 0.005, 0.0);
         }
     }
 
@@ -125,9 +137,23 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     }
 
     @Override
+    public int prettyfrogs$getCakeCandles() {
+        return ((Frog)(Object)this).getEntityData().get(PRETTYFROGS_CAKE_CANDLES);
+    }
+
+    @Override
+    public void prettyfrogs$setCakeCandles(int count) {
+        ((Frog)(Object)this).getEntityData().set(PRETTYFROGS_CAKE_CANDLES, Math.max(0, Math.min(4, count)));
+    }
+
+    @Override
     public void prettyfrogs$setForm(Identifier form) {
         Frog frog = (Frog)(Object)this;
-        frog.getEntityData().set(PRETTYFROGS_FORM, FrogFormRegistry.get(form).id().toString());
+        Identifier normalized = FrogFormRegistry.get(form).id();
+        frog.getEntityData().set(PRETTYFROGS_FORM, normalized.toString());
+        if (!normalized.equals(FrogFormRegistry.CAKE)) {
+            prettyfrogs$setCakeCandles(0);
+        }
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
@@ -135,6 +161,9 @@ public abstract class FrogMixin implements PrettyFrogAccess {
         output.putString(PRETTYFROGS_SAVE_KEY, prettyfrogs$getForm().toString());
         if (prettyfrogs$getForm().equals(FrogFormRegistry.CRYSTAL)) {
             output.putString(PRETTYFROGS_CRYSTAL_SAVE_KEY, prettyfrogs$getCrystal().toString());
+        }
+        if (prettyfrogs$getForm().equals(FrogFormRegistry.CAKE) && prettyfrogs$getCakeCandles() > 0) {
+            output.putString(PRETTYFROGS_CAKE_CANDLES_SAVE_KEY, Integer.toString(prettyfrogs$getCakeCandles()));
         }
     }
 
@@ -149,5 +178,13 @@ public abstract class FrogMixin implements PrettyFrogAccess {
                 .map(Identifier::tryParse)
                 .filter(java.util.Objects::nonNull)
                 .ifPresent(this::prettyfrogs$setCrystal);
+        input.getString(PRETTYFROGS_CAKE_CANDLES_SAVE_KEY)
+                .ifPresent(value -> {
+                    try {
+                        prettyfrogs$setCakeCandles(Integer.parseInt(value));
+                    } catch (NumberFormatException ignored) {
+                        prettyfrogs$setCakeCandles(0);
+                    }
+                });
     }
 }
