@@ -19,9 +19,6 @@ public final class FrogTransformationLogic {
     }
 
     public static boolean isAlreadyTransformed(Identifier current, Identifier requested) {
-        if (current.equals(requested)) {
-            return true;
-        }
-        return FrogFormRegistry.isDart(current) && FrogFormRegistry.isDart(requested);
+        return current.equals(requested);
     }
 }
