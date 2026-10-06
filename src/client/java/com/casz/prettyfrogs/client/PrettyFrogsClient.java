@@ -8,5 +8,6 @@ public final class PrettyFrogsClient implements ClientModInitializer {
     public void onInitializeClient() {
         ModelLayerRegistry.registerModelLayer(SkeletonFrogModel.LAYER_LOCATION, SkeletonFrogModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(PumpkinStemModel.LAYER_LOCATION, PumpkinStemModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(CakeCandleModel.LAYER_LOCATION, CakeCandleModel::createBodyLayer);
     }
 }
