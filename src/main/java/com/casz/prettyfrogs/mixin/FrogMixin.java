@@ -22,14 +22,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class FrogMixin implements PrettyFrogAccess {
     @Unique
     private static final String PRETTYFROGS_SAVE_KEY = "PrettyFrogsForm";
+    @Unique
+    private static final String PRETTYFROGS_CRYSTAL_SAVE_KEY = "PrettyFrogsCrystal";
 
     @Unique
     private static final EntityDataAccessor<String> PRETTYFROGS_FORM =
+            SynchedEntityData.defineId(Frog.class, EntityDataSerializers.STRING);
+    @Unique
+    private static final EntityDataAccessor<String> PRETTYFROGS_CRYSTAL =
             SynchedEntityData.defineId(Frog.class, EntityDataSerializers.STRING);
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
     private void prettyfrogs$defineFormData(SynchedEntityData.Builder builder, CallbackInfo ci) {
         builder.define(PRETTYFROGS_FORM, FrogFormRegistry.NORMAL.toString());
+        builder.define(PRETTYFROGS_CRYSTAL, "minecraft:amethyst_cluster");
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -107,6 +113,18 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     }
 
     @Override
+    public Identifier prettyfrogs$getCrystal() {
+        Frog frog = (Frog)(Object)this;
+        Identifier parsed = Identifier.tryParse(frog.getEntityData().get(PRETTYFROGS_CRYSTAL));
+        return parsed == null ? Identifier.withDefaultNamespace("amethyst_cluster") : parsed;
+    }
+
+    @Override
+    public void prettyfrogs$setCrystal(Identifier crystal) {
+        ((Frog)(Object)this).getEntityData().set(PRETTYFROGS_CRYSTAL, crystal.toString());
+    }
+
+    @Override
     public void prettyfrogs$setForm(Identifier form) {
         Frog frog = (Frog)(Object)this;
         frog.getEntityData().set(PRETTYFROGS_FORM, FrogFormRegistry.get(form).id().toString());
@@ -115,6 +133,9 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void prettyfrogs$saveForm(ValueOutput output, CallbackInfo ci) {
         output.putString(PRETTYFROGS_SAVE_KEY, prettyfrogs$getForm().toString());
+        if (prettyfrogs$getForm().equals(FrogFormRegistry.CRYSTAL)) {
+            output.putString(PRETTYFROGS_CRYSTAL_SAVE_KEY, prettyfrogs$getCrystal().toString());
+        }
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
@@ -124,5 +145,9 @@ public abstract class FrogMixin implements PrettyFrogAccess {
                 .filter(java.util.Objects::nonNull)
                 .filter(FrogFormRegistry::isKnown)
                 .ifPresent(this::prettyfrogs$setForm);
+        input.getString(PRETTYFROGS_CRYSTAL_SAVE_KEY)
+                .map(Identifier::tryParse)
+                .filter(java.util.Objects::nonNull)
+                .ifPresent(this::prettyfrogs$setCrystal);
     }
 }
