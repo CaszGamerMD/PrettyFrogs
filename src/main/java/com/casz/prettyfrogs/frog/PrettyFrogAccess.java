@@ -8,4 +8,6 @@ public interface PrettyFrogAccess {
     void prettyfrogs$setForm(Identifier form);
     Identifier prettyfrogs$getCrystal();
     void prettyfrogs$setCrystal(Identifier crystal);
+    int prettyfrogs$getCakeCandles();
+    void prettyfrogs$setCakeCandles(int count);
 }
