@@ -8,7 +8,7 @@ import net.minecraft.world.item.Item;
 
 public final class PrettyFrogsItems {
     public static final ResourceKey<Item> FROG_GUIDE_KEY = ResourceKey.create(Registries.ITEM, PrettyFrogs.id("frog_guide"));
-    public static final Item FROG_GUIDE = new Item(new Item.Properties().setId(FROG_GUIDE_KEY).stacksTo(1));
+    public static final Item FROG_GUIDE = new FrogGuideItem(new Item.Properties().setId(FROG_GUIDE_KEY).stacksTo(1));
 
     private PrettyFrogsItems() {}
 
