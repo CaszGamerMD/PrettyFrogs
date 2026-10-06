@@ -2,6 +2,12 @@
   "required": true,
   "package": "com.casz.prettyfrogs.mixin.client",
   "compatibilityLevel": "JAVA_25",
-  "client": ["FrogRendererMixin", "FrogRenderStateMixin"],
-  "injectors": { "defaultRequire": 1 }
+  "client": [
+    "FrogRendererMixin",
+    "FrogRenderStateMixin",
+    "MinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
