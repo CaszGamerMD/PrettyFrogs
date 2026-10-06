@@ -13,6 +13,8 @@ public abstract class FrogRenderStateMixin implements PrettyFrogRenderStateAcces
     private Identifier prettyfrogs$form = FrogFormRegistry.NORMAL;
     @Unique
     private Identifier prettyfrogs$crystal = Identifier.withDefaultNamespace("amethyst_cluster");
+    @Unique
+    private int prettyfrogs$cakeCandles;
 
     @Override
     public Identifier prettyfrogs$getForm() {
@@ -27,6 +29,16 @@ public abstract class FrogRenderStateMixin implements PrettyFrogRenderStateAcces
     @Override
     public void prettyfrogs$setCrystal(Identifier crystal) {
         prettyfrogs$crystal = crystal;
+    }
+
+    @Override
+    public int prettyfrogs$getCakeCandles() {
+        return prettyfrogs$cakeCandles;
+    }
+
+    @Override
+    public void prettyfrogs$setCakeCandles(int count) {
+        prettyfrogs$cakeCandles = Math.max(0, Math.min(4, count));
     }
 
     @Override
