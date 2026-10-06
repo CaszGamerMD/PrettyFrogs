@@ -27,6 +27,22 @@ public final class FrogInteractionHandler {
                 return InteractionResult.PASS;
             }
 
+            if (current.equals(FrogFormRegistry.CAKE) && isCandle(stack)) {
+                int candles = access.prettyfrogs$getCakeCandles();
+                if (candles >= 4) {
+                    return InteractionResult.PASS;
+                }
+                if (!level.isClientSide()) {
+                    access.prettyfrogs$setCakeCandles(candles + 1);
+                    level.playSound(null, frog.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 0.45F, 1.35F);
+                    level.broadcastEntityEvent(frog, (byte) 20);
+                    if (!player.getAbilities().instabuild) {
+                        stack.shrink(1);
+                    }
+                }
+                return InteractionResult.SUCCESS;
+            }
+
             if (FrogFormRegistry.isResetItem(stack.getItem())) {
                 if (current.equals(FrogFormRegistry.NORMAL)) {
                     return InteractionResult.PASS;
@@ -91,5 +107,25 @@ public final class FrogInteractionHandler {
 
             return InteractionResult.SUCCESS;
         });
+    }
+
+    private static boolean isCandle(ItemStack stack) {
+        return stack.is(Items.CANDLE)
+                || stack.is(Items.WHITE_CANDLE)
+                || stack.is(Items.ORANGE_CANDLE)
+                || stack.is(Items.MAGENTA_CANDLE)
+                || stack.is(Items.LIGHT_BLUE_CANDLE)
+                || stack.is(Items.YELLOW_CANDLE)
+                || stack.is(Items.LIME_CANDLE)
+                || stack.is(Items.PINK_CANDLE)
+                || stack.is(Items.GRAY_CANDLE)
+                || stack.is(Items.LIGHT_GRAY_CANDLE)
+                || stack.is(Items.CYAN_CANDLE)
+                || stack.is(Items.PURPLE_CANDLE)
+                || stack.is(Items.BLUE_CANDLE)
+                || stack.is(Items.BROWN_CANDLE)
+                || stack.is(Items.GREEN_CANDLE)
+                || stack.is(Items.RED_CANDLE)
+                || stack.is(Items.BLACK_CANDLE);
     }
 }
