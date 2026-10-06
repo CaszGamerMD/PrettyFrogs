@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:amethyst_cluster",
+    {"id":"crystaldepths:coal_cluster","required":false},
+    {"id":"crystaldepths:iron_cluster","required":false},
+    {"id":"crystaldepths:gold_cluster","required":false},
+    {"id":"crystaldepths:lapis_cluster","required":false},
+    {"id":"crystaldepths:diamond_cluster","required":false},
+    {"id":"crystaldepths:emerald_cluster","required":false},
+    {"id":"mythicupgrades:ametrine_crystal_cluster","required":false},
+    {"id":"mythicupgrades:aquamarine_crystal_cluster","required":false},
+    {"id":"mythicupgrades:citrine_crystal_cluster","required":false},
+    {"id":"mythicupgrades:jade_crystal_cluster","required":false},
+    {"id":"mythicupgrades:peridot_crystal_cluster","required":false},
+    {"id":"mythicupgrades:ruby_crystal_cluster","required":false},
+    {"id":"mythicupgrades:sapphire_crystal_cluster","required":false},
+    {"id":"mythicupgrades:topaz_crystal_cluster","required":false}
+  ]
+}
