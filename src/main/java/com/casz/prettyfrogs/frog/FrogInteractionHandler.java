@@ -44,13 +44,22 @@ public final class FrogInteractionHandler {
             }
 
             boolean crystalCluster = FrogFormRegistry.isCrystalCluster(stack);
-            Identifier requested = crystalCluster
-                    ? FrogFormRegistry.CRYSTAL
-                    : stack.is(Items.POISONOUS_POTATO)
-                    ? FrogFormRegistry.randomDart(frog.getRandom())
-                    : FrogFormRegistry.isRgbEndRod(stack.getItem())
-                            ? FrogFormRegistry.RAINBOW
-                            : FrogFormRegistry.fromItem(stack.getItem());
+            Identifier requested;
+            if (crystalCluster) {
+                requested = FrogFormRegistry.CRYSTAL;
+            } else if (stack.is(Items.MELON_SLICE)) {
+                requested = FrogFormRegistry.isWatermelon(current)
+                        ? FrogFormRegistry.nextWatermelon(current)
+                        : FrogFormRegistry.randomWatermelon(frog.getRandom());
+            } else if (stack.is(Items.POISONOUS_POTATO)) {
+                requested = FrogFormRegistry.isDart(current)
+                        ? FrogFormRegistry.nextDart(current)
+                        : FrogFormRegistry.randomDart(frog.getRandom());
+            } else if (FrogFormRegistry.isRgbEndRod(stack.getItem())) {
+                requested = FrogFormRegistry.RAINBOW;
+            } else {
+                requested = FrogFormRegistry.fromItem(stack.getItem());
+            }
             if (requested != null && requested.equals(FrogFormRegistry.WATER)
                     && !stack.is(Items.POTION)) {
                 requested = null;
