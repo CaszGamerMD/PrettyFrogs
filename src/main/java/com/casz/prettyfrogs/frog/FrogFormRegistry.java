@@ -93,7 +93,8 @@ public final class FrogFormRegistry {
         register(SCULK, "sculk");
         register(CAKE, "cake");
         register(SLIMY, "slimy");
-        register(CRYSTAL, "crystal");
+        // Crystal keeps the vanilla frog base; the crystal appearance is a translucent tinted overlay.
+        register(CRYSTAL, null);
 
         TRANSFORM_ITEMS.put(Items.MELON_SLICE, WATERMELON);
         VARIANT_ITEMS.put(Items.MELON_SLICE, new Identifier[]{WATERMELON, WATERMELON_RED_TOP});
