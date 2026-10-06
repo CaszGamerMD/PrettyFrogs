@@ -47,16 +47,9 @@ public final class FrogInteractionHandler {
             Identifier requested;
             if (crystalCluster) {
                 requested = FrogFormRegistry.CRYSTAL;
-            } else if (stack.is(Items.MELON_SLICE)) {
-                requested = FrogFormRegistry.isWatermelon(current)
-                        ? FrogFormRegistry.nextWatermelon(current)
-                        : FrogFormRegistry.randomWatermelon(frog.getRandom());
-            } else if (stack.is(Items.POISONOUS_POTATO)) {
-                requested = FrogFormRegistry.isDart(current)
-                        ? FrogFormRegistry.nextDart(current)
-                        : FrogFormRegistry.randomDart(frog.getRandom());
-            } else if (FrogFormRegistry.isRgbEndRod(stack.getItem())) {
-                requested = FrogFormRegistry.RAINBOW;
+            } else if (stack.is(Items.MELON_SLICE) || stack.is(Items.POISONOUS_POTATO)
+                    || FrogFormRegistry.isRgbEndRod(stack.getItem())) {
+                requested = FrogFormRegistry.variantForUse(stack.getItem(), current, frog.getRandom());
             } else {
                 requested = FrogFormRegistry.fromItem(stack.getItem());
             }
