@@ -11,10 +11,22 @@ import org.spongepowered.asm.mixin.Unique;
 public abstract class FrogRenderStateMixin implements PrettyFrogRenderStateAccess {
     @Unique
     private Identifier prettyfrogs$form = FrogFormRegistry.NORMAL;
+    @Unique
+    private Identifier prettyfrogs$crystal = Identifier.withDefaultNamespace("amethyst_cluster");
 
     @Override
     public Identifier prettyfrogs$getForm() {
         return prettyfrogs$form;
+    }
+
+    @Override
+    public Identifier prettyfrogs$getCrystal() {
+        return prettyfrogs$crystal;
+    }
+
+    @Override
+    public void prettyfrogs$setCrystal(Identifier crystal) {
+        prettyfrogs$crystal = crystal;
     }
 
     @Override
