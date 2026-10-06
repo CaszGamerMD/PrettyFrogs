@@ -43,7 +43,10 @@ public final class FrogInteractionHandler {
                 return InteractionResult.SUCCESS;
             }
 
-            Identifier requested = stack.is(Items.POISONOUS_POTATO)
+            boolean crystalCluster = FrogFormRegistry.isCrystalCluster(stack);
+            Identifier requested = crystalCluster
+                    ? FrogFormRegistry.CRYSTAL
+                    : stack.is(Items.POISONOUS_POTATO)
                     ? FrogFormRegistry.randomDart(frog.getRandom())
                     : FrogFormRegistry.isRgbEndRod(stack.getItem())
                             ? FrogFormRegistry.RAINBOW
@@ -56,12 +59,22 @@ public final class FrogInteractionHandler {
                     && !stack.getOrDefault(net.minecraft.core.component.DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER)) {
                 requested = null;
             }
-            if (requested == null || FrogTransformationLogic.isAlreadyTransformed(current, requested)) {
+            if (requested == null) {
+                return InteractionResult.PASS;
+            }
+            if (crystalCluster && current.equals(FrogFormRegistry.CRYSTAL)
+                    && access.prettyfrogs$getCrystal().equals(FrogFormRegistry.crystalId(stack.getItem()))) {
+                return InteractionResult.PASS;
+            }
+            if (!crystalCluster && FrogTransformationLogic.isAlreadyTransformed(current, requested)) {
                 return InteractionResult.PASS;
             }
 
             if (!level.isClientSide()) {
                 access.prettyfrogs$setForm(requested);
+                if (crystalCluster) {
+                    access.prettyfrogs$setCrystal(FrogFormRegistry.crystalId(stack.getItem()));
+                }
                 level.playSound(null, frog.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 0.65F, 1.0F + frog.getRandom().nextFloat() * 0.2F);
                 frog.getNavigation().stop();
                 level.broadcastEntityEvent(frog, (byte) 20);
