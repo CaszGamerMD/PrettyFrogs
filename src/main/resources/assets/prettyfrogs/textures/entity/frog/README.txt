@@ -13,7 +13,7 @@ Render-layer resources:
 - water_shell.png / ice_shell.png - translucent elemental shells
 - ghost_shell.png / slimy_shell.png - translucent spectral/slime shells
 - magma_glow.png / rainbow_glow.png - emissive masks
-- glow_glow.png / soulfire_glow.png / storm_glow.png / sculk_glow.png - emissive masks
+- glow_glow.png / soulfire_glow.png / storm_glow.png / sculk_glow.png - emissive masks\n- crystal_overlay.png - shared tintable Crystal Frog markings
 
 The current PNG set is a functional technical/base-color set for in-game testing.
 Detailed final pixel-art textures can replace these files without changing code.
