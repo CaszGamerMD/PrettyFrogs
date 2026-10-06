@@ -17,6 +17,7 @@ public final class FrogFormRegistry {
 
     public static final Identifier NORMAL = PrettyFrogs.id("normal");
     public static final Identifier WATERMELON = PrettyFrogs.id("watermelon");
+    public static final Identifier WATERMELON_RED_TOP = PrettyFrogs.id("watermelon_red_top");
     public static final Identifier PUMPKIN = PrettyFrogs.id("pumpkin");
     public static final Identifier RED_EYED_TREE = PrettyFrogs.id("red_eyed_tree");
     public static final Identifier SKELETON = PrettyFrogs.id("skeleton");
@@ -55,6 +56,7 @@ public final class FrogFormRegistry {
 
         register(NORMAL, null);
         register(WATERMELON, "watermelon");
+        register(WATERMELON_RED_TOP, "watermelon_red_top");
         register(PUMPKIN, "pumpkin");
         register(RED_EYED_TREE, "red_eyed_tree");
         register(SKELETON, "skeleton");
@@ -140,6 +142,26 @@ public final class FrogFormRegistry {
     public static boolean isDart(Identifier form) {
         return form.equals(DART_RED) || form.equals(DART_BLUE) || form.equals(DART_YELLOW)
                 || form.equals(DART_GREEN) || form.equals(DART_ORANGE);
+    }
+
+    public static boolean isWatermelon(Identifier form) {
+        return form.equals(WATERMELON) || form.equals(WATERMELON_RED_TOP);
+    }
+
+    public static Identifier randomWatermelon(net.minecraft.util.RandomSource random) {
+        return random.nextBoolean() ? WATERMELON : WATERMELON_RED_TOP;
+    }
+
+    public static Identifier nextWatermelon(Identifier current) {
+        return current.equals(WATERMELON) ? WATERMELON_RED_TOP : WATERMELON;
+    }
+
+    public static Identifier nextDart(Identifier current) {
+        Identifier[] colors = {DART_RED, DART_BLUE, DART_YELLOW, DART_GREEN, DART_ORANGE};
+        for (int i = 0; i < colors.length; i++) {
+            if (colors[i].equals(current)) return colors[(i + 1) % colors.length];
+        }
+        return DART_RED;
     }
 
     public static Identifier randomDart(net.minecraft.util.RandomSource random) {
