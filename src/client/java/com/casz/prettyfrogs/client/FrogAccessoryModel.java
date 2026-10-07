@@ -52,17 +52,18 @@ public final class FrogAccessoryModel extends FrogModel {
                 CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -0.4F, -2.5F, 5.0F, 0.8F, 5.0F),
                 PartPose.offset(-2.8F, -2.2F, -2.0F));
 
-        body.addOrReplaceChild("cactus_body_spikes",
-                CubeListBuilder.create()
-                        .texOffs(16, 0).addBox(-0.5F, -4.0F, -5.0F, 1.0F, 2.0F, 1.0F)
-                        .texOffs(16, 0).addBox(-2.5F, -3.6F, -1.5F, 1.0F, 2.0F, 1.0F)
-                        .texOffs(16, 0).addBox(1.5F, -3.6F, 2.5F, 1.0F, 2.0F, 1.0F),
-                PartPose.ZERO);
-        head.addOrReplaceChild("cactus_head_spikes",
-                CubeListBuilder.create()
-                        .texOffs(16, 0).addBox(-2.5F, -4.0F, -4.5F, 1.0F, 2.0F, 1.0F)
-                        .texOffs(16, 0).addBox(1.5F, -4.0F, -2.0F, 1.0F, 2.0F, 1.0F),
-                PartPose.ZERO);
+        // Anchor each spike at the actual top surface (local Y=-2) and extend
+        // upward from that contact point. Keeping every Z inside the body/head
+        // bounds prevents the old floating spikes behind the frog.
+        PartDefinition bodySpikes = body.addOrReplaceChild("cactus_body_spikes", CubeListBuilder.create(), PartPose.ZERO);
+        addSpike(bodySpikes, "back_1", -1.8F, -5.8F);
+        addSpike(bodySpikes, "back_2", 1.8F, -4.0F);
+        addSpike(bodySpikes, "back_3", -1.2F, -1.8F);
+        addSpike(bodySpikes, "back_4", 1.5F, 0.0F);
+
+        PartDefinition headSpikes = head.addOrReplaceChild("cactus_head_spikes", CubeListBuilder.create(), PartPose.ZERO);
+        addSpike(headSpikes, "head_1", -2.1F, -4.5F);
+        addSpike(headSpikes, "head_2", 2.0F, -2.0F);
 
         PartDefinition eyes = head.addOrReplaceChild("eyes", CubeListBuilder.create(), PartPose.offset(-0.5F, 0.0F, 2.0F));
         eyes.addOrReplaceChild("right_eye", CubeListBuilder.create(), PartPose.ZERO);
@@ -79,5 +80,12 @@ public final class FrogAccessoryModel extends FrogModel {
         rightLeg.addOrReplaceChild("right_foot", CubeListBuilder.create(), PartPose.ZERO);
 
         return LayerDefinition.create(mesh, 32, 32);
+    }
+
+    private static void addSpike(PartDefinition parent, String name, float x, float z) {
+        parent.addOrReplaceChild(
+                name,
+                CubeListBuilder.create().texOffs(0, 0).addBox(-0.5F, -2.0F, -0.5F, 1.0F, 2.0F, 1.0F),
+                PartPose.offset(x, -2.0F, z));
     }
 }

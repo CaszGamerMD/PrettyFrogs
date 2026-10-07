@@ -12,25 +12,29 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.FrogRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 
-public final class SkeletonFrogLayer extends RenderLayer<FrogRenderState, FrogModel> {
-    private static final Identifier TEXTURE = PrettyFrogs.id("textures/entity/frog/skeleton.png");
-    private final SkeletonFrogModel model;
+public final class GhostFrogLayer extends RenderLayer<FrogRenderState, FrogModel> {
+    private static final Identifier TEXTURE = PrettyFrogs.id("textures/entity/frog/ghost.png");
+    private final GhostFrogModel model;
 
-    public SkeletonFrogLayer(RenderLayerParent<FrogRenderState, FrogModel> renderer, EntityModelSet modelSet) {
+    public GhostFrogLayer(RenderLayerParent<FrogRenderState, FrogModel> renderer, EntityModelSet modelSet) {
         super(renderer);
-        model = new SkeletonFrogModel(modelSet.bakeLayer(SkeletonFrogModel.LAYER_LOCATION));
+        model = new GhostFrogModel(modelSet.bakeLayer(GhostFrogModel.LAYER_LOCATION));
     }
 
     @Override
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords,
                        FrogRenderState state, float yRot, float xRot) {
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
-        if (!access.prettyfrogs$isForm(FrogFormRegistry.SKELETON) || state.isInvisible) return;
+        if (!access.prettyfrogs$isForm(FrogFormRegistry.GHOST) || state.isInvisible) return;
 
-        collector.order(3).submitModel(
-                model, state, poseStack, RenderTypes.entityCutout(TEXTURE),
+        poseStack.pushPose();
+        poseStack.translate(0.0F, -0.12F + Mth.sin(state.ageInTicks * 0.12F) * 0.018F, 0.0F);
+        collector.order(2).submitModel(
+                model, state, poseStack, RenderTypes.entityTranslucent(TEXTURE),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
+        poseStack.popPose();
     }
 }

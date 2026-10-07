@@ -25,7 +25,6 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
     private static final Identifier GLOW_GLOW = PrettyFrogs.id("textures/entity/frog/glow_glow.png");
     private static final Identifier SOULFIRE_GLOW = PrettyFrogs.id("textures/entity/frog/soulfire_glow.png");
     private static final Identifier STORM_GLOW = PrettyFrogs.id("textures/entity/frog/storm_glow.png");
-    private static final Identifier SCULK_GLOW = PrettyFrogs.id("textures/entity/frog/sculk_glow.png");
 
     public PrettyFrogGlowLayer(RenderLayerParent<FrogRenderState, FrogModel> renderer) {
         super(renderer);
@@ -54,7 +53,7 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
             submitRgb(collector, poseStack, state, RAINBOW_DISCO_B, 0.53F - state.ageInTicks * 0.013F, 2);
             return;
         }
-        // RAINBOW_EYES is animated in FrogEyeLayer so only the irises rotate.
+        // RAINBOW_EYES animates only the eyes in FrogEyeLayer.
 
         RenderType renderType = null;
         if (access.prettyfrogs$isForm(FrogFormRegistry.MAGMA)) {
@@ -65,8 +64,6 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
             renderType = RenderTypes.eyes(SOULFIRE_GLOW);
         } else if (access.prettyfrogs$isForm(FrogFormRegistry.STORM)) {
             renderType = RenderTypes.eyes(STORM_GLOW);
-        } else if (access.prettyfrogs$isForm(FrogFormRegistry.SCULK)) {
-            renderType = RenderTypes.eyes(SCULK_GLOW);
         }
 
         if (renderType != null) {

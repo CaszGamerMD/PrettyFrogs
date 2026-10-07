@@ -7,6 +7,7 @@ import com.casz.prettyfrogs.client.WaterFrogShellLayer;
 import com.casz.prettyfrogs.client.IceFrogShellLayer;
 import com.casz.prettyfrogs.client.SkeletonFrogLayer;
 import com.casz.prettyfrogs.client.GhostSlimeFrogLayer;
+import com.casz.prettyfrogs.client.GhostFrogLayer;
 import com.casz.prettyfrogs.client.CrystalFrogLayer;
 import com.casz.prettyfrogs.client.PumpkinStemLayer;
 import com.casz.prettyfrogs.client.CakeCandleLayer;
@@ -37,8 +38,9 @@ public abstract class FrogRendererMixin extends net.minecraft.client.renderer.en
         this.addLayer(new WaterFrogShellLayer(renderer));
         this.addLayer(new IceFrogShellLayer(renderer));
         this.addLayer(new GhostSlimeFrogLayer(renderer));
+        this.addLayer(new GhostFrogLayer(renderer, context.getModelSet()));
         this.addLayer(new CrystalFrogLayer(renderer));
-        this.addLayer(new SkeletonFrogLayer(renderer));
+        this.addLayer(new SkeletonFrogLayer(renderer, context.getModelSet()));
         this.addLayer(new PumpkinStemLayer(renderer, context.getModelSet()));
         this.addLayer(new CakeCandleLayer(renderer, context.getModelSet()));
         this.addLayer(new FrogAccessoryLayer(renderer, context.getModelSet()));
@@ -59,9 +61,16 @@ public abstract class FrogRendererMixin extends net.minecraft.client.renderer.en
         for (int i = 0; i < 4; i++) {
             renderAccess.prettyfrogs$setCakeCandleColor(i, access.prettyfrogs$getCakeCandleColor(i));
         }
-        Identifier customTexture = form.equals(com.casz.prettyfrogs.frog.FrogFormRegistry.SKELETON)
-                ? com.casz.prettyfrogs.PrettyFrogs.id("textures/entity/frog/skeleton_base.png")
-                : FrogTextureResolver.customTexture(form);
+        Identifier customTexture;
+        if (form.equals(com.casz.prettyfrogs.frog.FrogFormRegistry.SKELETON)) {
+            customTexture = com.casz.prettyfrogs.PrettyFrogs.id("textures/entity/frog/skeleton_base.png");
+        } else if (form.equals(com.casz.prettyfrogs.frog.FrogFormRegistry.GHOST)) {
+            customTexture = com.casz.prettyfrogs.PrettyFrogs.id("textures/entity/frog/ghost_base.png");
+        } else if (form.equals(com.casz.prettyfrogs.frog.FrogFormRegistry.SCULK)) {
+            customTexture = Identifier.withDefaultNamespace("textures/block/sculk.png");
+        } else {
+            customTexture = FrogTextureResolver.customTexture(form);
+        }
         if (customTexture != null) {
             state.texture = customTexture;
         }

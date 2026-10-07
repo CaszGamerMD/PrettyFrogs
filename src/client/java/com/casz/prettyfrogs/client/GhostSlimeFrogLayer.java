@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 
 public final class GhostSlimeFrogLayer extends RenderLayer<FrogRenderState, FrogModel> {
-    private static final Identifier GHOST_SHELL = PrettyFrogs.id("textures/entity/frog/ghost_shell.png");
     private static final Identifier SLIME_SHELL = PrettyFrogs.id("textures/entity/frog/slimy_shell.png");
 
     public GhostSlimeFrogLayer(RenderLayerParent<FrogRenderState, FrogModel> renderer) {
@@ -24,12 +23,10 @@ public final class GhostSlimeFrogLayer extends RenderLayer<FrogRenderState, Frog
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords,
                        FrogRenderState state, float yRot, float xRot) {
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
-        Identifier shell = access.prettyfrogs$isForm(FrogFormRegistry.GHOST) ? GHOST_SHELL
-                : access.prettyfrogs$isForm(FrogFormRegistry.SLIMY) ? SLIME_SHELL : null;
-        if (shell == null || state.isInvisible) return;
+        if (!access.prettyfrogs$isForm(FrogFormRegistry.SLIMY) || state.isInvisible) return;
 
         collector.order(2).submitModel(
-                getParentModel(), state, poseStack, RenderTypes.entityTranslucent(shell),
+                getParentModel(), state, poseStack, RenderTypes.entityTranslucent(SLIME_SHELL),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
     }

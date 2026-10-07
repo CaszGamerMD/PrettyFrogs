@@ -15,7 +15,8 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 
 public final class FrogAccessoryLayer extends RenderLayer<FrogRenderState, FrogModel> {
-    private static final Identifier TEXTURE = PrettyFrogs.id("textures/entity/frog/frog_accessories.png");
+    private static final Identifier BUMBLE_WINGS = PrettyFrogs.id("textures/entity/frog/bumble_wings.png");
+    private static final Identifier CACTUS_SPIKES = PrettyFrogs.id("textures/entity/frog/cactus_spikes.png");
     private final FrogAccessoryModel model;
 
     public FrogAccessoryLayer(RenderLayerParent<FrogRenderState, FrogModel> renderer, EntityModelSet modelSet) {
@@ -33,9 +34,9 @@ public final class FrogAccessoryLayer extends RenderLayer<FrogRenderState, FrogM
         }
 
         model.setForm(form);
-        RenderType type = form.equals(FrogFormRegistry.BUMBLE)
-                ? RenderTypes.entityTranslucent(TEXTURE)
-                : RenderTypes.entityCutout(TEXTURE);
+        boolean bumble = form.equals(FrogFormRegistry.BUMBLE);
+        Identifier texture = bumble ? BUMBLE_WINGS : CACTUS_SPIKES;
+        RenderType type = bumble ? RenderTypes.entityTranslucent(texture) : RenderTypes.entityCutout(texture);
 
         collector.order(3).submitModel(
                 model, state, poseStack, type,
