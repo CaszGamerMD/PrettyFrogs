@@ -1,6 +1,7 @@
 package com.casz.prettyfrogs.client;
 
 import com.casz.prettyfrogs.PrettyFrogs;
+import com.casz.prettyfrogs.frog.FrogFormRegistry;
 import net.minecraft.client.model.animal.frog.FrogModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -9,53 +10,31 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.resources.Identifier;
 
-public final class CakeCandleModel extends FrogModel {
+public final class FrogAccessoryModel extends FrogModel {
     public static final ModelLayerLocation LAYER_LOCATION =
-            new ModelLayerLocation(PrettyFrogs.id("cake_candles"), "main");
+            new ModelLayerLocation(PrettyFrogs.id("frog_accessories"), "main");
 
-    private final ModelPart[] candleRoots;
-    private final ModelPart[] bodies;
-    private final ModelPart[] flames;
+    private final ModelPart wings;
+    private final ModelPart cactusBodySpikes;
+    private final ModelPart cactusHeadSpikes;
 
-    public CakeCandleModel(ModelPart root) {
+    public FrogAccessoryModel(ModelPart root) {
         super(root);
-        ModelPart head = root.getChild("root").getChild("body").getChild("head");
-        this.candleRoots = new ModelPart[4];
-        this.bodies = new ModelPart[4];
-        this.flames = new ModelPart[4];
-        for (int i = 0; i < 4; i++) {
-            ModelPart candle = head.getChild("candle_" + (i + 1));
-            candleRoots[i] = candle;
-            bodies[i] = candle.getChild("body");
-            flames[i] = candle.getChild("flame");
-        }
-        hideAll();
+        ModelPart body = root.getChild("root").getChild("body");
+        ModelPart head = body.getChild("head");
+        wings = body.getChild("bumble_wings");
+        cactusBodySpikes = body.getChild("cactus_body_spikes");
+        cactusHeadSpikes = head.getChild("cactus_head_spikes");
+        setForm(FrogFormRegistry.NORMAL);
     }
 
-    public void showSingleBody(int index) {
-        for (int i = 0; i < candleRoots.length; i++) {
-            boolean show = i == index;
-            candleRoots[i].visible = show;
-            bodies[i].visible = show;
-            flames[i].visible = false;
-        }
-    }
-
-    public void showFlames(int count) {
-        int visible = Math.max(0, Math.min(4, count));
-        for (int i = 0; i < candleRoots.length; i++) {
-            boolean show = i < visible;
-            candleRoots[i].visible = show;
-            bodies[i].visible = false;
-            flames[i].visible = show;
-        }
-    }
-
-    private void hideAll() {
-        for (ModelPart candle : candleRoots) {
-            candle.visible = false;
-        }
+    public void setForm(Identifier form) {
+        wings.visible = form.equals(FrogFormRegistry.BUMBLE);
+        boolean cactus = form.equals(FrogFormRegistry.CACTUS);
+        cactusBodySpikes.visible = cactus;
+        cactusHeadSpikes.visible = cactus;
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -65,11 +44,25 @@ public final class CakeCandleModel extends FrogModel {
         PartDefinition body = modelRoot.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -2.0F, 4.0F));
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -2.0F, -1.0F));
 
-        // Shifted two model pixels toward the frog's back (+Z).
-        addCandle(head, "candle_1", -1.5F, -1.8F);
-        addCandle(head, "candle_2", 1.5F, -1.8F);
-        addCandle(head, "candle_3", -1.5F, 0.4F);
-        addCandle(head, "candle_4", 1.5F, 0.4F);
+        PartDefinition wings = body.addOrReplaceChild("bumble_wings", CubeListBuilder.create(), PartPose.ZERO);
+        wings.addOrReplaceChild("left_wing",
+                CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -0.4F, -2.5F, 5.0F, 0.8F, 5.0F),
+                PartPose.offset(2.8F, -2.2F, -2.0F));
+        wings.addOrReplaceChild("right_wing",
+                CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -0.4F, -2.5F, 5.0F, 0.8F, 5.0F),
+                PartPose.offset(-2.8F, -2.2F, -2.0F));
+
+        body.addOrReplaceChild("cactus_body_spikes",
+                CubeListBuilder.create()
+                        .texOffs(16, 0).addBox(-0.5F, -4.0F, -5.0F, 1.0F, 2.0F, 1.0F)
+                        .texOffs(16, 0).addBox(-2.5F, -3.6F, -1.5F, 1.0F, 2.0F, 1.0F)
+                        .texOffs(16, 0).addBox(1.5F, -3.6F, 2.5F, 1.0F, 2.0F, 1.0F),
+                PartPose.ZERO);
+        head.addOrReplaceChild("cactus_head_spikes",
+                CubeListBuilder.create()
+                        .texOffs(16, 0).addBox(-2.5F, -4.0F, -4.5F, 1.0F, 2.0F, 1.0F)
+                        .texOffs(16, 0).addBox(1.5F, -4.0F, -2.0F, 1.0F, 2.0F, 1.0F),
+                PartPose.ZERO);
 
         PartDefinition eyes = head.addOrReplaceChild("eyes", CubeListBuilder.create(), PartPose.offset(-0.5F, 0.0F, 2.0F));
         eyes.addOrReplaceChild("right_eye", CubeListBuilder.create(), PartPose.ZERO);
@@ -85,16 +78,6 @@ public final class CakeCandleModel extends FrogModel {
         PartDefinition rightLeg = modelRoot.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.ZERO);
         rightLeg.addOrReplaceChild("right_foot", CubeListBuilder.create(), PartPose.ZERO);
 
-        return LayerDefinition.create(mesh, 16, 16);
-    }
-
-    private static void addCandle(PartDefinition head, String name, float x, float z) {
-        PartDefinition candle = head.addOrReplaceChild(name, CubeListBuilder.create(), PartPose.offset(x, 0.0F, z));
-        candle.addOrReplaceChild("body",
-                CubeListBuilder.create().texOffs(0, 0).addBox(-0.5F, -4.0F, -0.5F, 1.0F, 3.0F, 1.0F),
-                PartPose.ZERO);
-        candle.addOrReplaceChild("flame",
-                CubeListBuilder.create().texOffs(8, 0).addBox(-0.5F, -5.0F, -0.5F, 1.0F, 1.0F, 1.0F),
-                PartPose.ZERO);
+        return LayerDefinition.create(mesh, 32, 32);
     }
 }

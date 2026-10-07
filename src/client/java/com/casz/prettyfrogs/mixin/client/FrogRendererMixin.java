@@ -10,6 +10,8 @@ import com.casz.prettyfrogs.client.GhostSlimeFrogLayer;
 import com.casz.prettyfrogs.client.CrystalFrogLayer;
 import com.casz.prettyfrogs.client.PumpkinStemLayer;
 import com.casz.prettyfrogs.client.CakeCandleLayer;
+import com.casz.prettyfrogs.client.FrogEyeLayer;
+import com.casz.prettyfrogs.client.FrogAccessoryLayer;
 import com.casz.prettyfrogs.frog.PrettyFrogAccess;
 import net.minecraft.client.renderer.entity.FrogRenderer;
 import net.minecraft.client.renderer.entity.state.FrogRenderState;
@@ -36,9 +38,11 @@ public abstract class FrogRendererMixin extends net.minecraft.client.renderer.en
         this.addLayer(new IceFrogShellLayer(renderer));
         this.addLayer(new GhostSlimeFrogLayer(renderer));
         this.addLayer(new CrystalFrogLayer(renderer));
-        this.addLayer(new SkeletonFrogLayer(renderer, context.getModelSet()));
+        this.addLayer(new SkeletonFrogLayer(renderer));
         this.addLayer(new PumpkinStemLayer(renderer, context.getModelSet()));
         this.addLayer(new CakeCandleLayer(renderer, context.getModelSet()));
+        this.addLayer(new FrogAccessoryLayer(renderer, context.getModelSet()));
+        this.addLayer(new FrogEyeLayer(renderer, context.getModelSet()));
     }
 
     @Inject(method = "extractRenderState", at = @At("TAIL"))
@@ -52,6 +56,9 @@ public abstract class FrogRendererMixin extends net.minecraft.client.renderer.en
         renderAccess.prettyfrogs$setForm(form);
         renderAccess.prettyfrogs$setCrystal(access.prettyfrogs$getCrystal());
         renderAccess.prettyfrogs$setCakeCandles(access.prettyfrogs$getCakeCandles());
+        for (int i = 0; i < 4; i++) {
+            renderAccess.prettyfrogs$setCakeCandleColor(i, access.prettyfrogs$getCakeCandleColor(i));
+        }
         Identifier customTexture = form.equals(com.casz.prettyfrogs.frog.FrogFormRegistry.SKELETON)
                 ? com.casz.prettyfrogs.PrettyFrogs.id("textures/entity/frog/skeleton_base.png")
                 : FrogTextureResolver.customTexture(form);

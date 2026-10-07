@@ -26,6 +26,8 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     private static final String PRETTYFROGS_CRYSTAL_SAVE_KEY = "PrettyFrogsCrystal";
     @Unique
     private static final String PRETTYFROGS_CAKE_CANDLES_SAVE_KEY = "PrettyFrogsCakeCandles";
+    @Unique
+    private static final String PRETTYFROGS_CAKE_CANDLE_COLORS_SAVE_KEY = "PrettyFrogsCakeCandleColors";
 
     @Unique
     private static final EntityDataAccessor<String> PRETTYFROGS_FORM =
@@ -36,12 +38,28 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     @Unique
     private static final EntityDataAccessor<Integer> PRETTYFROGS_CAKE_CANDLES =
             SynchedEntityData.defineId(Frog.class, EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> PRETTYFROGS_CAKE_CANDLE_COLOR_0 =
+            SynchedEntityData.defineId(Frog.class, EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> PRETTYFROGS_CAKE_CANDLE_COLOR_1 =
+            SynchedEntityData.defineId(Frog.class, EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> PRETTYFROGS_CAKE_CANDLE_COLOR_2 =
+            SynchedEntityData.defineId(Frog.class, EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> PRETTYFROGS_CAKE_CANDLE_COLOR_3 =
+            SynchedEntityData.defineId(Frog.class, EntityDataSerializers.INT);
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
     private void prettyfrogs$defineFormData(SynchedEntityData.Builder builder, CallbackInfo ci) {
         builder.define(PRETTYFROGS_FORM, FrogFormRegistry.NORMAL.toString());
         builder.define(PRETTYFROGS_CRYSTAL, "minecraft:amethyst_cluster");
         builder.define(PRETTYFROGS_CAKE_CANDLES, 0);
+        builder.define(PRETTYFROGS_CAKE_CANDLE_COLOR_0, com.casz.prettyfrogs.frog.CakeCandleColors.DEFAULT);
+        builder.define(PRETTYFROGS_CAKE_CANDLE_COLOR_1, com.casz.prettyfrogs.frog.CakeCandleColors.DEFAULT);
+        builder.define(PRETTYFROGS_CAKE_CANDLE_COLOR_2, com.casz.prettyfrogs.frog.CakeCandleColors.DEFAULT);
+        builder.define(PRETTYFROGS_CAKE_CANDLE_COLOR_3, com.casz.prettyfrogs.frog.CakeCandleColors.DEFAULT);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -147,6 +165,31 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     }
 
     @Override
+    public int prettyfrogs$getCakeCandleColor(int index) {
+        Frog frog = (Frog)(Object)this;
+        return switch (index) {
+            case 0 -> frog.getEntityData().get(PRETTYFROGS_CAKE_CANDLE_COLOR_0);
+            case 1 -> frog.getEntityData().get(PRETTYFROGS_CAKE_CANDLE_COLOR_1);
+            case 2 -> frog.getEntityData().get(PRETTYFROGS_CAKE_CANDLE_COLOR_2);
+            case 3 -> frog.getEntityData().get(PRETTYFROGS_CAKE_CANDLE_COLOR_3);
+            default -> com.casz.prettyfrogs.frog.CakeCandleColors.DEFAULT;
+        };
+    }
+
+    @Override
+    public void prettyfrogs$setCakeCandleColor(int index, int color) {
+        Frog frog = (Frog)(Object)this;
+        int rgb = color & 0xFFFFFF;
+        switch (index) {
+            case 0 -> frog.getEntityData().set(PRETTYFROGS_CAKE_CANDLE_COLOR_0, rgb);
+            case 1 -> frog.getEntityData().set(PRETTYFROGS_CAKE_CANDLE_COLOR_1, rgb);
+            case 2 -> frog.getEntityData().set(PRETTYFROGS_CAKE_CANDLE_COLOR_2, rgb);
+            case 3 -> frog.getEntityData().set(PRETTYFROGS_CAKE_CANDLE_COLOR_3, rgb);
+            default -> { }
+        }
+    }
+
+    @Override
     public void prettyfrogs$setForm(Identifier form) {
         Frog frog = (Frog)(Object)this;
         Identifier normalized = FrogFormRegistry.get(form).id();
@@ -164,6 +207,9 @@ public abstract class FrogMixin implements PrettyFrogAccess {
         }
         if (prettyfrogs$getForm().equals(FrogFormRegistry.CAKE) && prettyfrogs$getCakeCandles() > 0) {
             output.putString(PRETTYFROGS_CAKE_CANDLES_SAVE_KEY, Integer.toString(prettyfrogs$getCakeCandles()));
+            output.putString(PRETTYFROGS_CAKE_CANDLE_COLORS_SAVE_KEY,
+                    prettyfrogs$getCakeCandleColor(0) + "," + prettyfrogs$getCakeCandleColor(1) + ","
+                            + prettyfrogs$getCakeCandleColor(2) + "," + prettyfrogs$getCakeCandleColor(3));
         }
     }
 
@@ -184,6 +230,17 @@ public abstract class FrogMixin implements PrettyFrogAccess {
                         prettyfrogs$setCakeCandles(Integer.parseInt(value));
                     } catch (NumberFormatException ignored) {
                         prettyfrogs$setCakeCandles(0);
+                    }
+                });
+        input.getString(PRETTYFROGS_CAKE_CANDLE_COLORS_SAVE_KEY)
+                .ifPresent(value -> {
+                    String[] parts = value.split(",");
+                    for (int i = 0; i < Math.min(4, parts.length); i++) {
+                        try {
+                            prettyfrogs$setCakeCandleColor(i, Integer.parseInt(parts[i]));
+                        } catch (NumberFormatException ignored) {
+                            prettyfrogs$setCakeCandleColor(i, com.casz.prettyfrogs.frog.CakeCandleColors.DEFAULT);
+                        }
                     }
                 });
     }

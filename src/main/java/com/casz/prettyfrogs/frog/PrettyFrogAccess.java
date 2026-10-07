@@ -10,4 +10,6 @@ public interface PrettyFrogAccess {
     void prettyfrogs$setCrystal(Identifier crystal);
     int prettyfrogs$getCakeCandles();
     void prettyfrogs$setCakeCandles(int count);
+    int prettyfrogs$getCakeCandleColor(int index);
+    void prettyfrogs$setCakeCandleColor(int index, int color);
 }

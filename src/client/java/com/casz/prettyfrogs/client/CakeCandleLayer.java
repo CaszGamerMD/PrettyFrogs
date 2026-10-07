@@ -26,15 +26,24 @@ public final class CakeCandleLayer extends RenderLayer<FrogRenderState, FrogMode
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords,
                        FrogRenderState state, float yRot, float xRot) {
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
-        if (!access.prettyfrogs$isForm(FrogFormRegistry.CAKE)
-                || access.prettyfrogs$getCakeCandles() <= 0
-                || state.isInvisible) {
+        int count = access.prettyfrogs$getCakeCandles();
+        if (!access.prettyfrogs$isForm(FrogFormRegistry.CAKE) || count <= 0 || state.isInvisible) {
             return;
         }
 
-        model.setCount(access.prettyfrogs$getCakeCandles());
-        collector.order(3).submitModel(model, state, poseStack, RenderTypes.entityCutout(TEXTURE),
-                lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
+        for (int i = 0; i < Math.min(4, count); i++) {
+            model.showSingleBody(i);
+            int color = 0xFF000000 | (access.prettyfrogs$getCakeCandleColor(i) & 0xFFFFFF);
+            collector.order(3).submitModel(
+                    model, state, poseStack, RenderTypes.entityCutout(TEXTURE),
+                    lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
+                    color, null, state.outlineColor, null);
+        }
+
+        model.showFlames(count);
+        collector.order(4).submitModel(
+                model, state, poseStack, RenderTypes.entityCutout(TEXTURE),
+                0xF000F0, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
     }
 }

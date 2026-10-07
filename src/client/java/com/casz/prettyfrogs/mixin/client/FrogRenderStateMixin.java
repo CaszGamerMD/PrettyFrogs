@@ -15,6 +15,10 @@ public abstract class FrogRenderStateMixin implements PrettyFrogRenderStateAcces
     private Identifier prettyfrogs$crystal = Identifier.withDefaultNamespace("amethyst_cluster");
     @Unique
     private int prettyfrogs$cakeCandles;
+    @Unique
+    private final int[] prettyfrogs$cakeCandleColors = new int[] {
+            0xF0D8A8, 0xF0D8A8, 0xF0D8A8, 0xF0D8A8
+    };
 
     @Override
     public Identifier prettyfrogs$getForm() {
@@ -39,6 +43,19 @@ public abstract class FrogRenderStateMixin implements PrettyFrogRenderStateAcces
     @Override
     public void prettyfrogs$setCakeCandles(int count) {
         prettyfrogs$cakeCandles = Math.max(0, Math.min(4, count));
+    }
+
+    @Override
+    public int prettyfrogs$getCakeCandleColor(int index) {
+        return index >= 0 && index < prettyfrogs$cakeCandleColors.length
+                ? prettyfrogs$cakeCandleColors[index] : 0xF0D8A8;
+    }
+
+    @Override
+    public void prettyfrogs$setCakeCandleColor(int index, int color) {
+        if (index >= 0 && index < prettyfrogs$cakeCandleColors.length) {
+            prettyfrogs$cakeCandleColors[index] = color & 0xFFFFFF;
+        }
     }
 
     @Override

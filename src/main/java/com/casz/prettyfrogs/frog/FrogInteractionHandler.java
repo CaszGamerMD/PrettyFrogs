@@ -34,6 +34,7 @@ public final class FrogInteractionHandler {
                     return InteractionResult.PASS;
                 }
                 if (!level.isClientSide()) {
+                    access.prettyfrogs$setCakeCandleColor(candles, CakeCandleColors.colorFor(stack.getItem()));
                     access.prettyfrogs$setCakeCandles(candles + 1);
                     level.playSound(null, frog.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 0.45F, 1.35F);
                     level.broadcastEntityEvent(frog, (byte) 20);
