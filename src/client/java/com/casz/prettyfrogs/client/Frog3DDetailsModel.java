@@ -25,6 +25,10 @@ public final class Frog3DDetailsModel extends FrogModel {
     private final ModelPart mushroomHead;
     private final ModelPart mushroomBack;
     private final ModelPart balloonKnot;
+    private final ModelPart frostingHead;
+    private final ModelPart frostingBack;
+    private final ModelPart snowHead;
+    private final ModelPart snowBack;
 
     public Frog3DDetailsModel(ModelPart root) {
         super(root);
@@ -36,6 +40,10 @@ public final class Frog3DDetailsModel extends FrogModel {
         mushroomHead = head.getChild("mushroom_head");
         mushroomBack = body.getChild("mushroom_back");
         balloonKnot = body.getChild("balloon_knot");
+        frostingHead = head.getChild("frosting_head");
+        frostingBack = body.getChild("frosting_back");
+        snowHead = head.getChild("snow_head");
+        snowBack = body.getChild("snow_back");
         setDetail(Frog3DDetailKind.NONE);
     }
 
@@ -45,6 +53,10 @@ public final class Frog3DDetailsModel extends FrogModel {
         mushroomHead.visible = kind == Frog3DDetailKind.MUSHROOMS;
         mushroomBack.visible = kind == Frog3DDetailKind.MUSHROOMS;
         balloonKnot.visible = kind == Frog3DDetailKind.BALLOON_KNOT;
+        frostingHead.visible = kind == Frog3DDetailKind.FROSTING_CAP;
+        frostingBack.visible = kind == Frog3DDetailKind.FROSTING_CAP;
+        snowHead.visible = kind == Frog3DDetailKind.SNOW_CAP;
+        snowBack.visible = kind == Frog3DDetailKind.SNOW_CAP;
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -96,6 +108,38 @@ public final class Frog3DDetailsModel extends FrogModel {
                         .texOffs(0, 32).addBox(-0.8F, 0.0F, -4.3F, 1.6F, 1.0F, 1.5F)
                         .texOffs(10, 32).addBox(-1.3F, 0.9F, -4.1F, 2.6F, 0.65F, 1.1F)
                         .texOffs(20, 32).addBox(-0.5F, 1.5F, -3.9F, 1.0F, 1.5F, 0.7F),
+                PartPose.ZERO);
+
+        // Cake Frog: frosting is a shallow cap hugging the TOP HALF of the
+        // vanilla head and back. Slight overhang makes it read as icing without
+        // replacing the cake-colored lower body. Candles render independently above it.
+        head.addOrReplaceChild("frosting_head",
+                CubeListBuilder.create()
+                        .texOffs(32, 24).addBox(-3.25F, -2.55F, -6.75F, 6.5F, 0.9F, 6.5F)
+                        .texOffs(32, 24).addBox(-3.18F, -1.72F, -6.68F, 0.55F, 0.75F, 6.35F)
+                        .texOffs(32, 24).addBox(2.63F, -1.72F, -6.68F, 0.55F, 0.75F, 6.35F),
+                PartPose.ZERO);
+        body.addOrReplaceChild("frosting_back",
+                CubeListBuilder.create()
+                        .texOffs(32, 24).addBox(-3.45F, -1.70F, -0.65F, 6.9F, 0.9F, 7.4F)
+                        .texOffs(32, 24).addBox(-3.38F, -0.90F, 0.1F, 0.55F, 0.8F, 5.9F)
+                        .texOffs(32, 24).addBox(2.83F, -0.90F, 0.9F, 0.55F, 0.65F, 4.8F),
+                PartPose.ZERO);
+
+        // Ice Frog: an uneven layer of settled snow over the same top-half
+        // silhouette. Low blocky mounds break up the outline so it reads as snow,
+        // while the existing translucent ice shell remains visible beneath.
+        head.addOrReplaceChild("snow_head",
+                CubeListBuilder.create()
+                        .texOffs(32, 44).addBox(-3.22F, -2.58F, -6.72F, 6.44F, 0.88F, 6.44F)
+                        .texOffs(32, 44).addBox(-2.45F, -3.05F, -5.45F, 2.2F, 0.55F, 2.1F)
+                        .texOffs(32, 44).addBox(0.55F, -2.95F, -3.35F, 2.0F, 0.45F, 2.0F),
+                PartPose.ZERO);
+        body.addOrReplaceChild("snow_back",
+                CubeListBuilder.create()
+                        .texOffs(32, 44).addBox(-3.40F, -1.73F, -0.62F, 6.8F, 0.88F, 7.3F)
+                        .texOffs(32, 44).addBox(-2.5F, -2.20F, 1.1F, 2.3F, 0.55F, 2.0F)
+                        .texOffs(32, 44).addBox(0.45F, -2.12F, 3.65F, 2.45F, 0.5F, 2.1F),
                 PartPose.ZERO);
 
         // Required vanilla model children: zero geometry, but correct hierarchy

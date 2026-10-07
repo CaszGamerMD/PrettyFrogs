@@ -12,12 +12,16 @@ public enum Frog3DDetailKind {
     NONE,
     CRYSTALS,
     MUSHROOMS,
-    BALLOON_KNOT;
+    BALLOON_KNOT,
+    FROSTING_CAP,
+    SNOW_CAP;
 
     public static Frog3DDetailKind forForm(Identifier form) {
         if (FrogFormRegistry.CRYSTAL.equals(form)) return CRYSTALS;
         if (FrogFormRegistry.MUSHROOM.equals(form)) return MUSHROOMS;
         if (FrogFormRegistry.WATER.equals(form)) return BALLOON_KNOT;
+        if (FrogFormRegistry.CAKE.equals(form)) return FROSTING_CAP;
+        if (FrogFormRegistry.ICE.equals(form)) return SNOW_CAP;
         return NONE;
     }
 }
