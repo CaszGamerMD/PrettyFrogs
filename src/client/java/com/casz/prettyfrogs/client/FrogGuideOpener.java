@@ -7,6 +7,6 @@ public final class FrogGuideOpener {
 
     public static void open() {
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.setScreen(new FrogGuideScreen());
+        minecraft.gui.setScreen(new FrogGuideScreen());
     }
 }
