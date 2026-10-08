@@ -101,6 +101,9 @@ public final class FrogInteractionHandler {
                 if (!player.getAbilities().instabuild) {
                     if (requested.equals(FrogFormRegistry.WATER)) {
                         player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                    } else if (requested.equals(FrogFormRegistry.TADPOLE_COSTUME)) {
+                        // Filled bucket is consumed, not its reusable container.
+                        player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                     } else {
                         stack.shrink(1);
                     }

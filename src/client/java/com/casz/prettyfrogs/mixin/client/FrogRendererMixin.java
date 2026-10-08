@@ -10,6 +10,7 @@ import com.casz.prettyfrogs.client.GhostSlimeFrogLayer;
 import com.casz.prettyfrogs.client.GhostFrogLayer;
 import com.casz.prettyfrogs.client.CrystalFrogLayer;
 import com.casz.prettyfrogs.client.PumpkinStemLayer;
+import com.casz.prettyfrogs.client.TadpoleCostumeLayer;
 import com.casz.prettyfrogs.client.CakeCandleLayer;
 import com.casz.prettyfrogs.client.FrogEyeLayer;
 import com.casz.prettyfrogs.client.FrogAccessoryLayer;
@@ -42,6 +43,7 @@ public abstract class FrogRendererMixin extends net.minecraft.client.renderer.en
         this.addLayer(new CrystalFrogLayer(renderer));
         this.addLayer(new SkeletonFrogLayer(renderer, context.getModelSet()));
         this.addLayer(new PumpkinStemLayer(renderer, context.getModelSet()));
+        this.addLayer(new TadpoleCostumeLayer(renderer, context.getModelSet()));
         this.addLayer(new CakeCandleLayer(renderer, context.getModelSet()));
         this.addLayer(new FrogAccessoryLayer(renderer, context.getModelSet()));
         this.addLayer(new FrogEyeLayer(renderer, context.getModelSet()));

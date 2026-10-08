@@ -8,6 +8,7 @@ Fabric 26.2 mod for cosmetic transformations of vanilla frogs.
 | --- | --- |
 | Melon Slice | Watermelon Frog |
 | Carved Pumpkin | Pumpkin Frog |
+| Tadpole Bucket | Tadpole Costume Frog (hood + tail) |
 | Ender Pearl | Red-Eyed Tree Frog |
 | Bone | Skeleton Frog |
 | Mud Block | Muddy Frog |
@@ -52,6 +53,8 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 - **Magma Frog:** harmless flame/smoke particles and a full-bright emissive layer.
 - **Ice Frog:** snowflake particles plus a translucent icy shell.
 - **Skeleton Frog:** dedicated animated skeletal geometry using the vanilla frog animation hierarchy.
+- **Tadpole Costume Frog:** an open-front tadpole hood with raised eyes and a tapered tail. The frog keeps its original appearance underneath; the bucket is returned in survival.
+- **Reusable hood template:** `BasicFrogHoodModel` and `basic_hood.png` are available for future costume variants.
 - **Rainbow Frog:** RGB form with a full-bright emissive layer.
 - **Cherry Blossom Frog:** drifting cherry-leaf petals, denser while airborne.
 - **Ender Frog:** subtle portal particles.

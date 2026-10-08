@@ -20,6 +20,7 @@ public final class FrogFormRegistry {
     public static final Identifier WATERMELON = PrettyFrogs.id("watermelon");
     public static final Identifier WATERMELON_RED_TOP = PrettyFrogs.id("watermelon_red_top");
     public static final Identifier PUMPKIN = PrettyFrogs.id("pumpkin");
+    public static final Identifier TADPOLE_COSTUME = PrettyFrogs.id("tadpole_costume");
     public static final Identifier RED_EYED_TREE = PrettyFrogs.id("red_eyed_tree");
     public static final Identifier SKELETON = PrettyFrogs.id("skeleton");
     public static final Identifier MUDDY = PrettyFrogs.id("muddy");
@@ -64,6 +65,8 @@ public final class FrogFormRegistry {
         register(WATERMELON, "watermelon");
         register(WATERMELON_RED_TOP, "watermelon_red_top");
         register(PUMPKIN, "pumpkin");
+        // Costume overlays the frog, preserving the underlying vanilla texture.
+        register(TADPOLE_COSTUME, null);
         register(RED_EYED_TREE, "red_eyed_tree");
         register(SKELETON, "skeleton");
         register(MUDDY, "muddy");
@@ -100,6 +103,7 @@ public final class FrogFormRegistry {
         VARIANT_ITEMS.put(Items.MELON_SLICE, new Identifier[]{WATERMELON, WATERMELON_RED_TOP});
         VARIANT_ITEMS.put(Items.POISONOUS_POTATO, new Identifier[]{DART_RED, DART_BLUE, DART_YELLOW, DART_GREEN, DART_ORANGE});
         TRANSFORM_ITEMS.put(Items.CARVED_PUMPKIN, PUMPKIN);
+        TRANSFORM_ITEMS.put(Items.TADPOLE_BUCKET, TADPOLE_COSTUME);
         TRANSFORM_ITEMS.put(Items.ENDER_PEARL, RED_EYED_TREE);
         TRANSFORM_ITEMS.put(Items.BONE, SKELETON);
         TRANSFORM_ITEMS.put(Items.MUD, MUDDY);

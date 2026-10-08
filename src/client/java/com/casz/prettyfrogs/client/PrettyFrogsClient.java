@@ -9,6 +9,8 @@ public final class PrettyFrogsClient implements ClientModInitializer {
         ModelLayerRegistry.registerModelLayer(SkeletonFrogModel.LAYER_LOCATION, SkeletonFrogModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(GhostFrogModel.LAYER_LOCATION, GhostFrogModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(PumpkinStemModel.LAYER_LOCATION, PumpkinStemModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(BasicFrogHoodModel.LAYER_LOCATION, BasicFrogHoodModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(TadpoleCostumeModel.LAYER_LOCATION, TadpoleCostumeModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(CakeCandleModel.LAYER_LOCATION, CakeCandleModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(FrogEyeModel.LAYER_LOCATION, FrogEyeModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(FrogAccessoryModel.LAYER_LOCATION, FrogAccessoryModel::createBodyLayer);
