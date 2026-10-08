@@ -27,7 +27,7 @@ public final class PumpkinStemModel extends FrogModel {
 
         // Small blocky stem centered on top of the frog's head.
         head.addOrReplaceChild("stem",
-                CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -4.0F, -3.0F, 2.0F, 3.0F, 2.0F),
+                CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -4.0F, -2.0F, 2.0F, 3.0F, 2.0F),
                 PartPose.ZERO);
 
         PartDefinition eyes = head.addOrReplaceChild("eyes", CubeListBuilder.create(), PartPose.offset(-0.5F, 0.0F, 2.0F));
