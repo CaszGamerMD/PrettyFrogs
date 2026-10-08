@@ -32,31 +32,33 @@ public final class FrogEyeLayer extends RenderLayer<FrogRenderState, FrogModel> 
                        FrogRenderState state, float yRot, float xRot) {
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
         Identifier form = access.prettyfrogs$getForm();
-        if (state.isInvisible
-                || form.equals(FrogFormRegistry.NORMAL)
-                || form.equals(FrogFormRegistry.SKELETON)) {
+        // Most frogs now use the eyes painted directly on their own 48x48
+        // textures; the generic eye overlay was covering that custom artwork.
+        // Retain only the intentionally animated RGB-eyes form and Sculk's
+        // dedicated bright-teal glowing eye effect.
+        boolean rgbEyes = form.equals(FrogFormRegistry.RAINBOW_EYES);
+        boolean sculkEyes = form.equals(FrogFormRegistry.SCULK);
+        if (state.isInvisible || (!rgbEyes && !sculkEyes)) {
             return;
         }
 
-        Identifier texture = form.equals(FrogFormRegistry.RAINBOW_EYES) ? RGB_EYES : EYES;
+        Identifier texture = rgbEyes ? RGB_EYES : EYES;
         int color = -1;
         RenderType type = RenderTypes.entityCutout(texture);
         int light = lightCoords;
         int overlay = LivingEntityRenderer.getOverlayCoords(state, 0.0F);
 
-        if (form.equals(FrogFormRegistry.RAINBOW_EYES)) {
+        if (rgbEyes) {
             float hue = (state.ageInTicks * 0.018F) % 1.0F;
             color = ARGB.opaque(Mth.hsvToRgb(hue, 0.9F, 1.0F));
             type = RenderTypes.eyes(texture);
             light = 0xF000F0;
             overlay = OverlayTexture.NO_OVERLAY;
-        } else if (form.equals(FrogFormRegistry.SCULK)) {
+        } else if (sculkEyes) {
             color = 0xFF39F6E8;
             type = RenderTypes.eyes(texture);
             light = 0xF000F0;
             overlay = OverlayTexture.NO_OVERLAY;
-        } else if (form.equals(FrogFormRegistry.RED_EYED_TREE)) {
-            color = 0xFFFF4A4A;
         }
 
         collector.order(5).submitModel(
