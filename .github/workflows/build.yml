@@ -34,147 +34,52 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ROOT="$PWD/blockbench_exports/textures"
+          BASE="$PWD/blockbench_exports"
+          ROOT="$BASE/textures"
+          OUT="$BASE/output"
           rm -rf "$ROOT"
-          mkdir -p "$ROOT/current_main/textures" "$ROOT/references/vanilla_textures" "$ROOT/references/source"
+          mkdir -p "$ROOT/current_main/textures" "$ROOT/references/vanilla_textures" "$ROOT/references/source" "$OUT"
 
           cp src/main/resources/assets/prettyfrogs/textures/entity/frog/*.png "$ROOT/current_main/textures/"
           cp src/main/resources/assets/prettyfrogs/textures/entity/frog/README.txt "$ROOT/current_main/"
           cp src/main/java/com/casz/prettyfrogs/frog/FrogFormRegistry.java "$ROOT/references/source/FrogFormRegistry.java"
 
-          curl -fL "https://raw.githubusercontent.com/Renekovski/26.2-mcp/51f3128ba7265299dce20b9abd2b37d7dd27d096/src/net/minecraft/client/model/animal/frog/FrogModel.java"             -o "$ROOT/references/source/Vanilla_FrogModel_26.2.java"
-          curl -fL "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.9/entity/frog/temperate_frog.png"             -o "$ROOT/references/vanilla_textures/temperate_frog.png"
-          curl -fL "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.9/entity/frog/warm_frog.png"             -o "$ROOT/references/vanilla_textures/warm_frog.png"
-          curl -fL "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.9/entity/frog/cold_frog.png"             -o "$ROOT/references/vanilla_textures/cold_frog.png"
+          curl -fL "https://raw.githubusercontent.com/Renekovski/26.2-mcp/51f3128ba7265299dce20b9abd2b37d7dd27d096/src/net/minecraft/client/model/animal/frog/FrogModel.java" -o "$ROOT/references/source/Vanilla_FrogModel_26.2.java"
+          curl -fL "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.9/entity/frog/temperate_frog.png" -o "$ROOT/references/vanilla_textures/temperate_frog.png"
+          curl -fL "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.9/entity/frog/warm_frog.png" -o "$ROOT/references/vanilla_textures/warm_frog.png"
+          curl -fL "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.9/entity/frog/cold_frog.png" -o "$ROOT/references/vanilla_textures/cold_frog.png"
 
-          cat > "$ROOT/README_BLOCKBENCH_TEXTURES.txt" <<'EOF'
-PrettyFrogs - Blockbench Texture Workspace
-==========================================
+          echo 'UHJldHR5RnJvZ3MgLSBCbG9ja2JlbmNoIFRleHR1cmUgV29ya3NwYWNlCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQoKU291cmNlIHNuYXBzaG90OiBjdXJyZW50IG1haW4gYnJhbmNoIHVzZWQgYnkgdGhlIGV4cG9ydCB3b3JrZmxvdy4KCldIQVQgVE8gRURJVAotLS0tLS0tLS0tLS0KY3VycmVudF9tYWluL3RleHR1cmVzLwogIFRoZXNlIGFyZSB0aGUgYWN0dWFsIGZyb2cgUE5HIGFzc2V0cyBmcm9tIHRoZSBtb2QuCgpUaGUgbm9ybWFsIGZyb2cgYm9keSBVViBpcyA0OHg0OC4gS2VlcCB0aGUgc2FtZSBVViBsYXlvdXQgYW5kIHRyYW5zcGFyZW50L3VudXNlZApyZWdpb25zIHVubGVzcyB0aGUgSmF2YSBtb2RlbCBpcyBjaGFuZ2VkIGF0IHRoZSBzYW1lIHRpbWUuIFRoZSBjdXJyZW50IFdhdGVybWVsb24KZnJvZyBpcyB0aGUgcHJlZmVycmVkIHNlbWFudGljIFVWIHJlZmVyZW5jZSBmb3IgY3VzdG9tIG5vcm1hbCBmcm9nIHNraW5zLgoKSW1wb3J0YW50IHRleHR1cmUgY2F0ZWdvcmllczoKLSBCYXNlIHNraW5zOiB3YXRlcm1lbG9uLCBwdW1wa2luLCByZWRfZXllZF90cmVlLCBtdWRkeSwgZGFydF8qLCBldGMuCi0gRnVsbCByZW5kZXIgbGF5ZXJzOiBzbGlteV9zaGVsbCwgd2F0ZXJfc2hlbGwsIGljZV9zaGVsbCwgZ2hvc3QtcmVsYXRlZCB0ZXh0dXJlcy4KLSBFbWlzc2l2ZS9SR0IgbWFza3M6ICpfZ2xvdywgcmFpbmJvd19kaXNjb19hL2IsIHJhaW5ib3dfKl9nbG93LgotIFNtYWxsIG1vZGVsIHRleHR1cmVzOiBwdW1wa2luX3N0ZW0sIGNha2VfY2FuZGxlcywgYnVtYmxlX3dpbmdzLCBjYWN0dXNfc3Bpa2VzLgotIFNoYXJlZCBleWUgdGV4dHVyZXM6IGZyb2dfZXllcy5wbmcgYW5kIGZyb2dfZXllc19yZ2IucG5nLgoKUkVGRVJFTkNFUwotLS0tLS0tLS0tCnJlZmVyZW5jZXMvc291cmNlL1ZhbmlsbGFfRnJvZ01vZGVsXzI2LjIuamF2YQogIEV4YWN0IDI2LjIgdmFuaWxsYSBmcm9nIGdlb21ldHJ5LCBoaWVyYXJjaHksIHBpdm90cyBhbmQgVVYgb2Zmc2V0cy4KCnJlZmVyZW5jZXMvdmFuaWxsYV90ZXh0dXJlcy8KICBWYW5pbGxhIDQ4eDQ4IGZyb2cgdGV4dHVyZXMgc3VwcGxpZWQgYXMgVVYvYXJ0IHJlZmVyZW5jZXMuIFRoZXNlIGFyZSBmcm9tIHRoZQogIG1vZGVybiB2YW5pbGxhIGZyb2cgbGF5b3V0IGFuZCBtYXRjaCB0aGUgc2FtZSA0OHg0OCBVViBvcmdhbml6YXRpb24uCgpCTE9DS0JFTkNICi0tLS0tLS0tLS0KRm9yIHJlcGFpbnRpbmcsIGxvYWQgdGhlIFBORyBvbnRvIGEgZnJvZyBtb2RlbCB1c2luZyB0aGUgNDh4NDggdGV4dHVyZSByZXNvbHV0aW9uLgpEbyBub3QgbGV0IEJsb2NrYmVuY2ggYXV0by1yZXBhY2sgVVZzLiBQcmVzZXJ2ZSB0aGUgdmFuaWxsYSBVViBjb29yZGluYXRlcy4KCldoZW4gcmV0dXJuaW5nIGVkaXRlZCBhcnQgdG8gdGhlIG1vZCwga2VlcCB0aGUgb3JpZ2luYWwgZmlsZW5hbWVzLiBQTkcgYWxwaGEgaXMKaW1wb3J0YW50IGZvciBvdmVybGF5cywgZW1pc3NpdmUgbWFza3MsIGplbGx5L2dob3N0IGxheWVycyBhbmQgdHJhbnNwYXJlbnQgYmFzZXMuCg==' | base64 -d > "$ROOT/README_BLOCKBENCH_TEXTURES.txt"
+          git fetch origin main
+          printf "main_commit=%s\n" "$(git merge-base HEAD origin/main)" > "$ROOT/SOURCE_COMMIT.txt"
 
-Source snapshot: current main branch used by the export workflow.
-
-WHAT TO EDIT
-------------
-current_main/textures/
-  These are the actual frog PNG assets from the mod.
-
-The normal frog body UV is 48x48. Keep the same UV layout and transparent/unused
-regions unless the Java model is changed at the same time. The current Watermelon
-frog is the preferred semantic UV reference for custom normal frog skins.
-
-Important texture categories:
-- Base skins: watermelon, pumpkin, red_eyed_tree, muddy, dart_*, etc.
-- Full render layers: slimy_shell, water_shell, ice_shell, ghost-related textures.
-- Emissive/RGB masks: *_glow, rainbow_disco_a/b, rainbow_*_glow.
-- Small model textures: pumpkin_stem, cake_candles, bumble_wings, cactus_spikes.
-- Shared eye textures: frog_eyes.png and frog_eyes_rgb.png.
-
-REFERENCES
-----------
-references/source/Vanilla_FrogModel_26.2.java
-  Exact 26.2 vanilla frog geometry, hierarchy, pivots and UV offsets.
-
-references/vanilla_textures/
-  Vanilla 48x48 frog textures supplied as UV/art references. These are from the
-  modern vanilla frog layout and match the same 48x48 UV organization.
-
-BLOCKBENCH
-----------
-For repainting, load the PNG onto a frog model using the 48x48 texture resolution.
-Do not let Blockbench auto-repack UVs. Preserve the vanilla UV coordinates.
-
-When returning edited art to the mod, keep the original filenames. PNG alpha is
-important for overlays, emissive masks, jelly/ghost layers and transparent bases.
-EOF
-
-          printf "main_commit=%s\n" "$(git rev-parse HEAD)" > "$ROOT/SOURCE_COMMIT.txt"
-
-          mkdir -p "$PWD/blockbench_exports/output"
-          (cd "$ROOT" && zip -qr "$PWD/blockbench_exports/output/PrettyFrogs-Blockbench-Textures.zip" .)
+          (cd "$ROOT" && zip -qr "$OUT/PrettyFrogs-Blockbench-Textures.zip" .)
 
       - name: Build Blockbench 3D workspace
         shell: bash
         run: |
           set -euo pipefail
-          ROOT="$PWD/blockbench_exports/models3d"
+          BASE="$PWD/blockbench_exports"
+          ROOT="$BASE/models3d"
+          OUT="$BASE/output"
           rm -rf "$ROOT"
-          mkdir -p "$ROOT/current_main/java/client" "$ROOT/current_main/java/frog_common"                    "$ROOT/current_main/textures" "$ROOT/references" "$ROOT/legacy_3d_branch"
+          mkdir -p "$ROOT/current_main/java/client" "$ROOT/current_main/java/frog_common" "$ROOT/current_main/textures" "$ROOT/references" "$ROOT/legacy_3d_branch" "$OUT"
 
           cp src/client/java/com/casz/prettyfrogs/client/*.java "$ROOT/current_main/java/client/"
           cp src/client/java/com/casz/prettyfrogs/mixin/client/FrogRendererMixin.java "$ROOT/current_main/java/client/"
           cp src/main/java/com/casz/prettyfrogs/frog/*.java "$ROOT/current_main/java/frog_common/"
           cp src/main/resources/assets/prettyfrogs/textures/entity/frog/*.png "$ROOT/current_main/textures/"
 
-          curl -fL "https://raw.githubusercontent.com/Renekovski/26.2-mcp/51f3128ba7265299dce20b9abd2b37d7dd27d096/src/net/minecraft/client/model/animal/frog/FrogModel.java"             -o "$ROOT/references/Vanilla_FrogModel_26.2.java"
+          curl -fL "https://raw.githubusercontent.com/Renekovski/26.2-mcp/51f3128ba7265299dce20b9abd2b37d7dd27d096/src/net/minecraft/client/model/animal/frog/FrogModel.java" -o "$ROOT/references/Vanilla_FrogModel_26.2.java"
 
           git fetch origin feature/frog-3d-decorations
-          git archive --format=tar origin/feature/frog-3d-decorations             src/client/java/com/casz/prettyfrogs/client             src/main/resources/assets/prettyfrogs/textures/entity/frog/frog_3d_details.png             | tar -x -C "$ROOT/legacy_3d_branch"
+          git archive --format=tar origin/feature/frog-3d-decorations src/client/java/com/casz/prettyfrogs/client src/main/resources/assets/prettyfrogs/textures/entity/frog/frog_3d_details.png | tar -x -C "$ROOT/legacy_3d_branch"
 
-          cat > "$ROOT/README_BLOCKBENCH_3D.txt" <<'EOF'
-PrettyFrogs - Blockbench 3D Add-on Workspace
-============================================
+          echo 'UHJldHR5RnJvZ3MgLSBCbG9ja2JlbmNoIDNEIEFkZC1vbiBXb3Jrc3BhY2UKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KCllFUzogQmxvY2tiZW5jaCBpcyBhIGdvb2QgdG9vbCBmb3IgZGVzaWduaW5nIHRoZSBjdXN0b20gZnJvZyBnZW9tZXRyeS4KCkhPVyBUSElTIE1PRCBVU0VTIDNECi0tLS0tLS0tLS0tLS0tLS0tLS0tClByZXR0eUZyb2dzIGtlZXBzIHRoZSB2YW5pbGxhIGZyb2cgYW5pbWF0aW9uIGhpZXJhcmNoeSBhbmQgYWRkcyBnZW9tZXRyeSB0aHJvdWdoCkZhYnJpYyByZW5kZXIgbGF5ZXJzL21vZGVscy4gTW9kZWwgcGFydHMgbXVzdCByZW1haW4gYXR0YWNoZWQgdG8gdGhlIGFwcHJvcHJpYXRlCnZhbmlsbGEgcGFyZW50IChoZWFkL2JvZHkvYXJtcy9sZWdzKSBzbyBob3BwaW5nLCB3YWxraW5nLCBzd2ltbWluZyBhbmQgY3JvYWtpbmcKY29udGludWUgdG8gYW5pbWF0ZSBjb3JyZWN0bHkuCgpDVVJSRU5UIE1BSU4gTU9ERUwgU09VUkNFUwotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpjdXJyZW50X21haW4vamF2YS9jbGllbnQvCiAgU2tlbGV0b25Gcm9nTW9kZWwuamF2YSAgICAgIC0gY3VzdG9tIHNrZWxldGFsIGZyb2cgZ2VvbWV0cnkKICBHaG9zdEZyb2dNb2RlbC5qYXZhICAgICAgICAgLSBsZWdsZXNzIGZsb2F0aW5nIGdob3N0IGdlb21ldHJ5CiAgRnJvZ0FjY2Vzc29yeU1vZGVsLmphdmEgICAgIC0gYnVtYmxlIHdpbmdzIGFuZCBjYWN0dXMgc3Bpa2VzCiAgQ2FrZUNhbmRsZU1vZGVsLmphdmEgICAgICAgIC0gY2FrZSBjYW5kbGUgZ2VvbWV0cnkKICBQdW1wa2luU3RlbU1vZGVsLmphdmEgICAgICAgLSBwdW1wa2luIHN0ZW0KICBGcm9nRXllTW9kZWwuamF2YSAgICAgICAgICAgLSBzaGFyZWQgY3VzdG9tIGV5ZXMKICBtYXRjaGluZyAqTGF5ZXIuamF2YSBmaWxlcyAgLSByZW5kZXJpbmcvbWF0ZXJpYWwgYmVoYXZpb3IKICBQcmV0dHlGcm9nc0NsaWVudC5qYXZhICAgICAgLSBtb2RlbCBsYXllciByZWdpc3RyYXRpb24KICBGcm9nUmVuZGVyZXJNaXhpbi5qYXZhICAgICAgLSB3aGVyZSBsYXllcnMgYXJlIGF0dGFjaGVkIHRvIHRoZSBmcm9nIHJlbmRlcmVyCgpjdXJyZW50X21haW4vdGV4dHVyZXMvCiAgSW5jbHVkZXMgZXZlcnkgdGV4dHVyZSBjdXJyZW50bHkgdXNlZCBieSB0aGVzZSBtb2RlbHMgYW5kIHJlbmRlciBsYXllcnMuCgpMRUdBQ1kgLyBFWFBFUklNRU5UQUwgM0QgQlJBTkNICi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KbGVnYWN5XzNkX2JyYW5jaC8KICBTbmFwc2hvdCBvZiBmZWF0dXJlL2Zyb2ctM2QtZGVjb3JhdGlvbnMuIEl0IGNvbnRhaW5zIEZyb2czRERldGFpbHNNb2RlbCwKICBGcm9nM0REZXRhaWxzTGF5ZXIgYW5kIGZyb2dfM2RfZGV0YWlscy5wbmcgZm9yOgogIC0gQ3J5c3RhbCBzcGlyZXMKICAtIE11c2hyb29tcwogIC0gV2F0ZXIvQmFsbG9vbiBrbm90CiAgLSBDYWtlIGZyb3N0aW5nIGNhcAogIC0gSWNlIHNub3cgY2FwCgpUaGlzIGlzIHVzZWZ1bCBzb3VyY2UgbWF0ZXJpYWwgZXZlbiB3aGVyZSBtYWluIGhhcyBzaW5jZSBldm9sdmVkIHNlcGFyYXRlbHkuCgpCTE9DS0JFTkNIIFdPUktGTE9XCi0tLS0tLS0tLS0tLS0tLS0tLS0KMS4gVXNlIGEgTW9kZGVkIEVudGl0eSAvIEphdmEgZW50aXR5LXN0eWxlIHByb2plY3QuCjIuIFVzZSByZWZlcmVuY2VzL1ZhbmlsbGFfRnJvZ01vZGVsXzI2LjIuamF2YSBmb3IgdGhlIGV4YWN0IHZhbmlsbGEgaGllcmFyY2h5LgozLiBLZWVwIHRoZXNlIHBhcmVudCBuYW1lcy9waXZvdHMgY29tcGF0aWJsZToKICAgcm9vdCAtPiBib2R5IC0+IGhlYWQgLT4gZXllcwogICBib2R5IC0+IGxlZnRfYXJtL3JpZ2h0X2FybQogICByb290IC0+IGxlZnRfbGVnL3JpZ2h0X2xlZwo0LiBQdXQgZGVjb3JhdGlvbnMgdW5kZXIgdGhlIGJvZHkvaGVhZCB0aGV5IHNob3VsZCBtb3ZlIHdpdGguCjUuIFRleHR1cmUgc2l6ZXMgYXJlIGRlY2xhcmVkIGJ5IGVhY2ggSmF2YSBtb2RlbCdzIExheWVyRGVmaW5pdGlvbi5jcmVhdGUoLi4uKS4KNi4gRG8gTk9UIGF1dG8tcmVwYWNrIFVWcyB3aGVuIGVkaXRpbmcgYW4gZXhpc3RpbmcgYXRsYXMgdW5sZXNzIHRoZSBtYXRjaGluZyBKYXZhCiAgIHRleE9mZnMgdmFsdWVzIGFyZSBhbHNvIHVwZGF0ZWQuCjcuIEV4cG9ydGluZyBmcm9tIEJsb2NrYmVuY2ggbWF5IHN0aWxsIHJlcXVpcmUgYWRhcHRpbmcgdGhlIGdlbmVyYXRlZCBKYXZhIHRvIHRoZQogICBGYWJyaWMgMjYuMiBjbGFzcyBuYW1lcy9BUEkgdXNlZCBieSB0aGlzIHJlcG8uIFRoZSBpbmNsdWRlZCBKYXZhIGZpbGVzIGFyZSB0aGUKICAgc291cmNlIG9mIHRydXRoIGZvciBpbnRlZ3JhdGlvbi4KCkZvciBuZXcgYWRkLW9ucywgYSBjbGVhbiBhcHByb2FjaCBpcyBvbmUgdmlzaWJpbGl0eSBncm91cCBwZXIgZnJvZyBmb3JtLCB0aGVuIGEKcmVuZGVyIGxheWVyIHNlbGVjdHMgb25seSB0aGF0IGdyb3VwJ3MgZ2VvbWV0cnkuCg==' | base64 -d > "$ROOT/README_BLOCKBENCH_3D.txt"
+          git fetch origin main
+          printf "main_commit=%s\nlegacy_3d_branch=%s\n" "$(git merge-base HEAD origin/main)" "$(git rev-parse origin/feature/frog-3d-decorations)" > "$ROOT/SOURCE_COMMITS.txt"
 
-YES: Blockbench is a good tool for designing the custom frog geometry.
-
-HOW THIS MOD USES 3D
---------------------
-PrettyFrogs keeps the vanilla frog animation hierarchy and adds geometry through
-Fabric render layers/models. Model parts must remain attached to the appropriate
-vanilla parent (head/body/arms/legs) so hopping, walking, swimming and croaking
-continue to animate correctly.
-
-CURRENT MAIN MODEL SOURCES
---------------------------
-current_main/java/client/
-  SkeletonFrogModel.java      - custom skeletal frog geometry
-  GhostFrogModel.java         - legless floating ghost geometry
-  FrogAccessoryModel.java     - bumble wings and cactus spikes
-  CakeCandleModel.java        - cake candle geometry
-  PumpkinStemModel.java       - pumpkin stem
-  FrogEyeModel.java           - shared custom eyes
-  matching *Layer.java files  - rendering/material behavior
-  PrettyFrogsClient.java      - model layer registration
-  FrogRendererMixin.java      - where layers are attached to the frog renderer
-
-current_main/textures/
-  Includes every texture currently used by these models and render layers.
-
-LEGACY / EXPERIMENTAL 3D BRANCH
--------------------------------
-legacy_3d_branch/
-  Snapshot of feature/frog-3d-decorations. It contains Frog3DDetailsModel,
-  Frog3DDetailsLayer and frog_3d_details.png for:
-  - Crystal spires
-  - Mushrooms
-  - Water/Balloon knot
-  - Cake frosting cap
-  - Ice snow cap
-
-This is useful source material even where main has since evolved separately.
-
-BLOCKBENCH WORKFLOW
--------------------
-1. Use a Modded Entity / Java entity-style project.
-2. Use references/Vanilla_FrogModel_26.2.java for the exact vanilla hierarchy.
-3. Keep these parent names/pivots compatible:
-   root -> body -> head -> eyes
-   body -> left_arm/right_arm
-   root -> left_leg/right_leg
-4. Put decorations under the body/head they should move with.
-5. Texture sizes are declared by each Java model's LayerDefinition.create(...).
-6. Do NOT auto-repack UVs when editing an existing atlas unless the matching Java
-   texOffs values are also updated.
-7. Exporting from Blockbench may still require adapting the generated Java to the
-   Fabric 26.2 class names/API used by this repo. The included Java files are the
-   source of truth for integration.
-
-For new add-ons, a clean approach is one visibility group per frog form, then a
-render layer selects only that group's geometry.
-EOF
-
-          printf "main_commit=%s\nlegacy_3d_branch=%s\n"             "$(git rev-parse HEAD)" "$(git rev-parse origin/feature/frog-3d-decorations)"             > "$ROOT/SOURCE_COMMITS.txt"
-
-          (cd "$ROOT" && zip -qr "$PWD/blockbench_exports/output/PrettyFrogs-Blockbench-3D-Addons.zip" .)
+          (cd "$ROOT" && zip -qr "$OUT/PrettyFrogs-Blockbench-3D-Addons.zip" .)
 
       - uses: actions/upload-artifact@v4
         with:
