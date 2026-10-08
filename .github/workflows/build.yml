@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -22,4 +24,43 @@ jobs:
         with:
           name: PrettyFrogs-1.0.0
           path: build/libs/PrettyFrogs-1.0.0.jar
+          if-no-files-found: error
+
+      - name: Package Blockbench texture workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="blockbench_exports/textures"
+          mkdir -p "$ROOT/frog_textures" "$ROOT/model_references"
+          cp src/main/resources/assets/prettyfrogs/textures/entity/frog/*.png "$ROOT/frog_textures/"
+          cp src/main/resources/assets/prettyfrogs/textures/entity/frog/README.txt "$ROOT/"
+          cp src/main/java/com/casz/prettyfrogs/frog/FrogFormRegistry.java "$ROOT/model_references/"
+          printf '%s\n' 'PrettyFrogs texture workspace' 'Frog base skins and most masks are 48x48 PNG.' '3D model atlases may be 64x64 or 128x128; check the corresponding LayerDefinition.' 'Keep UV coordinates and transparency when editing in Blockbench.' > "$ROOT/README_BLOCKBENCH.txt"
+          mkdir -p blockbench_exports/output
+          (cd "$ROOT" && zip -qr ../output/PrettyFrogs-Blockbench-Textures.zip .)
+
+      - name: Package Blockbench 3D workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="blockbench_exports/models3d"
+          mkdir -p "$ROOT/java_models" "$ROOT/render_layers" "$ROOT/textures" "$ROOT/guide"
+          cp src/client/java/com/casz/prettyfrogs/client/*Model.java "$ROOT/java_models/"
+          cp src/client/java/com/casz/prettyfrogs/client/*Layer.java "$ROOT/render_layers/"
+          cp src/main/resources/assets/prettyfrogs/textures/entity/frog/*.png "$ROOT/textures/"
+          cp src/client/java/com/casz/prettyfrogs/mixin/client/FrogRendererMixin.java "$ROOT/guide/"
+          cp docs/COSTUME_HOODS.md "$ROOT/guide/"
+          cp FROG_3D_DETAILS.md "$ROOT/guide/"
+          printf '%s\n' 'PrettyFrogs 3D model workspace' 'Current main branch Java model definitions and texture atlases.' 'Keep Minecraft frog animation part hierarchy intact.' 'This archive contains mod source models, not automatically generated .bbmodel files.' > "$ROOT/README_BLOCKBENCH_3D.txt"
+          (cd "$ROOT" && zip -qr ../output/PrettyFrogs-Blockbench-3D-Addons.zip .)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PrettyFrogs-Blockbench-Textures
+          path: blockbench_exports/output/PrettyFrogs-Blockbench-Textures.zip
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PrettyFrogs-Blockbench-3D-Addons
+          path: blockbench_exports/output/PrettyFrogs-Blockbench-3D-Addons.zip
           if-no-files-found: error
