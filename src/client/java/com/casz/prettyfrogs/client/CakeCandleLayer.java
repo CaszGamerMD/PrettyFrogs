@@ -15,11 +15,18 @@ import net.minecraft.resources.Identifier;
 
 public final class CakeCandleLayer extends RenderLayer<FrogRenderState, FrogModel> {
     private static final Identifier TEXTURE = PrettyFrogs.id("textures/entity/frog/cake_candles.png");
-    private final CakeCandleModel model;
+    // Submitted models are rendered later; visibility changes on one shared model
+    // would hide the bodies when the flame pass is queued.
+    private final CakeCandleModel[] bodyModels = new CakeCandleModel[4];
+    private final CakeCandleModel flameModel;
 
     public CakeCandleLayer(RenderLayerParent<FrogRenderState, FrogModel> renderer, EntityModelSet modelSet) {
         super(renderer);
-        this.model = new CakeCandleModel(modelSet.bakeLayer(CakeCandleModel.LAYER_LOCATION));
+        for (int i = 0; i < bodyModels.length; i++) {
+            bodyModels[i] = new CakeCandleModel(modelSet.bakeLayer(CakeCandleModel.LAYER_LOCATION));
+            bodyModels[i].showSingleBody(i);
+        }
+        flameModel = new CakeCandleModel(modelSet.bakeLayer(CakeCandleModel.LAYER_LOCATION));
     }
 
     @Override
@@ -32,17 +39,16 @@ public final class CakeCandleLayer extends RenderLayer<FrogRenderState, FrogMode
         }
 
         for (int i = 0; i < Math.min(4, count); i++) {
-            model.showSingleBody(i);
             int color = 0xFF000000 | (access.prettyfrogs$getCakeCandleColor(i) & 0xFFFFFF);
             collector.order(3).submitModel(
-                    model, state, poseStack, RenderTypes.entityCutout(TEXTURE),
+                    bodyModels[i], state, poseStack, RenderTypes.entityCutout(TEXTURE),
                     lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                     color, null, state.outlineColor, null);
         }
 
-        model.showFlames(count);
+        flameModel.showFlames(count);
         collector.order(4).submitModel(
-                model, state, poseStack, RenderTypes.entityCutout(TEXTURE),
+                flameModel, state, poseStack, RenderTypes.entityCutout(TEXTURE),
                 0xF000F0, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
     }
