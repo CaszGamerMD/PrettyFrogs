@@ -29,7 +29,7 @@ public final class WaterFrogShellLayer extends RenderLayer<FrogRenderState, Frog
 
         collector.order(2).submitModel(
                 getParentModel(), state, poseStack,
-                RenderTypes.entityTranslucent(WATER_SHELL),
+                RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(WATER_SHELL)),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
     }

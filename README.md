@@ -66,6 +66,27 @@ PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underl
 - **Moss Frog:** sparse spore-blossom particles.
 - **Storm Frog:** harmless electric sparks plus a full-bright emissive layer.\n- **Slimy Frog:** slime droplets, much more active while hopping, plus a translucent slime shell.\n- **Crystal Frog:** tinted crystal markings derived from the exact full cluster used; crystal identity persists and synchronizes to clients.
 
+## Field Guide appearance settings
+
+The **PrettyFrogs Field Guide** has **Frogs** and **Appearance** tabs.
+The Appearance tab has two independent, live client-side toggles:
+
+- **HD Textures** (default ON): switches between the selected HD skins
+  integrated from `feature/hd-frog-textures` and their original pre-merge
+  counterparts. The preserved classic files live in
+  `assets/prettyfrogs/textures/entity/frog/classic/`. The switch affects
+  Cake, Ice, Mushroom, Pumpkin, and Water textures (including their applicable
+  shell/stem), plus the Crystal Frog fallback overlay. Other frogs, including
+  Skeleton, Ghost, and Tadpole Costume, are unchanged.
+- **Extra 3D Decorations** (default ON): toggles the separate decoration layer
+  for Crystal spires, Mushroom caps, Water balloon knot, Cake frosting, and Ice
+  snow. Does not hide built-in costume parts, the Skeleton Frog model, the
+  Ghost Frog model, or independently added cake candles.
+
+Both preferences take effect immediately, are per-player rather than
+server-synchronized, and persist in
+`config/prettyfrogs-client.properties`. No extra mod is required.
+
 ## Development status
 
 Core form persistence, synchronization, interactions, particles, custom render-state plumbing, Water/Ghost/Slime shell rendering, Magma/Rainbow/Glow/Soulfire/Storm/Sculk emissive rendering, and Skeleton model geometry are implemented and compile against Minecraft 26.2.

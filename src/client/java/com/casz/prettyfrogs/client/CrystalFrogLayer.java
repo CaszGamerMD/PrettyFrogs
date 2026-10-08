@@ -40,7 +40,7 @@ public final class CrystalFrogLayer extends RenderLayer<FrogRenderState, FrogMod
         int rgb = CrystalFrogColors.color(crystal);
         int color = ARGB.color(220, (rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255);
         collector.order(2).submitModel(
-                getParentModel(), state, poseStack, RenderTypes.entityTranslucent(FALLBACK_MASK),
+                getParentModel(), state, poseStack, RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(FALLBACK_MASK)),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 color, null, state.outlineColor, null);
     }

@@ -2,5 +2,15 @@
   "mod.prettyfrogs.name": "PrettyFrogs",
   "item.prettyfrogs.frog_guide": "PrettyFrogs Field Guide",
   "screen.prettyfrogs.frog_guide": "PrettyFrogs Field Guide",
-  "screen.prettyfrogs.use_on_adult_frog": "Use this item on an adult frog"
+  "screen.prettyfrogs.use_on_adult_frog": "Use this item on an adult frog",
+  "screen.prettyfrogs.tab.frogs": "Frogs",
+  "screen.prettyfrogs.tab.appearance": "Appearance",
+  "screen.prettyfrogs.appearance.title": "Appearance Settings",
+  "screen.prettyfrogs.setting.hd": "HD Textures: %s",
+  "screen.prettyfrogs.setting.details": "Extra 3D Decorations: %s",
+  "screen.prettyfrogs.on": "ON",
+  "screen.prettyfrogs.off": "OFF",
+  "screen.prettyfrogs.appearance.hd.help": "HD or classic frog artwork",
+  "screen.prettyfrogs.appearance.details.help": "Extra hats, snow, frosting, crystals",
+  "screen.prettyfrogs.appearance.local": "Only changes what you see"
 }

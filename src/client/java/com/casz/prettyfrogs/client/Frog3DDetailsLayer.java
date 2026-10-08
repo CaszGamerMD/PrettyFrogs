@@ -37,7 +37,7 @@ public final class Frog3DDetailsLayer extends RenderLayer<FrogRenderState, FrogM
     @Override
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords,
                        FrogRenderState state, float yRot, float xRot) {
-        if (state.isInvisible) return;
+        if (state.isInvisible || !FrogAppearanceSettings.extra3DDecorations()) return;
 
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
         Frog3DDetailKind kind = Frog3DDetailKind.forForm(access.prettyfrogs$getForm());

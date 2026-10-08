@@ -28,7 +28,7 @@ public final class PumpkinStemLayer extends RenderLayer<FrogRenderState, FrogMod
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
         if (!access.prettyfrogs$isForm(FrogFormRegistry.PUMPKIN) || state.isInvisible) return;
 
-        collector.order(2).submitModel(model, state, poseStack, RenderTypes.entityCutout(TEXTURE),
+        collector.order(2).submitModel(model, state, poseStack, RenderTypes.entityCutout(FrogTextureResolver.selectTexture(TEXTURE)),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
     }

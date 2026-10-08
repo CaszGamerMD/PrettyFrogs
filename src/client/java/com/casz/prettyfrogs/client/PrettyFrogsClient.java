@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 public final class PrettyFrogsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        FrogAppearanceSettings.load();
         ModelLayerRegistry.registerModelLayer(SkeletonFrogModel.LAYER_LOCATION, SkeletonFrogModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(GhostFrogModel.LAYER_LOCATION, GhostFrogModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(PumpkinStemModel.LAYER_LOCATION, PumpkinStemModel::createBodyLayer);
