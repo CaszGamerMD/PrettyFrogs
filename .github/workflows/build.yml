@@ -10,16 +10,180 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '25'
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.7.0'
+
       - run: gradle build --stacktrace
+
       - uses: actions/upload-artifact@v4
         with:
           name: PrettyFrogs-1.0.0
           path: build/libs/PrettyFrogs-1.0.0.jar
+          if-no-files-found: error
+
+      - name: Build Blockbench texture workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="$PWD/blockbench_exports/textures"
+          rm -rf "$ROOT"
+          mkdir -p "$ROOT/current_main/textures" "$ROOT/references/vanilla_textures" "$ROOT/references/source"
+
+          cp src/main/resources/assets/prettyfrogs/textures/entity/frog/*.png "$ROOT/current_main/textures/"
+          cp src/main/resources/assets/prettyfrogs/textures/entity/frog/README.txt "$ROOT/current_main/"
+          cp src/main/java/com/casz/prettyfrogs/frog/FrogFormRegistry.java "$ROOT/references/source/FrogFormRegistry.java"
+
+          curl -fL "https://raw.githubusercontent.com/Renekovski/26.2-mcp/51f3128ba7265299dce20b9abd2b37d7dd27d096/src/net/minecraft/client/model/animal/frog/FrogModel.java"             -o "$ROOT/references/source/Vanilla_FrogModel_26.2.java"
+          curl -fL "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.9/entity/frog/temperate_frog.png"             -o "$ROOT/references/vanilla_textures/temperate_frog.png"
+          curl -fL "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.9/entity/frog/warm_frog.png"             -o "$ROOT/references/vanilla_textures/warm_frog.png"
+          curl -fL "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.9/entity/frog/cold_frog.png"             -o "$ROOT/references/vanilla_textures/cold_frog.png"
+
+          cat > "$ROOT/README_BLOCKBENCH_TEXTURES.txt" <<'EOF'
+PrettyFrogs - Blockbench Texture Workspace
+==========================================
+
+Source snapshot: current main branch used by the export workflow.
+
+WHAT TO EDIT
+------------
+current_main/textures/
+  These are the actual frog PNG assets from the mod.
+
+The normal frog body UV is 48x48. Keep the same UV layout and transparent/unused
+regions unless the Java model is changed at the same time. The current Watermelon
+frog is the preferred semantic UV reference for custom normal frog skins.
+
+Important texture categories:
+- Base skins: watermelon, pumpkin, red_eyed_tree, muddy, dart_*, etc.
+- Full render layers: slimy_shell, water_shell, ice_shell, ghost-related textures.
+- Emissive/RGB masks: *_glow, rainbow_disco_a/b, rainbow_*_glow.
+- Small model textures: pumpkin_stem, cake_candles, bumble_wings, cactus_spikes.
+- Shared eye textures: frog_eyes.png and frog_eyes_rgb.png.
+
+REFERENCES
+----------
+references/source/Vanilla_FrogModel_26.2.java
+  Exact 26.2 vanilla frog geometry, hierarchy, pivots and UV offsets.
+
+references/vanilla_textures/
+  Vanilla 48x48 frog textures supplied as UV/art references. These are from the
+  modern vanilla frog layout and match the same 48x48 UV organization.
+
+BLOCKBENCH
+----------
+For repainting, load the PNG onto a frog model using the 48x48 texture resolution.
+Do not let Blockbench auto-repack UVs. Preserve the vanilla UV coordinates.
+
+When returning edited art to the mod, keep the original filenames. PNG alpha is
+important for overlays, emissive masks, jelly/ghost layers and transparent bases.
+EOF
+
+          printf "main_commit=%s\n" "$(git rev-parse HEAD)" > "$ROOT/SOURCE_COMMIT.txt"
+
+          mkdir -p "$PWD/blockbench_exports/output"
+          (cd "$ROOT" && zip -qr "$PWD/blockbench_exports/output/PrettyFrogs-Blockbench-Textures.zip" .)
+
+      - name: Build Blockbench 3D workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="$PWD/blockbench_exports/models3d"
+          rm -rf "$ROOT"
+          mkdir -p "$ROOT/current_main/java/client" "$ROOT/current_main/java/frog_common"                    "$ROOT/current_main/textures" "$ROOT/references" "$ROOT/legacy_3d_branch"
+
+          cp src/client/java/com/casz/prettyfrogs/client/*.java "$ROOT/current_main/java/client/"
+          cp src/client/java/com/casz/prettyfrogs/mixin/client/FrogRendererMixin.java "$ROOT/current_main/java/client/"
+          cp src/main/java/com/casz/prettyfrogs/frog/*.java "$ROOT/current_main/java/frog_common/"
+          cp src/main/resources/assets/prettyfrogs/textures/entity/frog/*.png "$ROOT/current_main/textures/"
+
+          curl -fL "https://raw.githubusercontent.com/Renekovski/26.2-mcp/51f3128ba7265299dce20b9abd2b37d7dd27d096/src/net/minecraft/client/model/animal/frog/FrogModel.java"             -o "$ROOT/references/Vanilla_FrogModel_26.2.java"
+
+          git fetch origin feature/frog-3d-decorations
+          git archive --format=tar origin/feature/frog-3d-decorations             src/client/java/com/casz/prettyfrogs/client             src/main/resources/assets/prettyfrogs/textures/entity/frog/frog_3d_details.png             | tar -x -C "$ROOT/legacy_3d_branch"
+
+          cat > "$ROOT/README_BLOCKBENCH_3D.txt" <<'EOF'
+PrettyFrogs - Blockbench 3D Add-on Workspace
+============================================
+
+YES: Blockbench is a good tool for designing the custom frog geometry.
+
+HOW THIS MOD USES 3D
+--------------------
+PrettyFrogs keeps the vanilla frog animation hierarchy and adds geometry through
+Fabric render layers/models. Model parts must remain attached to the appropriate
+vanilla parent (head/body/arms/legs) so hopping, walking, swimming and croaking
+continue to animate correctly.
+
+CURRENT MAIN MODEL SOURCES
+--------------------------
+current_main/java/client/
+  SkeletonFrogModel.java      - custom skeletal frog geometry
+  GhostFrogModel.java         - legless floating ghost geometry
+  FrogAccessoryModel.java     - bumble wings and cactus spikes
+  CakeCandleModel.java        - cake candle geometry
+  PumpkinStemModel.java       - pumpkin stem
+  FrogEyeModel.java           - shared custom eyes
+  matching *Layer.java files  - rendering/material behavior
+  PrettyFrogsClient.java      - model layer registration
+  FrogRendererMixin.java      - where layers are attached to the frog renderer
+
+current_main/textures/
+  Includes every texture currently used by these models and render layers.
+
+LEGACY / EXPERIMENTAL 3D BRANCH
+-------------------------------
+legacy_3d_branch/
+  Snapshot of feature/frog-3d-decorations. It contains Frog3DDetailsModel,
+  Frog3DDetailsLayer and frog_3d_details.png for:
+  - Crystal spires
+  - Mushrooms
+  - Water/Balloon knot
+  - Cake frosting cap
+  - Ice snow cap
+
+This is useful source material even where main has since evolved separately.
+
+BLOCKBENCH WORKFLOW
+-------------------
+1. Use a Modded Entity / Java entity-style project.
+2. Use references/Vanilla_FrogModel_26.2.java for the exact vanilla hierarchy.
+3. Keep these parent names/pivots compatible:
+   root -> body -> head -> eyes
+   body -> left_arm/right_arm
+   root -> left_leg/right_leg
+4. Put decorations under the body/head they should move with.
+5. Texture sizes are declared by each Java model's LayerDefinition.create(...).
+6. Do NOT auto-repack UVs when editing an existing atlas unless the matching Java
+   texOffs values are also updated.
+7. Exporting from Blockbench may still require adapting the generated Java to the
+   Fabric 26.2 class names/API used by this repo. The included Java files are the
+   source of truth for integration.
+
+For new add-ons, a clean approach is one visibility group per frog form, then a
+render layer selects only that group's geometry.
+EOF
+
+          printf "main_commit=%s\nlegacy_3d_branch=%s\n"             "$(git rev-parse HEAD)" "$(git rev-parse origin/feature/frog-3d-decorations)"             > "$ROOT/SOURCE_COMMITS.txt"
+
+          (cd "$ROOT" && zip -qr "$PWD/blockbench_exports/output/PrettyFrogs-Blockbench-3D-Addons.zip" .)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PrettyFrogs-Blockbench-Textures
+          path: blockbench_exports/output/PrettyFrogs-Blockbench-Textures.zip
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PrettyFrogs-Blockbench-3D-Addons
+          path: blockbench_exports/output/PrettyFrogs-Blockbench-3D-Addons.zip
           if-no-files-found: error
