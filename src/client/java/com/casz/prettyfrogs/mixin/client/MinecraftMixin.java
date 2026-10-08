@@ -14,7 +14,7 @@ public abstract class MinecraftMixin {
     private void prettyfrogs$openFieldGuide(CallbackInfo ci) {
         Minecraft minecraft = (Minecraft)(Object)this;
         if (minecraft.player != null && minecraft.player.getMainHandItem().is(PrettyFrogsItems.FROG_GUIDE)) {
-            minecraft.setScreen(new FrogGuideScreen());
+            minecraft.gui.setScreen(new FrogGuideScreen());
             ci.cancel();
         }
     }
