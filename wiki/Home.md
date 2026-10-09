@@ -11,6 +11,7 @@ Welcome to **PrettyFrogs**, a Fabric mod for **Minecraft Java Edition 26.2** by 
 | [[Getting Started]] | Requirements, installation, first frog |
 | [[Crafting and Recipes]] | All craftable items and container returns |
 | [[Frog Controller]] | Ride and steer a frog, croak, jump, and tongue attack |
+| [[Pretty Frog Bucket]] | Carry transformed frogs without losing their skin |
 | [[Frog Forms]] | Every transformation item and form |
 | [[Variants and Special Forms]] | Watermelon, dart, RGB, crystal, costume |
 | [[Special Effects and Models]] | Particles, glow, shells, 3D accessories |

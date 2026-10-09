@@ -13,5 +13,7 @@
   "screen.prettyfrogs.appearance.hd.help": "HD or classic frog artwork",
   "screen.prettyfrogs.appearance.details.help": "Extra hats, snow, frosting, crystals",
   "screen.prettyfrogs.appearance.local": "Only changes what you see",
-  "item.prettyfrogs.frog_controller": "Frog Controller"
+  "item.prettyfrogs.frog_controller": "Frog Controller",
+  "item.prettyfrogs.frog_keeper_bucket": "Pretty Frog Bucket",
+  "item.prettyfrogs.frog_keeper_bucket.filled": "Pretty Frog Bucket (%s)"
 }

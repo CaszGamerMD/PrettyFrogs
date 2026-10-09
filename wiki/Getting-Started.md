@@ -26,6 +26,10 @@ The RGB End Rod trigger is **optional integration** with an item registered as `
 
 The **Frog Controller** and **PrettyFrogs Field Guide** are under **Tools & Utilities** and appear in Creative search. Commands: `/give @s prettyfrogs:frog_controller` or `/give @s prettyfrogs:frog_guide`.
 
+## Carry a transformed frog
+
+For bucket transport of a Watermelon, Skeleton, Ghost, Crystal, Cake or other custom frog, use a **Pretty Frog Bucket** (Bucket + Lily Pad). It saves the entire frog, unlike vanilla-variant-only third-party bucket mods. See [[Pretty Frog Bucket]].
+
 ## Control a frog
 
 Make the **Frog Controller** by combining a **Fishing Rod + Lily Pad + Slimeball** in any crafting grid. Use the controller on an adult frog to become it; WASD moves at frog speed, tapping Space performs one normal hop, left-click shoots its tongue (visible in first-person), right-click croaks, and Sneak + right-click returns you to your human character. See [[Frog Controller]].

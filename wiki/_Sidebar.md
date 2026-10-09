@@ -4,6 +4,7 @@
 - [[Getting Started]]
 - [[Crafting and Recipes]]
 - [[Frog Controller]]
+- [[Pretty Frog Bucket]]
 - [[Frog Forms]]
 - [[Variants and Special Forms]]
 - [[Special Effects and Models]]

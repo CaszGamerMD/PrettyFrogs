@@ -1,6 +1,6 @@
 # Crafting and Recipes
 
-PrettyFrogs adds **two craftable mod items**: the **PrettyFrogs Field Guide** and **Frog Controller**. The frogs themselves are transformations, not separate items; their triggers are described in [[Frog Forms]].
+PrettyFrogs adds **three craftable mod items**: the **PrettyFrogs Field Guide**, **Frog Controller**, and **Pretty Frog Bucket**. The frogs themselves are transformations, not separate items; their triggers are described in [[Frog Forms]].
 
 ## PrettyFrogs Field Guide
 
@@ -29,6 +29,10 @@ The guide has a **Frogs** catalog and **Appearance** settings. See [[Field Guide
 **Shapeless crafting recipe:** Fishing Rod + Lily Pad + Slimeball → **1 Frog Controller** (`prettyfrogs:frog_controller`). No items are returned from this crafting recipe. The controller itself is reusable.
 
 Use it on an adult frog to mount and steer. See [[Frog Controller]] for controls, croaking, tongue attacks, and cooldown.
+
+## Pretty Frog Bucket
+
+**Shapeless crafting recipe:** 1 Bucket + 1 Lily Pad → **1 reusable Pretty Frog Bucket** (`prettyfrogs:frog_keeper_bucket`). Use the empty bucket on a frog and the filled bucket on a block face to release it, preserving all of the frog's persistent data, including custom skins. See [[Pretty Frog Bucket]].
 
 ## Other item interactions (not crafting recipes)
 

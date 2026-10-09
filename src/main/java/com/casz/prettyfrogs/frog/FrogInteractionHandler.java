@@ -2,6 +2,7 @@ package com.casz.prettyfrogs.frog;
 
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import com.casz.prettyfrogs.PrettyFrogsItems;
+import com.casz.prettyfrogs.frog.PrettyFrogBucketItem;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -23,6 +24,11 @@ public final class FrogInteractionHandler {
             }
 
             ItemStack stack = player.getItemInHand(hand);
+            // Our dedicated bucket serializes the entire frog instead of
+            // recreating a vanilla-only variant like third-party bucket mods.
+            if (stack.is(PrettyFrogsItems.FROG_KEEPER_BUCKET)) {
+                return PrettyFrogBucketItem.capture(player, stack, frog);
+            }
             Identifier current = access.prettyfrogs$getForm();
 
             if (frog.isBaby()) {

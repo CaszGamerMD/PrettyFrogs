@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bucket",
+    "minecraft:lily_pad"
+  ],
+  "result": {
+    "id": "prettyfrogs:frog_keeper_bucket",
+    "count": 1
+  }
+}

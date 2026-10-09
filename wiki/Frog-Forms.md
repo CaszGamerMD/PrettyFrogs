@@ -52,6 +52,12 @@ Use the listed item on an **adult vanilla frog**. Each form is cosmetic; the fro
 
 Single-form triggers cannot be spent repeatedly on an already-matching frog. See [[Variants and Special Forms]] for further details.
 
+## Carrying frogs without losing their appearance
+
+Make a **Pretty Frog Bucket** with a Bucket and Lily Pad (shapeless). Use the empty Pretty Frog Bucket on a frog to capture it; use the filled bucket on a block face to release it. It saves the full frog data, including all PrettyFrogs forms, crystal cluster, and Cake Frog candle colors.
+
+The third-party Bucket of Frog mod is separate. Its vanilla-variant bucket items may recreate a normal frog and lose PrettyFrogs' special forms. For transformed frogs, use the Pretty Frog Bucket until the other mod provides complete custom-data preservation.
+
 ## Resetting
 
 **Milk Bucket** removes the special form, returning the frog to its vanilla appearance. In survival, the milk bucket becomes an empty bucket.

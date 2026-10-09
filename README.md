@@ -6,6 +6,12 @@ Fabric 26.2 mod for cosmetic transformations of vanilla frogs.
 
 The [PrettyFrogs GitHub Wiki](https://github.com/CaszGamerMD/PrettyFrogs/wiki) documents installation, every frog form, transformation items, the Field Guide recipe, appearance settings, special effects, crystal support, Blockbench textures, troubleshooting, and developer information. Its [source pages](https://github.com/CaszGamerMD/PrettyFrogs/tree/main/wiki) are versioned in this repository and synchronized by the [Publish PrettyFrogs Wiki workflow](https://github.com/CaszGamerMD/PrettyFrogs/actions/workflows/publish-wiki.yml). GitHub requires an initial Home wiki page to be created via the Wiki tab before automatic publishing can start.
 
+## Pretty Frog Bucket — custom forms survive carrying
+
+Craft a **Pretty Frog Bucket** with **Bucket + Lily Pad** (shapeless), or find it under Creative **Tools & Utilities**. Right-click a frog with the empty Pretty Frog Bucket to pick it up; right-click the side of a block to release it. The entire frog's persistent entity data is carried, including the PrettyFrogs skin, crystal, cake candles, health, custom name and vanilla variant.
+
+Use this separate bucket for transformed frogs instead of the third-party **Bucket of Frog** mod, which may discard custom form data on release. Keeping the third-party mod installed is fine. [Full usage guide](wiki/Pretty-Frog-Bucket.md).
+
 ## Frog Controller
 
 Find the **Frog Controller** and **Field Guide** in Creative inventory under **Tools & Utilities** (and by Creative search). Craft a **Frog Controller** from **Fishing Rod + Lily Pad + Slimeball** (shapeless). Right-click an **adult frog** with the controller to possess it: **WASD** for normal frog-speed movement, **tap Space** for one short frog hop (no jump charge bar), **Left-click** to shoot its tongue, **Right-click** to croak, and **Sneak + Right-click** to return to your player. Sneak alone does not end possession. The camera becomes the frog's own low eye-level view in first person, and F5 follows the frog in third person. Your player model, equipment and name tag are hidden while possessing (visual-only; no invisibility effect). First-person tongue attacks display an animated pink tongue from the frog's mouth toward the crosshair.
