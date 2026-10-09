@@ -8,7 +8,7 @@ import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.animation.definitions.FrogAnimation;
 import net.minecraft.client.model.animal.frog.FrogModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.OverlayTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
