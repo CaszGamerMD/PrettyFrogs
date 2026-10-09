@@ -2,6 +2,8 @@ package com.casz.prettyfrogs.frog;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -30,6 +32,8 @@ import net.minecraft.world.level.storage.TagValueOutput;
  * so it does not require or mix into third-party bucket mods.
  */
 public final class PrettyFrogBucketItem extends Item {
+    private static final EntityType<?> FROG_TYPE = BuiltInRegistries.ENTITY_TYPE.getValue(
+            Identifier.withDefaultNamespace("frog"));
     public PrettyFrogBucketItem(Properties properties) {
         super(properties);
     }
@@ -52,7 +56,7 @@ public final class PrettyFrogBucketItem extends Item {
             return InteractionResult.FAIL;
         }
         CompoundTag entityData = output.buildResult();
-        stack.set(DataComponents.ENTITY_DATA, TypedEntityData.of(EntityType.FROG, entityData));
+        stack.set(DataComponents.ENTITY_DATA, TypedEntityData.of(FROG_TYPE, entityData));
         level.playSound(null, frog.blockPosition(), SoundEvents.BUCKET_FILL_FISH,
                 SoundSource.NEUTRAL, 1.0F, 1.0F);
         frog.discard();
@@ -64,7 +68,7 @@ public final class PrettyFrogBucketItem extends Item {
         ItemStack stack = context.getItemInHand();
         TypedEntityData<EntityType<?>> stored = stack.get(DataComponents.ENTITY_DATA);
         if (stored == null) return InteractionResult.PASS;
-        if (stored.type() != EntityType.FROG) return InteractionResult.FAIL;
+        if (stored.type() != FROG_TYPE) return InteractionResult.FAIL;
 
         Level level = context.getLevel();
         Player player = context.getPlayer();
@@ -75,8 +79,8 @@ public final class PrettyFrogBucketItem extends Item {
         if (!level.isInWorldBounds(pos) || (player != null && !server.mayInteract(player, pos))) {
             return InteractionResult.FAIL;
         }
-        Frog frog = EntityType.FROG.create(server, EntitySpawnReason.BUCKET);
-        if (frog == null) return InteractionResult.FAIL;
+        var entity = FROG_TYPE.create(server, EntitySpawnReason.BUCKET);
+        if (!(entity instanceof Frog frog)) return InteractionResult.FAIL;
 
         // TypedEntityData.loadInto() preserves a fresh UUID while restoring
         // persistent vanilla frog and PrettyFrogs NBT.
@@ -100,7 +104,7 @@ public final class PrettyFrogBucketItem extends Item {
     @Override
     public Component getName(ItemStack stack) {
         TypedEntityData<EntityType<?>> data = stack.get(DataComponents.ENTITY_DATA);
-        if (data != null && data.type() == EntityType.FROG) {
+        if (data != null && data.type() == FROG_TYPE) {
             String form = data.copyTagWithoutId().getString("PrettyFrogsForm").orElse("prettyfrogs:normal");
             return Component.translatable("item.prettyfrogs.frog_keeper_bucket.filled", form);
         }
