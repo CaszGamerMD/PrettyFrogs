@@ -11,7 +11,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PlayerRideableJumping;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
@@ -28,14 +27,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Lets one player ride and directly steer a vanilla frog while holding the
- * Frog Controller. Uses vanilla mounted movement and jumping protocol.
+ * Controls a vanilla frog's movement while internally preserving its rider
+ * for synchronization, but uses a single-hop packet instead of a mount jump.
  * Croak/tongue are validated on the server; the tongue never trusts client
  * target coordinates or entity IDs.
  */
 @Mixin(Frog.class)
 public abstract class FrogControlMixin extends Animal
-        implements PlayerRideableJumping, FrogControlAccess {
+        implements FrogControlAccess {
     @Unique private int prettyfrogs$actionTimer;
     @Unique private int prettyfrogs$attackCooldown;
     @Unique private int prettyfrogs$targetId = -1;
@@ -76,7 +75,7 @@ public abstract class FrogControlMixin extends Animal
     protected Vec3 getRiddenInput(Player controller, Vec3 selfInput) {
         if (!prettyfrogs$isControlActive()) return selfInput;
         float forward = controller.zza;
-        float sideways = controller.xxa * 0.75F;
+        float sideways = controller.xxa * 0.85F;
         if (forward < 0.0F) forward *= 0.5F;
         return new Vec3(sideways, 0.0, forward);
     }
@@ -84,7 +83,7 @@ public abstract class FrogControlMixin extends Animal
     @Override
     protected float getRiddenSpeed(Player controller) {
         return prettyfrogs$isControlActive()
-                ? (this.isInWater() ? 0.20F : 0.27F)
+                ? (this.isInWater() ? 0.095F : 0.115F)
                 : (float)this.getAttributeValue(Attributes.MOVEMENT_SPEED);
     }
 
@@ -96,39 +95,31 @@ public abstract class FrogControlMixin extends Animal
         this.yRotO = this.yBodyRot = this.yHeadRot = getYRot();
     }
 
+    /**
+     * One native-sized frog hop per packet, with a small fixed upward
+     * impulse. Vanilla's charged mount jump interface is deliberately NOT
+     * implemented: no horse bar, no charge time and no held-Space repeats.
+     *
+     * Called both on the local client's frog for responsiveness and on the
+     * authoritative server after a validated HOP packet.
+     */
     @Override
-    public boolean canJump() {
-        return prettyfrogs$isControlActive() && this.isAlive();
-    }
-
-    @Unique
-    private void prettyfrogs$jump(int charge) {
-        if (charge <= 0 || !canJump() || !this.onGround() || prettyfrogs$jumpCooldown > 0) {
+    public void prettyfrogs$controlledHop() {
+        if (!prettyfrogs$isControlActive() || !this.isAlive()
+                || !this.onGround() || prettyfrogs$jumpCooldown > 0) {
             return;
         }
-        double strength = 0.56 + Math.min(100, charge) * 0.0024;
-        Vec3 current = getDeltaMovement();
-        setDeltaMovement(current.x, Math.max(strength, current.y), current.z);
+        Vec3 current = this.getDeltaMovement();
+        // A regular frog hop, not a horse leap or vanilla long jump.
+        // Keep current horizontal steering; add only a modest nudge.
+        Vec3 facing = this.getLookAngle();
+        double nudge = this.isInWater() ? 0.025D : 0.08D;
+        this.setDeltaMovement(current.x + facing.x * nudge, 0.42D,
+                current.z + facing.z * nudge);
         this.needsSync = true;
         prettyfrogs$jumpCooldown = 10;
-        Frog frog = (Frog)(Object)this;
-        frog.setPose(Pose.LONG_JUMPING);
+        ((Frog)(Object)this).setPose(Pose.LONG_JUMPING);
     }
-
-    @Override
-    public void onPlayerJump(int charge) {
-        // The local controlled vehicle predicts the jump for responsiveness.
-        if (level().isClientSide()) prettyfrogs$jump(charge);
-    }
-
-    @Override
-    public void handleStartJump(int charge) {
-        // Called by the vanilla mounted-jump packet on the authoritative server.
-        if (!level().isClientSide()) prettyfrogs$jump(charge);
-    }
-
-    @Override
-    public void handleStopJump() { }
 
     @Inject(method = "customServerAiStep", at = @At("HEAD"), cancellable = true)
     private void prettyfrogs$disableFreeRoamingWhileControlled(ServerLevel level, CallbackInfo ci) {

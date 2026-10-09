@@ -4,4 +4,5 @@ package com.casz.prettyfrogs.control;
 public interface FrogControlAccess {
     void prettyfrogs$controlledCroak();
     void prettyfrogs$controlledTongue();
+    void prettyfrogs$controlledHop();
 }

@@ -28,7 +28,7 @@ The **Frog Controller** and **PrettyFrogs Field Guide** are under **Tools & Util
 
 ## Control a frog
 
-Make the **Frog Controller** by combining a **Fishing Rod + Lily Pad + Slimeball** in any crafting grid. Use the controller on an adult frog to ride and steer it with WASD and Space; C croaks, V uses the tongue, and Sneak dismounts. See [[Frog Controller]].
+Make the **Frog Controller** by combining a **Fishing Rod + Lily Pad + Slimeball** in any crafting grid. Use the controller on an adult frog to become it; WASD moves at frog speed, tapping Space performs one normal hop, left-click shoots its tongue (visible in first-person), right-click croaks, and Sneak + right-click returns you to your human character. See [[Frog Controller]].
 
 ## Transform your first frog
 

@@ -10,6 +10,7 @@ public record FrogControlPayload(byte action) implements CustomPacketPayload {
     public static final byte CROAK = 0;
     public static final byte TONGUE = 1;
     public static final byte EXIT = 2;
+    public static final byte HOP = 3;
     public static final Type<FrogControlPayload> TYPE =
             new Type<>(PrettyFrogs.id("frog_control"));
     public static final StreamCodec<RegistryFriendlyByteBuf, FrogControlPayload> CODEC =

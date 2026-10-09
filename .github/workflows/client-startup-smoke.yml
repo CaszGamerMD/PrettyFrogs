@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feature/frog-boot-mixin-fix
+      - feature/frog-controller-frog-hop
   workflow_dispatch:
 
 jobs:

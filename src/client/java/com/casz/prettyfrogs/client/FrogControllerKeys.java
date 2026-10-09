@@ -1,6 +1,8 @@
 package com.casz.prettyfrogs.client;
 
 import com.casz.prettyfrogs.control.FrogControlPayload;
+import com.casz.prettyfrogs.control.FrogControlAccess;
+import net.minecraft.world.entity.animal.frog.Frog;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
@@ -18,6 +20,17 @@ public final class FrogControllerKeys {
 
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (client.player != null && FrogPossessionCamera.isPossessing(client.player)
+                    && client.gui.screen() == null && client.options.keyJump.consumeClick()
+                    && ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
+                // One edge-triggered hop rather than vanilla hold-to-charge.
+                // Simulate locally too, so the frog reacts immediately.
+                if (client.player.getVehicle() instanceof Frog frog
+                        && frog instanceof FrogControlAccess control) {
+                    control.prettyfrogs$controlledHop();
+                }
+                ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.HOP));
+            }
             if (client.player == null || !FrogPossessionCamera.isPossessing(client.player)
                     || !client.options.keyUse.isDown()) {
                 rightClickHandled = false;
@@ -34,6 +47,7 @@ public final class FrogControllerKeys {
 
     public static void tongue() {
         if (canAct() && ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
+            FrogTongueHud.startAttack();
             ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.TONGUE));
         }
     }
