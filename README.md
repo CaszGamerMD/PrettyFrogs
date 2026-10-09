@@ -32,6 +32,10 @@ Fabric 26.2 mod for cosmetic transformations of vanilla frogs.
 | Slime Block | Slimy Frog |\n| Full crystal cluster | Crystal Frog matching that crystal |
 | Milk Bucket | Reset to normal |
 
+## Frog Field Guide crafting
+
+Combine a **Book** and a **Tadpole Bucket** in either crafting grid to craft the **PrettyFrogs Field Guide** (shapeless). The tadpole is consumed, and this recipe returns an **empty Bucket** in the crafting grid. The Field Guide keeps its frog catalog and client-side Appearance settings.
+
 ## Behavior
 
 PrettyFrogs forms are cosmetic identities layered over vanilla frogs. The underlying vanilla warm/temperate/cold variant is never replaced.

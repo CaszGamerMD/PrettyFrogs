@@ -2,6 +2,7 @@ package com.casz.prettyfrogs;
 
 import com.casz.prettyfrogs.frog.FrogFormRegistry;
 import com.casz.prettyfrogs.frog.FrogInteractionHandler;
+import com.casz.prettyfrogs.recipe.FrogGuideRecipe;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 
@@ -15,6 +16,7 @@ public final class PrettyFrogs implements ModInitializer {
     @Override
     public void onInitialize() {
         PrettyFrogsItems.register();
+        FrogGuideRecipe.register();
         FrogFormRegistry.bootstrap();
         FrogInteractionHandler.register();
     }

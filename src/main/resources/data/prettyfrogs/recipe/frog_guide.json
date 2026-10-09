@@ -1,0 +1,12 @@
+{
+  "type": "prettyfrogs:frog_guide",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:tadpole_bucket"
+  ],
+  "result": {
+    "id": "prettyfrogs:frog_guide",
+    "count": 1
+  }
+}
