@@ -8,6 +8,7 @@ on:
       - feature/frog-controller-frog-hop
       - feature/pretty-frog-bucket
       - feature/frog-polish-bucket-guide-croak-tongue
+      - feature/frog-real-tongue-first-person
   workflow_dispatch:
 
 jobs:

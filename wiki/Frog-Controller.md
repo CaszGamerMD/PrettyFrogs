@@ -18,7 +18,7 @@ Hold a **Frog Controller** and use it on an **adult** frog to temporarily **beco
 | Sneak + Right-click | Return to your human character (end possession) |
 | Sneak alone | Stay in frog mode |
 
-The actions follow your normal Minecraft **Attack**, **Use**, and **Sneak** keybinds, including remapped mouse buttons. First-person tongue strikes use an eased, shaded and rounded tongue animation that extends from the frog's mouth toward the reticle and retracts quickly. It only plays for server-valid strike cooldowns. Normal attacks, mining, and held-item use are suppressed during frog possession.
+The actions follow your normal Minecraft **Attack**, **Use**, and **Sneak** keybinds, including remapped mouse buttons. First-person tongue strikes now render Minecraft's **actual 3D FrogModel tongue part** with the vanilla FROG_TONGUE keyframes and original frog tongue texture. The tongue is anchored near the mouth in the 3D first-person hand pass, not drawn as a flat 2D overlay. It extends and retracts with the frog's synced USING_TONGUE pose. The local click still obeys the 16-tick attack cooldown. Normal attacks, mining, and held-item use are suppressed during frog possession.
 
 **Croak:** Right-click to croak at a stronger volume. Croaks have no special cooldown and do not cancel the tongue attack; rapidly clicking or holding right-click repeats the sound. **Sneak + Right-click** still leaves frog mode instead.
 
@@ -34,7 +34,7 @@ The attack uses vanilla tongue pose/target rendering and `FROG_TONGUE` sound, an
 
 - `control/FrogControlPayload.java`, `FrogControlNetworking.java`: C2S action packet and server validation
 - `mixin/FrogControlMixin.java`: slow frog-speed steering, fixed-height hop, action state, tongue and sound
-- `client/FrogTongueHud.java`: first-person tongue projection
+- `client/FrogTongueFirstPerson.java`: baked vanilla FrogModel tongue, vanilla keyframe animation, first-person 3D rendering
 - `client/FrogControllerKeys.java`: use/attack actions and debounced croak/exit packets
 - `client/FrogPossessionCamera.java`: frog POV + camera lifecycle restoration
 - `mixin/client/MinecraftPossessionActionsMixin.java`: redirect left/right clicks while possessing

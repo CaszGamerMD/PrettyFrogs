@@ -8,7 +8,7 @@ public final class PrettyFrogsClient implements ClientModInitializer {
     public void onInitializeClient() {
         FrogAppearanceSettings.load();
         FrogControllerKeys.register();
-        FrogTongueHud.register();
+        FrogTongueFirstPerson.register();
         FrogPossessionCamera.register();
         ModelLayerRegistry.registerModelLayer(SkeletonFrogModel.LAYER_LOCATION, SkeletonFrogModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(GhostFrogModel.LAYER_LOCATION, GhostFrogModel::createBodyLayer);

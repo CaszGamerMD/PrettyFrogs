@@ -1,6 +1,10 @@
 package com.casz.prettyfrogs.mixin.client;
 
 import com.casz.prettyfrogs.client.FrogPossessionCamera;
+import com.casz.prettyfrogs.client.FrogTongueFirstPerson;
+import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Shadow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
@@ -17,11 +21,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(GameRenderer.class)
 public abstract class GameRendererPossessionHandsMixin {
+    @Shadow @Final private FeatureRenderDispatcher featureRenderDispatcher;
     @Inject(method = "renderItemInHand", at = @At("HEAD"), cancellable = true)
     private void prettyfrogs$hideHumanHandsInFrogPov(
             CameraRenderState camera, float partialTick,
             Matrix4fc modelView, CallbackInfo ci) {
         if (FrogPossessionCamera.isPossessing(Minecraft.getInstance().player)) {
+            // The normal pass is cancelled so hands and held items cannot
+            // render. Flush preceding world submits, then submit the real
+            // vanilla frog tongue model in the 3D first-person hand pass.
+            featureRenderDispatcher.renderAllFeatures();
+            FrogTongueFirstPerson.submit(partialTick, modelView,
+                    ((GameRenderer)(Object)this).getSubmitNodeStorage());
+            featureRenderDispatcher.renderAllFeatures();
             ci.cancel();
         }
     }

@@ -58,7 +58,7 @@ public final class FrogControllerKeys {
 
     public static void tongue() {
         if (canAct() && ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
-            if (FrogTongueHud.startAttack()) {
+            if (FrogTongueFirstPerson.startAttack()) {
                 ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.TONGUE));
             }
         }
