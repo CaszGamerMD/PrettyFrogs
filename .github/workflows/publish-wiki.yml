@@ -1,0 +1,59 @@
+name: Publish PrettyFrogs Wiki
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'wiki/**'
+      - '.github/workflows/publish-wiki.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prettyfrogs-wiki
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Sync wiki pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update GitHub Wiki from repository sources
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # GitHub Wiki pages live in a separate Git repository.
+          # GitHub requires someone to create the first Wiki page via the
+          # GitHub UI before the .wiki.git repository can be cloned.
+          wiki_url="https://github.com/${GITHUB_REPOSITORY}.wiki.git"
+          wiki_dir="${RUNNER_TEMP}/prettyfrogs-wiki"
+          auth="$(printf 'x-access-token:%s' "${GITHUB_TOKEN}" | base64 -w0)"
+          git_auth="AUTHORIZATION: basic ${auth}"
+
+          if ! git -c "http.https://github.com/.extraheader=${git_auth}" \
+              clone --quiet "${wiki_url}" "${wiki_dir}"; then
+            echo "::error::PrettyFrogs Wiki is not initialized or the workflow token lacks Wiki write access."
+            echo "::error::Visit https://github.com/${GITHUB_REPOSITORY}/wiki, create the initial Home page, and rerun Publish PrettyFrogs Wiki from Actions."
+            exit 1
+          fi
+
+          # Update managed wiki files without deleting unrelated manual pages.
+          cp wiki/*.md "${wiki_dir}/"
+          git -C "${wiki_dir}" config user.name "github-actions[bot]"
+          git -C "${wiki_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "${wiki_dir}" add -- '*.md'
+          if git -C "${wiki_dir}" diff --cached --quiet; then
+            echo "PrettyFrogs Wiki is already up to date."
+            exit 0
+          fi
+
+          git -C "${wiki_dir}" commit -m "Sync PrettyFrogs documentation from main"
+          git -C "${wiki_dir}" -c "http.https://github.com/.extraheader=${git_auth}" \
+            push --quiet origin HEAD
+          echo "Published PrettyFrogs Wiki at https://github.com/${GITHUB_REPOSITORY}/wiki"

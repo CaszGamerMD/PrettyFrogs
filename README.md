@@ -2,6 +2,10 @@
 
 Fabric 26.2 mod for cosmetic transformations of vanilla frogs.
 
+## Wiki and Documentation
+
+The [PrettyFrogs GitHub Wiki](https://github.com/CaszGamerMD/PrettyFrogs/wiki) documents installation, every frog form, transformation items, the Field Guide recipe, appearance settings, special effects, crystal support, Blockbench textures, troubleshooting, and developer information. Its [source pages](https://github.com/CaszGamerMD/PrettyFrogs/tree/main/wiki) are versioned in this repository and synchronized by the [Publish PrettyFrogs Wiki workflow](https://github.com/CaszGamerMD/PrettyFrogs/actions/workflows/publish-wiki.yml). GitHub requires an initial Home wiki page to be created via the Wiki tab before automatic publishing can start.
+
 ## Transformations
 
 | Item used on frog | Form |
