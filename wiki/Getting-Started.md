@@ -22,6 +22,10 @@ For developers, the repository currently uses **Gradle 9.7**, Fabric Loom, and J
 
 The RGB End Rod trigger is **optional integration** with an item registered as `colorful_rods:rgb_end_rod`. Without that item, the rest of PrettyFrogs still works, but the RGB family has no standard transformation trigger.
 
+## Creative inventory
+
+The **Frog Controller** and **PrettyFrogs Field Guide** are under **Tools & Utilities** and appear in Creative search. Commands: `/give @s prettyfrogs:frog_controller` or `/give @s prettyfrogs:frog_guide`.
+
 ## Control a frog
 
 Make the **Frog Controller** by combining a **Fishing Rod + Lily Pad + Slimeball** in any crafting grid. Use the controller on an adult frog to ride and steer it with WASD and Space; C croaks, V uses the tongue, and Sneak dismounts. See [[Frog Controller]].

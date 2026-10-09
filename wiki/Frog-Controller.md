@@ -2,6 +2,8 @@
 
 **New item:** `prettyfrogs:frog_controller`
 
+**Finding it in Creative:** Open **Tools & Utilities** or search **Frog Controller**. Both the controller and the PrettyFrogs Field Guide are listed there in builds with the Creative inventory fix. For an immediate test, use `/give @s prettyfrogs:frog_controller`.
+
 Hold a **Frog Controller** and use it on an **adult** frog to temporarily **become the frog**. The camera moves to the frog's eye position (not the player's seat). In first person, you see through its eyes; in third person (F5), the camera follows the frog itself. The player's visible model, equipment and nameplate are suppressed while possessing without granting gameplay invisibility. The controller isn't consumed, and cosmetic frog forms remain unchanged. Use **Sneak + Right-click** to return to your player; Sneak by itself keeps you in frog mode. You may switch hotbar items while possessing without losing control.
 
 ## Controls
