@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/bucket",
+    "layer1": "prettyfrogs:item/frog_bucket_body",
+    "layer2": "prettyfrogs:item/frog_bucket_belly",
+    "layer3": "prettyfrogs:item/frog_bucket_face"
+  }
+}

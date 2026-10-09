@@ -8,69 +8,89 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
- * First-person frog tongue. Minecraft normally hides the camera entity's
- * model, which hides the real frog's tongue as well. Draw a short, animated,
- * tapered pink tongue from the bottom-center (frog's mouth) toward the reticle.
- * Only appears for an actual frog possession in first-person perspective.
+ * Perspective tongue from the frog's mouth toward the center of the screen.
+ *
+ * The former overlay was a huge vertical rectangle drawn almost the whole
+ * height of the window. This animation is a SHORT tapering tongue with shaded
+ * edges, a curved centerline, a rounded tip and eased extension/retraction.
+ * It is only drawn in first-person possession and respects attack cooldown.
  */
 public final class FrogTongueHud {
-    private static int animationTicks;
+    private static final int ANIMATION_TICKS = 10;
+    private static final int ATTACK_COOLDOWN = 16;
+    private static int ticksRemaining;
+    private static int cooldownRemaining;
 
     private FrogTongueHud() {}
 
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (animationTicks > 0) --animationTicks;
-            if (!FrogPossessionCamera.isPossessing(client.player)) animationTicks = 0;
+            if (ticksRemaining > 0) --ticksRemaining;
+            if (cooldownRemaining > 0) --cooldownRemaining;
+            if (!FrogPossessionCamera.isPossessing(client.player)) {
+                ticksRemaining = 0;
+                cooldownRemaining = 0;
+            }
         });
         HudElementRegistry.attachElementBefore(
                 VanillaHudElements.CROSSHAIR, PrettyFrogs.id("frog_tongue_pov"),
-                (graphics, tracker) -> draw(graphics));
+                (graphics, delta) -> draw(graphics, delta.getGameTimeDeltaTicks()));
     }
 
-    public static void startAttack() {
-        animationTicks = 11;
+    /** Do not animate a tongue strike that the server is cooling down. */
+    public static boolean startAttack() {
+        if (cooldownRemaining > 0) return false;
+        ticksRemaining = ANIMATION_TICKS;
+        cooldownRemaining = ATTACK_COOLDOWN;
+        return true;
     }
 
-    private static void draw(GuiGraphicsExtractor graphics) {
-        Minecraft client = Minecraft.getInstance();
-        if (animationTicks <= 0 || client.player == null || client.gui.screen() != null
-                || !client.options.getCameraType().isFirstPerson()
-                || !FrogPossessionCamera.isPossessing(client.player)) return;
+    private static float smooth(float x) {
+        x = Math.max(0.0F, Math.min(1.0F, x));
+        return x * x * (3.0F - 2.0F * x);
+    }
 
-        // Fast extension, brief hold, then retraction. Size is independent
-        // of the window resolution because GuiGraphicsExtractor is GUI-scaled.
-        float progress = switch (animationTicks) {
-            case 11 -> 0.17F;
-            case 10 -> 0.47F;
-            case 9 -> 0.78F;
-            case 8, 7, 6 -> 1.0F;
-            case 5 -> 0.80F;
-            case 4 -> 0.58F;
-            case 3 -> 0.36F;
-            case 2 -> 0.17F;
-            default -> 0.07F;
-        };
-        int center = graphics.guiWidth() / 2;
-        int mouthY = graphics.guiHeight() - 27;
-        int fullReach = Math.max(30, Math.min(136, graphics.guiHeight() / 2 - 34));
-        int reach = Math.round(fullReach * progress);
-        int steps = Math.max(1, reach / 3);
+    private static void draw(GuiGraphicsExtractor g, float partialTick) {
+        Minecraft mc = Minecraft.getInstance();
+        if (ticksRemaining <= 0 || mc.player == null || mc.gui.screen() != null
+                || !mc.options.getCameraType().isFirstPerson()
+                || !FrogPossessionCamera.isPossessing(mc.player)) return;
 
-        // Trapezoid in perspective: broad at the mouth and thin at the tip.
-        for (int i = 0; i < steps; ++i) {
-            float t = (float)i / steps;
-            int y = mouthY - i * 3;
-            int radius = Math.max(2, Math.round(9.0F - 7.0F * t));
-            graphics.fill(center - radius - 1, y - 3, center + radius + 1, y,
-                    0xFF8B315A);
-            graphics.fill(center - radius, y - 3, center + radius, y,
-                    t > 0.70F ? 0xFFFF9CC4 : 0xFFFF709F);
-            graphics.fill(center - Math.max(1, radius / 3), y - 3,
-                    center + Math.max(1, radius / 3), y,
-                    0xFFFFB3CD);
+        float age = ANIMATION_TICKS - ticksRemaining + Math.max(0, Math.min(1, partialTick));
+        // Fire out rapidly; linger only very briefly before snapping back.
+        float reach = age < 3.3F
+                ? smooth(age / 3.3F)
+                : age < 4.8F ? 1.0F : 1.0F - smooth((age - 4.8F) / 5.2F);
+        if (reach <= 0.01F) return;
+
+        int mx = g.guiWidth() / 2;
+        int centerY = g.guiHeight() / 2;
+        // Frog mouth is only just below the camera, rather than at the very
+        // bottom of the UI. Scale gracefully across GUI resolutions.
+        int mouthY = Math.min(g.guiHeight() - 20, centerY + Math.min(73, g.guiHeight() / 3));
+        int maxReach = Math.max(12, mouthY - centerY - 5);
+        int length = Math.max(2, Math.round(maxReach * reach));
+
+        // A slightly curving tapered ribbon, thick at the mouth, rounded at
+        // the tip. Narrowing conveys foreshortening in frog-eye perspective.
+        // Each slice uses a dark outline, pink underside, and light center.
+        for (int i = 0; i <= length; i += 2) {
+            float u = (float)i / Math.max(1, length);
+            int y = mouthY - i;
+            int curve = Math.round(3.0F * (float)Math.sin(u * Math.PI) * (1.0F - reach * 0.3F));
+            int x = mx + curve;
+            int width = Math.max(2, Math.round(8.0F * (1.0F - u) + 1.8F * u));
+            g.fill(x - width - 1, y - 2, x + width + 1, y + 1, 0xFF662A47);
+            g.fill(x - width, y - 2, x + width, y + 1, 0xFFDB5A80);
+            int highlight = Math.max(1, width / 3);
+            g.fill(x - highlight, y - 2, x + highlight, y, 0xFFFF9AB4);
         }
-        int tipY = mouthY - steps * 3;
-        graphics.fill(center - 3, tipY - 4, center + 3, tipY + 1, 0xFFFFA7C8);
+        int tipY = mouthY - length;
+        int tipX = mx;
+        g.fill(tipX - 3, tipY - 2, tipX + 3, tipY + 2, 0xFF9F3D66);
+        g.fill(tipX - 2, tipY - 3, tipX + 2, tipY + 1, 0xFFFF8FB1);
+        // Pink lower lip at the base gives the tongue a clear mouth anchor.
+        g.fill(mx - 9, mouthY, mx + 9, mouthY + 2, 0xFF7D385B);
+        g.fill(mx - 6, mouthY, mx + 6, mouthY + 1, 0xFFE67A9E);
     }
 }

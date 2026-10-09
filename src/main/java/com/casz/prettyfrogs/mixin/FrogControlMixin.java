@@ -36,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class FrogControlMixin extends Animal
         implements FrogControlAccess {
     @Unique private int prettyfrogs$actionTimer;
+    @Unique private int prettyfrogs$croakPoseTicks;
     @Unique private int prettyfrogs$attackCooldown;
     @Unique private int prettyfrogs$targetId = -1;
     @Unique private boolean prettyfrogs$tongueActive;
@@ -131,11 +132,15 @@ public abstract class FrogControlMixin extends Animal
 
     @Override
     public void prettyfrogs$controlledCroak() {
-        if (level().isClientSide() || !prettyfrogs$isControlActive() || prettyfrogs$actionTimer != 0) return;
-        prettyfrogs$actionTimer = 16;
-        prettyfrogs$tongueActive = false;
-        this.setPose(Pose.CROAKING);
-        level().playSound(null, blockPosition(), SoundEvents.FROG_AMBIENT, SoundSource.NEUTRAL, 0.85F, 1.0F);
+        if (level().isClientSide() || !prettyfrogs$isControlActive()) return;
+        // Croaking has NO tongue/jump cooldown. Each click or held-use pulse
+        // makes an audible sound, even if a tongue attack is in progress.
+        if (!prettyfrogs$tongueActive) {
+            prettyfrogs$croakPoseTicks = 7;
+            this.setPose(Pose.CROAKING);
+        }
+        level().playSound(null, this.getX(), this.getY() + 0.35D, this.getZ(),
+                SoundEvents.FROG_AMBIENT, SoundSource.PLAYERS, 2.3F, 1.0F);
     }
 
     @Override
@@ -172,6 +177,7 @@ public abstract class FrogControlMixin extends Animal
         prettyfrogs$actionTimer = 11;
         prettyfrogs$attackCooldown = 16;
         prettyfrogs$tongueActive = true;
+        prettyfrogs$croakPoseTicks = 0;
         if (best != null) frog.setTongueTarget(best);
         frog.setPose(Pose.USING_TONGUE);
         server.playSound(null, blockPosition(), SoundEvents.FROG_TONGUE, SoundSource.NEUTRAL, 1.0F, 1.0F);
@@ -183,6 +189,10 @@ public abstract class FrogControlMixin extends Animal
         if (prettyfrogs$jumpCooldown > 0) prettyfrogs$jumpCooldown--;
         if (prettyfrogs$attackCooldown > 0) prettyfrogs$attackCooldown--;
         Frog frog = (Frog)(Object)this;
+        if (prettyfrogs$croakPoseTicks > 0 && --prettyfrogs$croakPoseTicks == 0
+                && frog.getPose() == Pose.CROAKING) {
+            frog.setPose(Pose.STANDING);
+        }
         if (prettyfrogs$jumpCooldown == 0 && frog.getPose() == Pose.LONG_JUMPING && frog.onGround()) {
             frog.setPose(Pose.STANDING);
         }

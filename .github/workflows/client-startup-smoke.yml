@@ -7,6 +7,7 @@ on:
       - feature/frog-boot-mixin-fix
       - feature/frog-controller-frog-hop
       - feature/pretty-frog-bucket
+      - feature/frog-polish-bucket-guide-croak-tongue
   workflow_dispatch:
 
 jobs:

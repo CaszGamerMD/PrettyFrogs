@@ -15,6 +15,7 @@ import net.minecraft.client.player.LocalPlayer;
  */
 public final class FrogControllerKeys {
     private static boolean rightClickHandled;
+    private static int croakRepeatDelay;
 
     private FrogControllerKeys() {}
 
@@ -32,8 +33,18 @@ public final class FrogControllerKeys {
                 ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.HOP));
             }
             if (client.player == null || !FrogPossessionCamera.isPossessing(client.player)
-                    || !client.options.keyUse.isDown()) {
+                    || !client.options.keyUse.isDown() || client.gui.screen() != null) {
                 rightClickHandled = false;
+                croakRepeatDelay = 0;
+            } else if (rightClickHandled && !client.player.isShiftKeyDown()) {
+                // Holding right-click keeps croaking; rapid distinct clicks
+                // also work because the server no longer gates croak on the
+                // tongue attack timer.
+                if (croakRepeatDelay > 0) --croakRepeatDelay;
+                if (croakRepeatDelay == 0 && ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
+                    ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.CROAK));
+                    croakRepeatDelay = 5;
+                }
             }
         });
     }
@@ -47,8 +58,9 @@ public final class FrogControllerKeys {
 
     public static void tongue() {
         if (canAct() && ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
-            FrogTongueHud.startAttack();
-            ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.TONGUE));
+            if (FrogTongueHud.startAttack()) {
+                ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.TONGUE));
+            }
         }
     }
 
@@ -57,6 +69,7 @@ public final class FrogControllerKeys {
             return;
         }
         rightClickHandled = true;
+        croakRepeatDelay = 5;
         if (ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
             byte action = Minecraft.getInstance().player.isShiftKeyDown()
                     ? FrogControlPayload.EXIT

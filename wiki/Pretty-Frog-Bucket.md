@@ -18,6 +18,10 @@ This is a separate item; the third-party mod can stay installed. The capture doe
 
 The filled bucket remembers its frog even when carried in inventory, stored in a chest, dropped, moved between players, or saved and reloaded.
 
+**Dynamic icon:** An empty bucket looks like a bucket. A filled bucket shows a small pixel-art frog peeking from the rim, colored according to its saved PrettyFrogs form (watermelon, crystal, skeleton, dart, etc.). This is a lightweight stylized preview, not a live animated entity. The actual 3D frog retains its full saved appearance when released.
+
+**Name:** Filled buckets show `<Frog Name> in a Bucket`, e.g. `Watermelon Frog in a Bucket` or `Fred in a Bucket` if the frog is named with a name tag. The normal empty item is still `Pretty Frog Bucket`.
+
 ## What gets saved?
 
 The **entire persistent Frog entity data**, not just a texture ID:

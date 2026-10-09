@@ -18,7 +18,9 @@ Hold a **Frog Controller** and use it on an **adult** frog to temporarily **beco
 | Sneak + Right-click | Return to your human character (end possession) |
 | Sneak alone | Stay in frog mode |
 
-The actions follow your normal Minecraft **Attack**, **Use**, and **Sneak** keybinds, including remapped mouse buttons. First-person tongue attacks now draw an animated tapered pink tongue from the frog's mouth toward the reticle, while the camera remains at frog eye level. Normal attacks, mining, and held-item use are suppressed during frog possession.
+The actions follow your normal Minecraft **Attack**, **Use**, and **Sneak** keybinds, including remapped mouse buttons. First-person tongue strikes use an eased, shaded and rounded tongue animation that extends from the frog's mouth toward the reticle and retracts quickly. It only plays for server-valid strike cooldowns. Normal attacks, mining, and held-item use are suppressed during frog possession.
+
+**Croak:** Right-click to croak at a stronger volume. Croaks have no special cooldown and do not cancel the tongue attack; rapidly clicking or holding right-click repeats the sound. **Sneak + Right-click** still leaves frog mode instead.
 
 **Tongue:** Targets one living mob **or another player** in front of the frog, at most 3.5 blocks away, with an unobstructed line of sight. A **size-1 Slime** or **size-1 Magma Cube** is attacked through the frog's regular eating attack (so vanilla kill/drop behavior is used). Other mobs and players take **2 base damage (one heart before armor and resistance)**. Larger slimes/magma cubes are *not* swallowed: they take 2 damage. Attacks have a 16-tick cooldown. **Player targets obey the server's PvP setting and team friendly-fire rules**; creative-invulnerable players and spectators are excluded, and a frog cannot tongue its own controlling player.
 

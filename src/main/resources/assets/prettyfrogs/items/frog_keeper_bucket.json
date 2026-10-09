@@ -1,6 +1,914 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/bucket"
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "minecraft:entity_data",
+    "on_true": {
+      "type": "minecraft:select",
+      "property": "minecraft:custom_model_data",
+      "cases": [
+        {
+          "when": "normal",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 7846221
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 13295512
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "watermelon",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2986308
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 15746136
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "watermelon_red_top",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 15221857
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 6601046
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "pumpkin",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 14584361
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16037209
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "tadpole_costume",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 7644271
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 13951139
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "red_eyed_tree",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 6803274
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16049052
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "skeleton",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 14407879
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 6841949
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "muddy",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 7821381
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 11373671
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "water",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2665950
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 11333880
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "magma",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 11356970
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 15835959
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "ice",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 9428204
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 15727359
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "dart_red",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2303021
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16075600
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "dart_blue",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2566199
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 4557311
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "dart_yellow",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2630698
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16241486
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "dart_green",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2238250
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 5297787
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "dart_orange",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2565426
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16026179
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "rainbow",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 6114476
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 3142826
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "rainbow_dart",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2499639
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 15556092
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "rainbow_eyes",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 6073939
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 11065725
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "rainbow_solid",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 12861914
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 6614762
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "rainbow_disco",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 10803691
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16341693
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "cherry_blossom",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 15902928
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16771057
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "bumble",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16766275
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 3485750
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "mushroom",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 11817292
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16047817
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "moss",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 4490048
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 8697700
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "ender",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 4931197
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 11902173
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "ghost",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 10798795
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 15728123
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "glow",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 4565949
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 12449760
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "cactus",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2460497
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 11851914
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "storm",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 5206657
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 12969702
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "soulfire",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 3588033
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 10808812
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "sculk",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 1257018
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 2592154
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "cake",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 15916993
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16620464
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "slimy",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 7067736
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 14024626
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        },
+        {
+          "when": "crystal",
+          "model": {
+            "type": "minecraft:model",
+            "model": "prettyfrogs:item/frog_bucket_filled",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 10783963
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16049402
+              },
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              }
+            ]
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "prettyfrogs:item/frog_bucket_filled",
+        "tints": [
+          {
+            "type": "minecraft:constant",
+            "value": 16777215
+          },
+          {
+            "type": "minecraft:constant",
+            "value": 7846221
+          },
+          {
+            "type": "minecraft:constant",
+            "value": 13295512
+          },
+          {
+            "type": "minecraft:constant",
+            "value": 16777215
+          }
+        ]
+      }
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/bucket"
+    }
   }
 }

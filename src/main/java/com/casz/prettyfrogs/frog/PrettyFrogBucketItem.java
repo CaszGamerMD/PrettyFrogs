@@ -18,6 +18,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TypedEntityData;
+import net.minecraft.world.item.component.CustomModelData;
+import com.casz.prettyfrogs.guide.FrogGuideEntries;
+import java.util.List;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.TagValueOutput;
@@ -57,6 +60,12 @@ public final class PrettyFrogBucketItem extends Item {
         }
         CompoundTag entityData = output.buildResult();
         stack.set(DataComponents.ENTITY_DATA, TypedEntityData.of(FROG_TYPE, entityData));
+        String form = ((PrettyFrogAccess)frog).prettyfrogs$getForm().getPath();
+        stack.set(DataComponents.CUSTOM_MODEL_DATA,
+                new CustomModelData(List.of(), List.of(), List.of(form), List.of()));
+        Component frogName = frog.getCustomName();
+        String displayName = frogName == null ? formName(form) : frogName.getString();
+        stack.set(DataComponents.ITEM_NAME, Component.literal(displayName + " in a Bucket"));
         level.playSound(null, frog.blockPosition(), SoundEvents.BUCKET_FILL_FISH,
                 SoundSource.NEUTRAL, 1.0F, 1.0F);
         frog.discard();
@@ -96,17 +105,44 @@ public final class PrettyFrogBucketItem extends Item {
         }
 
         stack.remove(DataComponents.ENTITY_DATA);
+        stack.remove(DataComponents.CUSTOM_MODEL_DATA);
+        stack.remove(DataComponents.ITEM_NAME);
         server.playSound(null, pos, SoundEvents.BUCKET_EMPTY_FISH,
                 SoundSource.NEUTRAL, 1.0F, 1.0F);
         return InteractionResult.SUCCESS;
+    }
+
+    private static String formName(String form) {
+        // Prefer the exact in-game Field Guide name, including RGB and
+        // decorative form names. A vanilla frog defaults to "Frog".
+        if ("normal".equals(form)) return "Frog";
+        return FrogGuideEntries.entries().stream()
+                .filter(entry -> entry.form().getPath().equals(form))
+                .map(FrogGuideEntries.Entry::name)
+                .findFirst()
+                .orElseGet(() -> {
+                    StringBuilder result = new StringBuilder();
+                    for (String word : form.split("_")) {
+                        if (word.isEmpty()) continue;
+                        if (!result.isEmpty()) result.append(' ');
+                        result.append(Character.toUpperCase(word.charAt(0)))
+                              .append(word.substring(1));
+                    }
+                    return result + " Frog";
+                });
     }
 
     @Override
     public Component getName(ItemStack stack) {
         TypedEntityData<EntityType<?>> data = stack.get(DataComponents.ENTITY_DATA);
         if (data != null && data.type() == FROG_TYPE) {
-            String form = data.copyTagWithoutId().getString("PrettyFrogsForm").orElse("prettyfrogs:normal");
-            return Component.translatable("item.prettyfrogs.frog_keeper_bucket.filled", form);
+            // Also works for filled buckets from previous versions that did
+            // not yet have ITEM_NAME or CUSTOM_MODEL_DATA components.
+            String form = data.copyTagWithoutId().getString("PrettyFrogsForm")
+                    .orElse("prettyfrogs:normal");
+            Identifier id = Identifier.tryParse(form);
+            return Component.literal(formName(id == null ? "normal" : id.getPath())
+                    + " in a Bucket");
         }
         return super.getName(stack);
     }

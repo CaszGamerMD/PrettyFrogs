@@ -39,3 +39,7 @@ More detail: [[Appearance Settings]].
 See [[Troubleshooting]] for versions, missing assets, and client-only GUI diagnostics.
 
 [[Home]] · [[Crafting and Recipes]] · [[Appearance Settings]]
+
+## Rotating a frog preview
+
+On the **Frogs** tab, **left-click and drag the frog image** to rotate the 3D frog around its vertical axis. Drag vertically to tilt the preview; the tilt is limited to keep it readable. Your chosen angle stays while turning guide pages, allowing comparisons from the same view.

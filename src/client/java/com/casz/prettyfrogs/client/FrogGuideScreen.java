@@ -6,7 +6,15 @@ import java.util.List;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.world.entity.Pose;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -27,6 +35,9 @@ public final class FrogGuideScreen extends Screen {
     private Button hdToggle;
     private Button decorToggle;
     private Frog preview;
+    private boolean rotatingPreview;
+    private float previewYaw = 20.0F;
+    private float previewPitch = 8.0F;
 
     public FrogGuideScreen() {
         super(Component.translatable("screen.prettyfrogs.frog_guide"));
@@ -66,8 +77,66 @@ public final class FrogGuideScreen extends Screen {
         updateButtons();
     }
 
+    @Override
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (!appearancePage && event.button() == 0 && insidePreview(event.x(), event.y())) {
+            rotatingPreview = true;
+            return true;
+        }
+        return super.mouseClicked(event, doubleClick);
+    }
+
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (rotatingPreview && event.button() == 0) {
+            previewYaw = (previewYaw + (float)dx * 1.3F) % 360.0F;
+            previewPitch = Math.max(-60.0F, Math.min(60.0F, previewPitch + (float)dy * 0.65F));
+            return true;
+        }
+        return super.mouseDragged(event, dx, dy);
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        if (rotatingPreview && event.button() == 0) {
+            rotatingPreview = false;
+            return true;
+        }
+        return super.mouseReleased(event);
+    }
+
+    private boolean insidePreview(double mx, double my) {
+        int center = width / 2;
+        int top = height / 2 - 100;
+        return mx >= center - 55 && mx <= center + 55
+                && my >= top + 50 && my <= top + 120;
+    }
+
+    private void renderRotatableFrog(GuiGraphicsExtractor graphics, int center, int top) {
+        EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderer<? super Frog, ?> renderer = dispatcher.getRenderer(preview);
+        EntityRenderState state = renderer.createRenderState(preview, 1.0F);
+        state.shadowPieces.clear();
+        state.outlineColor = 0;
+        if (state instanceof LivingEntityRenderState living) {
+            living.bodyRot = 180.0F + previewYaw;
+            living.yRot = previewYaw;
+            living.xRot = previewPitch;
+            living.boundingBoxWidth /= living.scale;
+            living.boundingBoxHeight /= living.scale;
+            living.scale = 1.0F;
+        }
+        Quaternionf rotation = new Quaternionf().rotateZ((float)Math.PI);
+        Quaternionf pitch = new Quaternionf().rotateX(-previewPitch * (float)Math.PI / 180.0F);
+        rotation.mul(pitch);
+        graphics.entity(state, 48,
+                new Vector3f(0.0F, state.boundingBoxHeight / 2.0F + 0.05F, 0.0F),
+                rotation, pitch, center - 55, top + 50, center + 55, top + 120);
+    }
+
     private void switchPage(boolean showAppearance) {
         appearancePage = showAppearance;
+        rotatingPreview = false;
         updateButtons();
     }
 
@@ -137,9 +206,8 @@ public final class FrogGuideScreen extends Screen {
         graphics.centeredText(font, Component.literal((page + 1) + " / " + entries.size()),
                 center, top + 46, -8355712);
         if (preview != null) {
-            InventoryScreen.extractEntityInInventoryFollowsMouse(
-                    graphics, center - 55, top + 50, center + 55, top + 120,
-                    48, 0.05F, mouseX, mouseY, preview);
+            renderRotatableFrog(graphics, center, top);
+            graphics.centeredText(font, Component.literal("Drag frog to rotate"), center, top + 119, -8355712);
         }
         ItemStack trigger = new ItemStack(entry.trigger());
         graphics.item(trigger, center - 8, top + 126);
