@@ -6,6 +6,12 @@ Fabric 26.2 mod for cosmetic transformations of vanilla frogs.
 
 The [PrettyFrogs GitHub Wiki](https://github.com/CaszGamerMD/PrettyFrogs/wiki) documents installation, every frog form, transformation items, the Field Guide recipe, appearance settings, special effects, crystal support, Blockbench textures, troubleshooting, and developer information. Its [source pages](https://github.com/CaszGamerMD/PrettyFrogs/tree/main/wiki) are versioned in this repository and synchronized by the [Publish PrettyFrogs Wiki workflow](https://github.com/CaszGamerMD/PrettyFrogs/actions/workflows/publish-wiki.yml). GitHub requires an initial Home wiki page to be created via the Wiki tab before automatic publishing can start.
 
+## Frog Controller
+
+Craft a **Frog Controller** from **Fishing Rod + Lily Pad + Slimeball** (shapeless). Right-click an **adult frog** with the controller to mount and steer it: **WASD** to move, **Space** to jump, **C** to croak, **V** to shoot its tongue, and **Sneak** to dismount.
+
+The controlled tongue eats **size-1 Slimes/Magma Cubes** using vanilla frog attacks and deals **2 damage (one heart)** to other non-player mobs; it has a short cooldown and checks line of sight and range on the server. The controller does not change custom forms. See the [Frog Controller wiki](wiki/Frog-Controller.md) for details and binding information.
+
 ## Transformations
 
 | Item used on frog | Form |

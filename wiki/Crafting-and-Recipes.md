@@ -1,6 +1,6 @@
 # Crafting and Recipes
 
-PrettyFrogs currently adds **one craftable mod item**, the **PrettyFrogs Field Guide**. The frogs themselves are transformations, not separate items; their triggers are described in [[Frog Forms]].
+PrettyFrogs adds **two craftable mod items**: the **PrettyFrogs Field Guide** and **Frog Controller**. The frogs themselves are transformations, not separate items; their triggers are described in [[Frog Forms]].
 
 ## PrettyFrogs Field Guide
 
@@ -23,6 +23,12 @@ Place a Book and a Tadpole Bucket in **either** the 2×2 inventory grid or a 3×
 ```
 
 The guide has a **Frogs** catalog and **Appearance** settings. See [[Field Guide]].
+
+## Frog Controller
+
+**Shapeless crafting recipe:** Fishing Rod + Lily Pad + Slimeball → **1 Frog Controller** (`prettyfrogs:frog_controller`). No items are returned from this crafting recipe. The controller itself is reusable.
+
+Use it on an adult frog to mount and steer. See [[Frog Controller]] for controls, croaking, tongue attacks, and cooldown.
 
 ## Other item interactions (not crafting recipes)
 

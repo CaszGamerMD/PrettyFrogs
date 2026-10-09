@@ -7,6 +7,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 
 public final class PrettyFrogsItems {
+    public static final ResourceKey<Item> FROG_CONTROLLER_KEY = ResourceKey.create(Registries.ITEM, PrettyFrogs.id("frog_controller"));
+    public static final Item FROG_CONTROLLER = new Item(new Item.Properties().setId(FROG_CONTROLLER_KEY).stacksTo(1));
+
     public static final ResourceKey<Item> FROG_GUIDE_KEY = ResourceKey.create(Registries.ITEM, PrettyFrogs.id("frog_guide"));
     public static final Item FROG_GUIDE = new Item(new Item.Properties().setId(FROG_GUIDE_KEY).stacksTo(1));
 
@@ -14,5 +17,6 @@ public final class PrettyFrogsItems {
 
     public static void register() {
         Registry.register(BuiltInRegistries.ITEM, FROG_GUIDE_KEY, FROG_GUIDE);
+        Registry.register(BuiltInRegistries.ITEM, FROG_CONTROLLER_KEY, FROG_CONTROLLER);
     }
 }

@@ -3,6 +3,7 @@
 - [[Home]]
 - [[Getting Started]]
 - [[Crafting and Recipes]]
+- [[Frog Controller]]
 - [[Frog Forms]]
 - [[Variants and Special Forms]]
 - [[Special Effects and Models]]

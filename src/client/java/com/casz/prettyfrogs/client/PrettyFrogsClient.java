@@ -7,6 +7,7 @@ public final class PrettyFrogsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         FrogAppearanceSettings.load();
+        FrogControllerKeys.register();
         ModelLayerRegistry.registerModelLayer(SkeletonFrogModel.LAYER_LOCATION, SkeletonFrogModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(GhostFrogModel.LAYER_LOCATION, GhostFrogModel::createBodyLayer);
         ModelLayerRegistry.registerModelLayer(PumpkinStemModel.LAYER_LOCATION, PumpkinStemModel::createBodyLayer);

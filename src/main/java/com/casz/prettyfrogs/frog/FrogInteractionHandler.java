@@ -1,6 +1,7 @@
 package com.casz.prettyfrogs.frog;
 
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import com.casz.prettyfrogs.PrettyFrogsItems;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -26,6 +27,17 @@ public final class FrogInteractionHandler {
 
             if (frog.isBaby()) {
                 return InteractionResult.PASS;
+            }
+
+            // Controller is not consumed and never changes the cosmetic form.
+            // Player dismounts using their normal Sneak key.
+            if (stack.is(PrettyFrogsItems.FROG_CONTROLLER)) {
+                if (frog.isVehicle() || player.isPassenger()) return InteractionResult.PASS;
+                if (!level.isClientSide()) {
+                    frog.getNavigation().stop();
+                    player.startRiding(frog);
+                }
+                return InteractionResult.SUCCESS;
             }
 
             if (current.equals(FrogFormRegistry.CAKE) && isCandle(stack)) {

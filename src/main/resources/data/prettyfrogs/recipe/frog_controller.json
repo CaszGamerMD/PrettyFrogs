@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:fishing_rod",
+    "minecraft:lily_pad",
+    "minecraft:slime_ball"
+  ],
+  "result": {
+    "id": "prettyfrogs:frog_controller",
+    "count": 1
+  }
+}
