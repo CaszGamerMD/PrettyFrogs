@@ -101,6 +101,19 @@ Both preferences take effect immediately, are per-player rather than
 server-synchronized, and persist in
 `config/prettyfrogs-client.properties`. No extra mod is required.
 
+## Startup regression testing
+
+A passing Gradle build does **not** validate Mixin method targets at Minecraft
+startup. The [Minecraft client startup smoke workflow](https://github.com/CaszGamerMD/PrettyFrogs/actions/workflows/client-startup-smoke.yml)
+uses a virtual X display to launch the 26.2 client and flag broken Mixin
+targets. If it cannot start a renderer in GitHub Actions, its log artifact
+explains the environment limitation.
+
+The frog possession hand render suppression hooks `GameRenderer.renderItemInHand`
+rather than `ItemInHandRenderer.renderHandsWithItems`, which produced a
+startup-time InvalidInjectionException in a modded client. The removed
+`FrogPossessionHandsMixin` is no longer registered.
+
 ## Development status
 
 Core form persistence, synchronization, interactions, particles, custom render-state plumbing, Water/Ghost/Slime shell rendering, Magma/Rainbow/Glow/Soulfire/Storm/Sculk emissive rendering, and Skeleton model geometry are implemented and compile against Minecraft 26.2.

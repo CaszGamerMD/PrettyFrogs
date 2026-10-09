@@ -1,0 +1,56 @@
+name: Minecraft client startup smoke
+
+on:
+  push:
+    branches:
+      - main
+      - feature/frog-boot-mixin-fix
+  workflow_dispatch:
+
+jobs:
+  launch-client:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.7.0'
+      - name: Run modded Minecraft client under virtual X display
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          MESA_GL_VERSION_OVERRIDE: '4.5'
+        run: |
+          set -uo pipefail
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            echo "::error::xvfb-run is not installed on this runner"
+            exit 1
+          fi
+          timeout --signal=TERM --kill-after=10s 150s \
+            xvfb-run -a -s '-screen 0 1280x720x24' \
+            gradle runClient --no-daemon --console=plain --stacktrace \
+            > client-startup.log 2>&1
+          status=$?
+          tail -n 120 client-startup.log
+          if grep -Eiq 'InvalidInjectionException|MixinApplyError|MixinTransformerError|Mixin transformation of|Critical injection failure|Exception in thread "Render thread"|Failed to start the minecraft client' client-startup.log; then
+            echo "::error::Minecraft client failed with a startup/mixin error"
+            exit 1
+          fi
+          if grep -Eiq 'Sound engine started|Reloading ResourceManager|Created:.*atlas|Loaded [0-9]+ recipes' client-startup.log; then
+            echo "Minecraft loaded its client runtime without mixin startup failures (exit code: $status)"
+            exit 0
+          fi
+          echo "::error::Unable to confirm that the Minecraft client reached startup. Exit code: $status"
+          exit 1
+      - name: Upload startup log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PrettyFrogs-client-startup-log
+          path: client-startup.log
+          if-no-files-found: warn
