@@ -1,6 +1,5 @@
 package com.casz.prettyfrogs.client;
 
-import com.casz.prettyfrogs.PrettyFrogsItems;
 import com.casz.prettyfrogs.control.FrogControlPayload;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
@@ -24,7 +23,7 @@ public final class FrogControllerKeys {
             boolean tongue = TONGUE.consumeClick();
             if ((!croak && !tongue) || client.player == null || client.gui.screen() != null
                     || !(client.player.getControlledVehicle() instanceof Frog)
-                    || !client.player.isHolding(PrettyFrogsItems.FROG_CONTROLLER)
+                    || !FrogPossessionCamera.isPossessing(client.player)
                     || !ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
                 return;
             }

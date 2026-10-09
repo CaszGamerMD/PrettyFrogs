@@ -2,7 +2,7 @@
 
 **New item:** `prettyfrogs:frog_controller`
 
-Hold a **Frog Controller** and use it on an **adult** frog to mount it and temporarily steer that frog. The controller is not consumed, and the frog retains any PrettyFrogs cosmetic appearance. Use the ordinary **Sneak** key to dismount.
+Hold a **Frog Controller** and use it on an **adult** frog to temporarily **become the frog**. The camera moves to the frog's eye position (not the player's seat). In first person, you see through its eyes; in third person (F5), the camera follows the frog itself. The player's visible model, equipment and nameplate are suppressed while possessing without granting gameplay invisibility. The controller isn't consumed, and cosmetic frog forms remain unchanged. Use the normal **Sneak** key to return to your player. You may switch hotbar items while possessing without losing control.
 
 ## Controls
 
@@ -23,13 +23,16 @@ The attack uses vanilla tongue pose/target rendering and `FROG_TONGUE` sound, an
 
 **Crafting:** Shapeless **Fishing Rod + Lily Pad + Slimeball** gives one Frog Controller. It has no durability or item-consumption cost after crafting.
 
-**Implementation detail:** This first iteration is **ride-based control**. The player is a passenger on the frog, not an invisible possession camera/remote drone. It should be evaluated in-game for look/feel, jump behavior and dismount safety.
+**Implementation detail:** **Implementation:** Uses an internal passenger attachment to preserve native vanilla mounted movement, jump networking, and authoritative control. The camera and visible representation are fully changed to the frog. The player's actual entity still exists as a passenger (not a spectator or teleporting clone). The camera restores on dismount, death, invalid frog, or world change. Validate camera and animations in-game.
 
 ## Source
 
 - `control/FrogControlPayload.java`, `FrogControlNetworking.java`: C2S action packet and server validation
 - `mixin/FrogControlMixin.java`: riding movement, jump, action state, tongue and sound
 - `client/FrogControllerKeys.java`: rebindable keys and client send logic
+- `client/FrogPossessionCamera.java`: frog POV + camera lifecycle restoration
+- `mixin/client/LocalPlayerPossessionMixin.java`: preserve WASD when camera is redirected
+- `mixin/client/AvatarPossessionRenderMixin.java`: hide player avatar and armor visually (does not change invisibility or AI)
 - `FrogInteractionHandler.java`: start-control by using item on frog
 - `data/prettyfrogs/recipe/frog_controller.json`: crafting recipe
 

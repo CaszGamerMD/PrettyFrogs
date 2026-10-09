@@ -48,9 +48,10 @@ public abstract class FrogControlMixin extends Animal
     @Unique
     private boolean prettyfrogs$isControlActive() {
         Entity passenger = this.getFirstPassenger();
-        return !this.isBaby() && passenger instanceof Player player
-                && (player.getMainHandItem().is(PrettyFrogsItems.FROG_CONTROLLER)
-                    || player.getOffhandItem().is(PrettyFrogsItems.FROG_CONTROLLER));
+        // The controller item is required to START possession in the
+        // interaction handler, not to keep it. Changing the hotbar slot
+        // shouldn't eject the camera or disable controls mid-jump.
+        return !this.isBaby() && passenger instanceof Player;
     }
 
     @Override
@@ -90,7 +91,7 @@ public abstract class FrogControlMixin extends Animal
     protected void tickRidden(Player controller, Vec3 riddenInput) {
         if (!prettyfrogs$isControlActive()) return;
         this.getNavigation().stop();
-        this.setRot(controller.getYRot(), controller.getXRot() * 0.4F);
+        this.setRot(controller.getYRot(), controller.getXRot());
         this.yRotO = this.yBodyRot = this.yHeadRot = getYRot();
     }
 

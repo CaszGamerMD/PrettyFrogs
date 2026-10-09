@@ -5,7 +5,10 @@
   "client": [
     "FrogRendererMixin",
     "FrogRenderStateMixin",
-    "MinecraftMixin"
+    "MinecraftMixin",
+    "LocalPlayerPossessionMixin",
+    "AvatarPossessionRenderMixin",
+    "FrogPossessionHandsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
