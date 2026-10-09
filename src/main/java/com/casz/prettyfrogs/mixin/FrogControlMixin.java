@@ -5,6 +5,7 @@ import com.casz.prettyfrogs.control.FrogControlAccess;
 import java.util.Comparator;
 import java.util.List;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -156,8 +157,18 @@ public abstract class FrogControlMixin extends Animal
         Vec3 forward = getLookAngle();
         List<LivingEntity> candidates = server.getEntitiesOfClass(LivingEntity.class,
                 getBoundingBox().inflate(3.5),
-                e -> e.isAlive() && e != frog && !(e instanceof Player) && !e.isPassengerOfSameVehicle(frog)
-                        && frog.hasLineOfSight(e));
+                e -> e.isAlive() && e != frog && !e.isPassengerOfSameVehicle(frog)
+                        && frog.hasLineOfSight(e)
+                        // A possessed frog can attack another player, but not
+                        // its controller, spectators, creative-invulnerable players,
+                        // teammates protected by friendly-fire rules or players
+                        // when server PvP is disabled.
+                        && (!(e instanceof Player victim)
+                            || (getFirstPassenger() instanceof ServerPlayer controller
+                                && controller != victim
+                                && !victim.isSpectator()
+                                && !victim.getAbilities().invulnerable
+                                && controller.canHarmPlayer(victim))));
         LivingEntity best = candidates.stream()
                 .filter(e -> e.position().add(0, e.getBbHeight() * 0.5, 0)
                         .subtract(center).lengthSqr() <= 3.5 * 3.5)
@@ -193,7 +204,19 @@ public abstract class FrogControlMixin extends Animal
             if (e instanceof LivingEntity target && target.isAlive()
                     && target.distanceToSqr(frog) <= 3.5 * 3.5
                     && frog.hasLineOfSight(target) && prettyfrogs$isControlActive()) {
-                if (target instanceof AbstractCubeMob cube && cube.getSize() == 1
+                if (target instanceof Player victim) {
+                    // Revalidate PvP authorization when the tongue actually
+                    // connects; the rules or riding state might have changed
+                    // since target selection five ticks earlier. Attribution to
+                    // the controlling player also lets vanilla PvP checks apply.
+                    if (getFirstPassenger() instanceof ServerPlayer controller
+                            && controller != victim
+                            && !victim.isSpectator()
+                            && !victim.getAbilities().invulnerable
+                            && controller.canHarmPlayer(victim)) {
+                        victim.hurtServer(server, damageSources().playerAttack(controller), 2.0F);
+                    }
+                } else if (target instanceof AbstractCubeMob cube && cube.getSize() == 1
                         && Frog.canEat(target)) {
                     frog.doHurtTarget(server, target);
                     frog.playEatingSound();

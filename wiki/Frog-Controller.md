@@ -18,9 +18,9 @@ Hold a **Frog Controller** and use it on an **adult** frog to temporarily **beco
 
 The actions follow your normal Minecraft **Attack**, **Use**, and **Sneak** keybinds, including remapped mouse buttons. Normal attacks, mining, and held-item use are suppressed during frog possession.
 
-**Tongue:** Targets one living non-player mob in front of the frog, at most 3.5 blocks away, with an unobstructed line of sight. A **size-1 Slime** or **size-1 Magma Cube** is attacked through the frog's regular eating attack (so vanilla kill/drop behavior is used). Other non-player living mobs take **2 damage (one heart)**. Larger slimes/magma cubes are *not* swallowed: they take 2 damage. Attacks have a 16-tick cooldown.
+**Tongue:** Targets one living mob **or another player** in front of the frog, at most 3.5 blocks away, with an unobstructed line of sight. A **size-1 Slime** or **size-1 Magma Cube** is attacked through the frog's regular eating attack (so vanilla kill/drop behavior is used). Other mobs and players take **2 base damage (one heart before armor and resistance)**. Larger slimes/magma cubes are *not* swallowed: they take 2 damage. Attacks have a 16-tick cooldown. **Player targets obey the server's PvP setting and team friendly-fire rules**; creative-invulnerable players and spectators are excluded, and a frog cannot tongue its own controlling player.
 
-The attack uses vanilla tongue pose/target rendering and `FROG_TONGUE` sound, and croaking uses `FROG_AMBIENT`. Neither command requires selecting an entity client-side; target detection is server-authoritative. The player cannot strike other players with this feature.
+The attack uses vanilla tongue pose/target rendering and `FROG_TONGUE` sound, and croaking uses `FROG_AMBIENT`. Neither command requires selecting an entity client-side; target detection and PvP validation are server-authoritative. Player hits are attributed to the person controlling the frog.
 
 **Crafting:** Shapeless **Fishing Rod + Lily Pad + Slimeball** gives one Frog Controller. It has no durability or item-consumption cost after crafting.
 
