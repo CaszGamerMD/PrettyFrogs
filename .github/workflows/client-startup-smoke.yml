@@ -27,21 +27,24 @@ jobs:
           MESA_GL_VERSION_OVERRIDE: '4.5'
         run: |
           set -uo pipefail
+          set +e
           if ! command -v xvfb-run >/dev/null 2>&1; then
             echo "::error::xvfb-run is not installed on this runner"
             exit 1
           fi
-          timeout --signal=TERM --kill-after=10s 150s \
+          timeout --signal=TERM --kill-after=10s 95s \
             xvfb-run -a -s '-screen 0 1280x720x24' \
             gradle runClient --no-daemon --console=plain --stacktrace \
             > client-startup.log 2>&1
           status=$?
+          set -e
           tail -n 120 client-startup.log
           if grep -Eiq 'InvalidInjectionException|MixinApplyError|MixinTransformerError|Mixin transformation of|Critical injection failure|Exception in thread "Render thread"|Failed to start the minecraft client' client-startup.log; then
             echo "::error::Minecraft client failed with a startup/mixin error"
             exit 1
           fi
-          if grep -Eiq 'Sound engine started|Reloading ResourceManager|Created:.*atlas|Loaded [0-9]+ recipes' client-startup.log; then
+          if grep -Eiq 'Reloading ResourceManager' client-startup.log \
+              && grep -Eiq 'Created:.*blocks.png-atlas' client-startup.log; then
             echo "Minecraft loaded its client runtime without mixin startup failures (exit code: $status)"
             exit 0
           fi
