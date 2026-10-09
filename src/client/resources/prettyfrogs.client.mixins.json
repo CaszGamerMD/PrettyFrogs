@@ -8,7 +8,8 @@
     "MinecraftMixin",
     "LocalPlayerPossessionMixin",
     "AvatarPossessionRenderMixin",
-    "FrogPossessionHandsMixin"
+    "FrogPossessionHandsMixin",
+    "MinecraftPossessionActionsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

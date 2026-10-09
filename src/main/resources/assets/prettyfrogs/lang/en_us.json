@@ -13,7 +13,5 @@
   "screen.prettyfrogs.appearance.hd.help": "HD or classic frog artwork",
   "screen.prettyfrogs.appearance.details.help": "Extra hats, snow, frosting, crystals",
   "screen.prettyfrogs.appearance.local": "Only changes what you see",
-  "item.prettyfrogs.frog_controller": "Frog Controller",
-  "key.prettyfrogs.croak": "Controlled Frog: Croak",
-  "key.prettyfrogs.tongue": "Controlled Frog: Tongue"
+  "item.prettyfrogs.frog_controller": "Frog Controller"
 }

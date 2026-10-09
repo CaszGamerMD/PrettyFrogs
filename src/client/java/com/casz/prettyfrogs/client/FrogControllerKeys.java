@@ -2,33 +2,52 @@ package com.casz.prettyfrogs.client;
 
 import com.casz.prettyfrogs.control.FrogControlPayload;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.world.entity.animal.frog.Frog;
-import org.lwjgl.glfw.GLFW;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 
-/** Bindings work only while actively steering a frog with the controller. */
+/**
+ * Possession mouse actions, using the player's usual attack/use keybinds:
+ * attack -> tongue, use -> croak, sneak + use -> return to player.
+ * One action is sent per press, not every tick while right-click is held.
+ */
 public final class FrogControllerKeys {
-    private static final KeyMapping CROAK = KeyMappingHelper.registerKeyMapping(
-            new KeyMapping("key.prettyfrogs.croak", GLFW.GLFW_KEY_C, KeyMapping.Category.GAMEPLAY));
-    private static final KeyMapping TONGUE = KeyMappingHelper.registerKeyMapping(
-            new KeyMapping("key.prettyfrogs.tongue", GLFW.GLFW_KEY_V, KeyMapping.Category.GAMEPLAY));
+    private static boolean rightClickHandled;
 
     private FrogControllerKeys() {}
 
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            boolean croak = CROAK.consumeClick();
-            boolean tongue = TONGUE.consumeClick();
-            if ((!croak && !tongue) || client.player == null || client.gui.screen() != null
-                    || !(client.player.getControlledVehicle() instanceof Frog)
-                    || !FrogPossessionCamera.isPossessing(client.player)
-                    || !ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
-                return;
+            if (client.player == null || !FrogPossessionCamera.isPossessing(client.player)
+                    || !client.options.keyUse.isDown()) {
+                rightClickHandled = false;
             }
-            if (tongue) ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.TONGUE));
-            else ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.CROAK));
         });
+    }
+
+    private static boolean canAct() {
+        Minecraft client = Minecraft.getInstance();
+        LocalPlayer player = client.player;
+        return player != null && client.gui.screen() == null
+                && FrogPossessionCamera.isPossessing(player);
+    }
+
+    public static void tongue() {
+        if (canAct() && ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
+            ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.TONGUE));
+        }
+    }
+
+    public static void croakOrExit() {
+        if (!canAct() || rightClickHandled) {
+            return;
+        }
+        rightClickHandled = true;
+        if (ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
+            byte action = Minecraft.getInstance().player.isShiftKeyDown()
+                    ? FrogControlPayload.EXIT
+                    : FrogControlPayload.CROAK;
+            ClientPlayNetworking.send(new FrogControlPayload(action));
+        }
     }
 }

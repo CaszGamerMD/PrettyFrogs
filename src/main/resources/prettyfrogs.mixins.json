@@ -2,6 +2,12 @@
   "required": true,
   "package": "com.casz.prettyfrogs.mixin",
   "compatibilityLevel": "JAVA_25",
-  "mixins": ["FrogMixin", "FrogControlMixin"],
-  "injectors": { "defaultRequire": 1 }
+  "mixins": [
+    "FrogMixin",
+    "FrogControlMixin",
+    "PlayerFrogDismountMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

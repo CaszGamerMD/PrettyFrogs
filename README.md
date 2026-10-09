@@ -8,7 +8,7 @@ The [PrettyFrogs GitHub Wiki](https://github.com/CaszGamerMD/PrettyFrogs/wiki) d
 
 ## Frog Controller
 
-Craft a **Frog Controller** from **Fishing Rod + Lily Pad + Slimeball** (shapeless). Right-click an **adult frog** with the controller to possess it: **WASD** to move, **Space** to jump, **C** to croak, **V** to shoot its tongue, and **Sneak** to end possession. The camera becomes the frog's own low eye-level view in first person, and F5 follows the frog in third person. Your player model, equipment and name tag are hidden while possessing (visual-only; no invisibility effect).
+Craft a **Frog Controller** from **Fishing Rod + Lily Pad + Slimeball** (shapeless). Right-click an **adult frog** with the controller to possess it: **WASD** to move, **Space** to jump, **Left-click** to shoot its tongue, **Right-click** to croak, and **Sneak + Right-click** to return to your player. Sneak alone does not end possession. The camera becomes the frog's own low eye-level view in first person, and F5 follows the frog in third person. Your player model, equipment and name tag are hidden while possessing (visual-only; no invisibility effect).
 
 The controlled tongue eats **size-1 Slimes/Magma Cubes** using vanilla frog attacks and deals **2 damage (one heart)** to other non-player mobs; it has a short cooldown and checks line of sight and range on the server. The controller does not change custom forms. See the [Frog Controller wiki](wiki/Frog-Controller.md) for details and binding information.
 

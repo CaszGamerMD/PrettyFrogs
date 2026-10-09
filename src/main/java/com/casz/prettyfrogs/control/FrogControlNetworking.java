@@ -24,6 +24,11 @@ public final class FrogControlNetworking {
                 control.prettyfrogs$controlledCroak();
             } else if (payload.action() == FrogControlPayload.TONGUE) {
                 control.prettyfrogs$controlledTongue();
+            } else if (payload.action() == FrogControlPayload.EXIT) {
+                // The server owns the actual dismount. A client cannot
+                // remotely detach another player, since frog ownership was
+                // validated above against this packet's sender.
+                player.stopRiding();
             }
         });
     }
