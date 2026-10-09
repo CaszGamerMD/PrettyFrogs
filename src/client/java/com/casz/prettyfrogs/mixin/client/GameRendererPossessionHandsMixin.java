@@ -23,19 +23,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererPossessionHandsMixin {
     @Shadow @Final private FeatureRenderDispatcher featureRenderDispatcher;
-    @Shadow @Final private SubmitNodeStorage submitNodeStorage;
+    // Owned by PrettyFrogs: avoids brittle @Shadow fields on GameRenderer.
+    private static final SubmitNodeStorage prettyfrogs$tongueNodes = new SubmitNodeStorage();
     @Inject(method = "renderItemInHand", at = @At("HEAD"), cancellable = true)
     private void prettyfrogs$hideHumanHandsInFrogPov(
             CameraRenderState camera, float partialTick,
             Matrix4fc modelView, CallbackInfo ci) {
         if (FrogPossessionCamera.isPossessing(Minecraft.getInstance().player)) {
-            // The normal pass is cancelled so hands and held items cannot
-            // render. Flush preceding world submits, then submit the real
-            // vanilla frog tongue model in the 3D first-person hand pass.
-            featureRenderDispatcher.renderAllFeatures(submitNodeStorage);
+            // Suppress human arms and render only the frog tongue in a
+            // standalone collector. The vanilla world pass has already
+            // flushed its submits before this first-person hand pass.
             FrogTongueFirstPerson.submit(partialTick, modelView,
-                    submitNodeStorage);
-            featureRenderDispatcher.renderAllFeatures(submitNodeStorage);
+                    prettyfrogs$tongueNodes);
+            featureRenderDispatcher.renderAllFeatures(prettyfrogs$tongueNodes);
             ci.cancel();
         }
     }
