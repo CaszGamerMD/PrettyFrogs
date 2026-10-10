@@ -33,9 +33,8 @@ public abstract class GameRendererPossessionHandsMixin {
             // Suppress human arms and render only the frog tongue in a
             // standalone collector. The vanilla world pass has already
             // flushed its submits before this first-person hand pass.
-            FrogTongueFirstPerson.submit(partialTick, modelView,
-                    prettyfrogs$tongueNodes);
-            featureRenderDispatcher.renderAllFeatures(prettyfrogs$tongueNodes);
+            FrogTongueFirstPerson.render(partialTick, modelView,
+                    prettyfrogs$tongueNodes, featureRenderDispatcher);
             ci.cancel();
         }
     }

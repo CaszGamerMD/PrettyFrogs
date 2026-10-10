@@ -9,6 +9,7 @@ on:
       - feature/pretty-frog-bucket
       - feature/frog-polish-bucket-guide-croak-tongue
       - feature/frog-real-tongue-first-person
+      - feature/frog-tongue-camera-align
   workflow_dispatch:
 
 jobs:

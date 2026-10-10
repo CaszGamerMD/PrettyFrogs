@@ -10,6 +10,7 @@ import net.minecraft.client.model.animal.frog.FrogModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.SubmitNodeStorage;
+import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Pose;
@@ -61,8 +62,9 @@ public final class FrogTongueFirstPerson {
     }
 
     /** Called by the existing GameRenderer possession hand-pass hook. */
-    public static void submit(float partialTick, Matrix4fc modelView,
-                              SubmitNodeStorage collector) {
+    public static void render(float partialTick, Matrix4fc modelView,
+                              SubmitNodeStorage collector,
+                              FeatureRenderDispatcher featureRenderer) {
         Minecraft mc = Minecraft.getInstance();
         if (!FrogPossessionCamera.isPossessing(mc.player)
                 || !mc.options.getCameraType().isFirstPerson()
@@ -80,6 +82,10 @@ public final class FrogTongueFirstPerson {
 
         PoseStack pose = new PoseStack();
         pose.pushPose();
+        // Match the vanilla first-person item pass: inverse camera rotation
+        // is stored in submitted geometry while the render system receives
+        // the forward camera rotation. These cancel ONLY if we flush while
+        // the model-view stack is still pushed.
         pose.mulPose(modelView.invert(new Matrix4f()));
         // First-person mouth position, just below and ahead of frog eyes.
         // Vanilla tongue UV quad extends forward in -Z and is 4x7 pixels.
@@ -92,6 +98,11 @@ public final class FrogTongueFirstPerson {
             collector.submitModelPart(TONGUE, pose,
                     RenderTypes.entityCutout(FROG_SKIN),
                     0x00F000F0, OverlayTexture.NO_OVERLAY, null);
+            // Critical: the tongue must be DRAWN while modelView is still
+            // on the RenderSystem stack, not after it has been popped. The
+            // old code flushed at the caller after the finally block;
+            // that caused view-dependent rotation drift and left offset.
+            featureRenderer.renderAllFeatures(collector);
         } finally {
             viewStack.popMatrix();
             pose.popPose();

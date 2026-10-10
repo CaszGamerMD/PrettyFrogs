@@ -18,7 +18,7 @@ Hold a **Frog Controller** and use it on an **adult** frog to temporarily **beco
 | Sneak + Right-click | Return to your human character (end possession) |
 | Sneak alone | Stay in frog mode |
 
-The actions follow your normal Minecraft **Attack**, **Use**, and **Sneak** keybinds, including remapped mouse buttons. First-person tongue strikes now render Minecraft's **actual 3D FrogModel tongue part** with the vanilla FROG_TONGUE keyframes and original frog tongue texture. The tongue is anchored near the mouth in the 3D first-person hand pass, not drawn as a flat 2D overlay. It extends and retracts with the frog's synced USING_TONGUE pose. The local click still obeys the 16-tick attack cooldown. Normal attacks, mining, and held-item use are suppressed during frog possession.
+The actions follow your normal Minecraft **Attack**, **Use**, and **Sneak** keybinds, including remapped mouse buttons. First-person tongue strikes now render Minecraft's **actual 3D FrogModel tongue part** with the vanilla FROG_TONGUE keyframes and original frog tongue texture. The tongue is anchored near the mouth in the 3D first-person hand pass, not drawn as a flat 2D overlay. The first-person draw occurs while Minecraft's camera transform is active so the tongue stays centered and turns at exactly the same rate as the camera. It extends and retracts with the frog's synced USING_TONGUE pose. The local click still obeys the 16-tick attack cooldown. Normal attacks, mining, and held-item use are suppressed during frog possession.
 
 **Croak:** Right-click to croak at a stronger volume. Croaks have no special cooldown and do not cancel the tongue attack; rapidly clicking or holding right-click repeats the sound. **Sneak + Right-click** still leaves frog mode instead.
 
