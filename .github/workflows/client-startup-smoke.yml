@@ -10,6 +10,7 @@ on:
       - feature/frog-polish-bucket-guide-croak-tongue
       - feature/frog-real-tongue-first-person
       - feature/frog-tongue-camera-align
+      - feature/frog-hop-swim-fix
   workflow_dispatch:
 
 jobs:

@@ -22,15 +22,20 @@ public final class FrogControllerKeys {
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.player != null && FrogPossessionCamera.isPossessing(client.player)
-                    && client.gui.screen() == null && client.options.keyJump.consumeClick()
-                    && ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
-                // One edge-triggered hop rather than vanilla hold-to-charge.
-                // Simulate locally too, so the frog reacts immediately.
-                if (client.player.getVehicle() instanceof Frog frog
-                        && frog instanceof FrogControlAccess control) {
+                    && client.gui.screen() == null
+                    && client.player.getVehicle() instanceof Frog frog
+                    && frog instanceof FrogControlAccess control) {
+                // Space is a single frog leap on land. While swimming, hold
+                // Space to ascend; hold Sneak to descend. The server reads
+                // the same values from vanilla ServerboundPlayerInputPacket.
+                control.prettyfrogs$setSwimInputs(
+                        client.options.keyJump.isDown(),
+                        client.options.keyShift.isDown());
+                if (client.options.keyJump.consumeClick() && !frog.isInWater()
+                        && ClientPlayNetworking.canSend(FrogControlPayload.TYPE)) {
                     control.prettyfrogs$controlledHop();
+                    ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.HOP));
                 }
-                ClientPlayNetworking.send(new FrogControlPayload(FrogControlPayload.HOP));
             }
             if (client.player == null || !FrogPossessionCamera.isPossessing(client.player)
                     || !client.options.keyUse.isDown() || client.gui.screen() != null) {

@@ -13,6 +13,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.behavior.LongJumpUtil;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.monster.cubemob.AbstractCubeMob;
@@ -41,6 +43,9 @@ public abstract class FrogControlMixin extends Animal
     @Unique private int prettyfrogs$targetId = -1;
     @Unique private boolean prettyfrogs$tongueActive;
     @Unique private int prettyfrogs$jumpCooldown;
+    @Unique private boolean prettyfrogs$inLongJump;
+    @Unique private boolean prettyfrogs$clientSwimUp;
+    @Unique private boolean prettyfrogs$clientSwimDown;
 
     protected FrogControlMixin(EntityType<? extends Animal> type, Level level) {
         super(type, level);
@@ -78,7 +83,34 @@ public abstract class FrogControlMixin extends Animal
         float forward = controller.zza;
         float sideways = controller.xxa * 0.85F;
         if (forward < 0.0F) forward *= 0.5F;
+
+        if (this.isInWater()) {
+            // The vanilla ridden input used Y=0, preventing the frog from
+            // swimming vertically. Reuse Frog.travelInWater's genuine water
+            // physics, with forward pitch + jump/shift to steer in 3D.
+            boolean up = prettyfrogs$clientSwimUp;
+            boolean down = prettyfrogs$clientSwimDown;
+            if (controller instanceof ServerPlayer serverPlayer) {
+                // Native riding inputs already sync to the server; no extra
+                // C2S packet or client-trusted motion is necessary.
+                up = serverPlayer.getLastClientInput().jump();
+                down = serverPlayer.getLastClientInput().shift();
+            }
+            double pitch = Math.sin(Math.toRadians(controller.getXRot()));
+            double y = -pitch * Math.max(0.0F, forward) * 0.95
+                    + (up ? 0.9 : 0.0) - (down ? 0.9 : 0.0);
+            return new Vec3(sideways, Mth.clamp(y, -1.0, 1.0), forward);
+        }
+
+        // A real frog leap is ballistic; stop rider input fighting the jump.
+        if (prettyfrogs$inLongJump) return Vec3.ZERO;
         return new Vec3(sideways, 0.0, forward);
+    }
+
+    @Override
+    public void prettyfrogs$setSwimInputs(boolean up, boolean down) {
+        prettyfrogs$clientSwimUp = up;
+        prettyfrogs$clientSwimDown = down;
     }
 
     @Override
@@ -97,29 +129,47 @@ public abstract class FrogControlMixin extends Animal
     }
 
     /**
-     * One native-sized frog hop per packet, with a small fixed upward
-     * impulse. Vanilla's charged mount jump interface is deliberately NOT
-     * implemented: no horse bar, no charge time and no held-Space repeats.
-     *
-     * Called both on the local client's frog for responsiveness and on the
-     * authoritative server after a validated HOP packet.
+     * Use the same collision-aware projectile solver as FrogAi's
+     * LongJumpToRandomPos, directed by the player instead of random AI.
+     * This is a proper FORWARD frog leap rather than player jumpFromGround.
+     * In water, Space is continuous swim-up, not a jump.
      */
     @Override
     public void prettyfrogs$controlledHop() {
         if (!prettyfrogs$isControlActive() || !this.isAlive()
-                || !this.onGround() || prettyfrogs$jumpCooldown > 0) {
+                || this.isInWater() || !this.onGround()
+                || prettyfrogs$inLongJump || prettyfrogs$jumpCooldown > 0) {
             return;
         }
-        Vec3 current = this.getDeltaMovement();
-        // A regular frog hop, not a horse leap or vanilla long jump.
-        // Keep current horizontal steering; add only a modest nudge.
-        Vec3 facing = this.getLookAngle();
-        double nudge = this.isInWater() ? 0.025D : 0.08D;
-        this.setDeltaMovement(current.x + facing.x * nudge, 0.42D,
-                current.z + facing.z * nudge);
+        Frog frog = (Frog)(Object)this;
+        Player controller = (Player)this.getFirstPassenger();
+        float yaw = controller.getYRot() * (float)(Math.PI / 180.0);
+        Vec3 facing = new Vec3(-Mth.sin(yaw), 0.0, Mth.cos(yaw));
+        Vec3 strafe = new Vec3(facing.z, 0.0, -facing.x);
+        double forward = controller.zza;
+        double side = controller.xxa * 0.75;
+        Vec3 direction = facing.scale(forward).add(strafe.scale(side));
+        if (direction.lengthSqr() < 0.001) direction = facing;
+        direction = direction.normalize();
+        // ~2.5-block horizontal leap, with the actual frog animation, arc,
+        // landing resistance and sounds. The vanilla solver checks obstacles.
+        Vec3 target = frog.position().add(direction.scale(2.65));
+        float maxVelocity = (float)(this.getAttributeValue(Attributes.JUMP_STRENGTH) * 3.5714288F);
+        var launch = LongJumpUtil.calculateJumpVectorForAngle(frog, target, maxVelocity, 45, true);
+        if (launch.isEmpty()) {
+            // No clear frog-sized arc: don't clip through low ceilings.
+            return;
+        }
+        this.setDeltaMovement(launch.get());
+        this.setDiscardFriction(true);
         this.needsSync = true;
-        prettyfrogs$jumpCooldown = 10;
-        ((Frog)(Object)this).setPose(Pose.LONG_JUMPING);
+        prettyfrogs$inLongJump = true;
+        prettyfrogs$jumpCooldown = 12;
+        frog.setPose(Pose.LONG_JUMPING);
+        if (!level().isClientSide()) {
+            level().playSound(null, frog, SoundEvents.FROG_LONG_JUMP,
+                    SoundSource.NEUTRAL, 1.0F, 1.0F);
+        }
     }
 
     @Inject(method = "customServerAiStep", at = @At("HEAD"), cancellable = true)
@@ -183,19 +233,38 @@ public abstract class FrogControlMixin extends Animal
         server.playSound(null, blockPosition(), SoundEvents.FROG_TONGUE, SoundSource.NEUTRAL, 1.0F, 1.0F);
     }
 
+    @Unique
+    private void prettyfrogs$finishJumpPose() {
+        Frog frog = (Frog)(Object)this;
+        if (prettyfrogs$inLongJump && (frog.onGround() || frog.isInWater())) {
+            prettyfrogs$inLongJump = false;
+            this.setDiscardFriction(false);
+            if (frog.onGround()) {
+                Vec3 movement = frog.getDeltaMovement();
+                frog.setDeltaMovement(movement.x * 0.1, movement.y, movement.z * 0.1);
+                if (!level().isClientSide()) {
+                    level().playSound(null, frog, SoundEvents.FROG_STEP,
+                            SoundSource.NEUTRAL, 1.0F, 1.0F);
+                }
+            }
+            if (frog.getPose() == Pose.LONG_JUMPING) frog.setPose(Pose.STANDING);
+        }
+    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void prettyfrogs$finishControlledActions(CallbackInfo ci) {
-        if (level().isClientSide()) return;
         if (prettyfrogs$jumpCooldown > 0) prettyfrogs$jumpCooldown--;
+        if (level().isClientSide()) {
+            prettyfrogs$finishJumpPose();
+            return;
+        }
         if (prettyfrogs$attackCooldown > 0) prettyfrogs$attackCooldown--;
         Frog frog = (Frog)(Object)this;
         if (prettyfrogs$croakPoseTicks > 0 && --prettyfrogs$croakPoseTicks == 0
                 && frog.getPose() == Pose.CROAKING) {
             frog.setPose(Pose.STANDING);
         }
-        if (prettyfrogs$jumpCooldown == 0 && frog.getPose() == Pose.LONG_JUMPING && frog.onGround()) {
-            frog.setPose(Pose.STANDING);
-        }
+        prettyfrogs$finishJumpPose();
         if (prettyfrogs$actionTimer <= 0) return;
         prettyfrogs$actionTimer--;
 

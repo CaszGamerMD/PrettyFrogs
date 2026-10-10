@@ -12,7 +12,10 @@ Hold a **Frog Controller** and use it on an **adult** frog to temporarily **beco
 | --- | --- |
 | Right-click adult frog with Frog Controller | Begin controlling (mount) frog |
 | WASD | Ground movement at frog speed |
-| Tap Space | Single short frog hop (no charge bar, one hop per press) |
+| Tap Space on land | Frog-style forward long-jump using vanilla FrogAi's collision-aware jump trajectory, pose, friction, and sounds (no charge bar) |
+| WASD in water | Swim at frog speed, following where you look (including up/down) |
+| Hold Space in water | Swim upward, continuously |
+| Hold Sneak in water | Dive, continuously; does not end possession |
 | Left-click | Tongue attack |
 | Right-click | Croak sound with frog croak animation |
 | Sneak + Right-click | Return to your human character (end possession) |
@@ -28,17 +31,18 @@ The attack uses vanilla tongue pose/target rendering and `FROG_TONGUE` sound, an
 
 **Model:** A green 3D frog-shaped console gamepad with raised frog eyes, a D-pad and colorful face buttons; the new item model replaces the carrot-on-a-stick placeholder. **Crafting:** Shapeless **Fishing Rod + Lily Pad + Slimeball** gives one Frog Controller. It has no durability or item-consumption cost after crafting.
 
-**Implementation detail:** **Implementation:** Uses an internal passenger attachment to preserve mounted synchronization and authoritative movement, but not vanilla horse-style charged jumping. The camera and visible representation are fully changed to the frog. The player's actual entity still exists as a passenger (not a spectator or teleporting clone). The camera restores after Sneak + Right-click, death, invalid frog, or world change. Validate camera and animations in-game.
+**Implementation detail:** **Implementation:** Uses an internal passenger attachment to preserve mounted synchronization and authoritative movement, but not vanilla horse-style charged jumping. The camera and visible representation are fully changed to the frog. The player's actual entity still exists as a passenger (not a spectator or teleporting clone). When the frog is underwater, the possessing player gains underwater breathing only for as long as possession is active, so the passenger does not drown; no potion effects or permanent ability changes. The camera restores after Sneak + Right-click, death, invalid frog, or world change. Validate camera and animations in-game.
 
 ## Source
 
 - `control/FrogControlPayload.java`, `FrogControlNetworking.java`: C2S action packet and server validation
-- `mixin/FrogControlMixin.java`: slow frog-speed steering, fixed-height hop, action state, tongue and sound
+- `mixin/FrogControlMixin.java`: frog-speed steering and real ballistic frog leap, 3D frog swimming, action state, tongue and sound
 - `client/FrogTongueFirstPerson.java`: baked vanilla FrogModel tongue, vanilla keyframe animation, first-person 3D rendering
 - `client/FrogControllerKeys.java`: use/attack actions and debounced croak/exit packets
 - `client/FrogPossessionCamera.java`: frog POV + camera lifecycle restoration
 - `mixin/client/MinecraftPossessionActionsMixin.java`: redirect left/right clicks while possessing
 - `mixin/PlayerFrogDismountMixin.java`: suppress default sneak-only dismount
+- `mixin/FrogPossessionBreathingMixin.java`: preserve the player's air supply during underwater frog possession
 - `mixin/client/LocalPlayerPossessionMixin.java`: preserve WASD when camera is redirected
 - `mixin/client/AvatarPossessionRenderMixin.java`: hide player avatar and armor visually (does not change invisibility or AI)
 - `FrogInteractionHandler.java`: start-control by using item on frog

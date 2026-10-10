@@ -5,7 +5,8 @@
   "mixins": [
     "FrogMixin",
     "FrogControlMixin",
-    "PlayerFrogDismountMixin"
+    "PlayerFrogDismountMixin",
+    "FrogPossessionBreathingMixin"
   ],
   "injectors": {
     "defaultRequire": 1
