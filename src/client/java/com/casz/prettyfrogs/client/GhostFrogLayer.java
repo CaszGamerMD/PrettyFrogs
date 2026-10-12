@@ -39,10 +39,15 @@ public final class GhostFrogLayer extends RenderLayer<FrogRenderState, FrogModel
                 state.outlineColor, null);
         // The glow mask uses the pupils' dedicated UV tile, so the rest of
         // the translucent frog stays naturally shaded.
+        poseStack.pushPose();
+        // Give emissive pupil faces their own depth above the translucent
+        // ghost geometry, without scaling the actual ghost silhouette.
+        poseStack.scale(1.013F, 1.013F, 1.013F);
         collector.order(4).submitModel(
                 model, state, poseStack, RenderTypes.eyes(GLOW_MASK),
                 0xF000F0, OverlayTexture.NO_OVERLAY,
                 0xFFB4FFF3, null, state.outlineColor, null);
+        poseStack.popPose();
         poseStack.popPose();
     }
 }
