@@ -25,9 +25,13 @@ public final class GhostSlimeFrogLayer extends RenderLayer<FrogRenderState, Frog
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
         if (!access.prettyfrogs$isForm(FrogFormRegistry.SLIMY) || state.isInvisible) return;
 
+        poseStack.pushPose();
+        // Prevent the translucent slime from competing with the opaque skin.
+        poseStack.scale(1.03F, 1.03F, 1.03F);
         collector.order(2).submitModel(
                 getParentModel(), state, poseStack, RenderTypes.entityTranslucent(SLIME_SHELL),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
+        poseStack.popPose();
     }
 }
