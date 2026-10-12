@@ -15,6 +15,7 @@ import com.casz.prettyfrogs.client.Frog3DDetailsLayer;
 import com.casz.prettyfrogs.client.CakeCandleLayer;
 import com.casz.prettyfrogs.client.FrogEyeLayer;
 import com.casz.prettyfrogs.client.FrogAccessoryLayer;
+import com.casz.prettyfrogs.client.FrogWingMotion;
 import com.casz.prettyfrogs.frog.PrettyFrogAccess;
 import net.minecraft.client.renderer.entity.FrogRenderer;
 import net.minecraft.client.renderer.entity.state.FrogRenderState;
@@ -60,6 +61,9 @@ public abstract class FrogRendererMixin extends net.minecraft.client.renderer.en
         Identifier form = access.prettyfrogs$getForm();
         PrettyFrogRenderStateAccess renderAccess = (PrettyFrogRenderStateAccess) state;
         renderAccess.prettyfrogs$setForm(form);
+        // Do not rely on walkAnimationSpeed: vanilla frogs set it to zero
+        // during a long jump. Real velocity catches hops, swimming and falls.
+        renderAccess.prettyfrogs$setWingSpread(FrogWingMotion.update(frog, partialTicks));
         renderAccess.prettyfrogs$setCrystal(access.prettyfrogs$getCrystal());
         renderAccess.prettyfrogs$setCakeCandles(access.prettyfrogs$getCakeCandles());
         for (int i = 0; i < 4; i++) {
