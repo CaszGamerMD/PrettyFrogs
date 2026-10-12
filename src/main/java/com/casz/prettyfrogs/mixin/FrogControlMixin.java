@@ -44,6 +44,8 @@ public abstract class FrogControlMixin extends Animal
     @Unique private boolean prettyfrogs$tongueActive;
     @Unique private int prettyfrogs$jumpCooldown;
     @Unique private boolean prettyfrogs$inLongJump;
+    @Unique private boolean prettyfrogs$leftGroundAfterJump;
+    @Unique private int prettyfrogs$jumpAge;
     @Unique private boolean prettyfrogs$clientSwimUp;
     @Unique private boolean prettyfrogs$clientSwimDown;
 
@@ -129,18 +131,20 @@ public abstract class FrogControlMixin extends Animal
     }
 
     /**
-     * Use the same collision-aware projectile solver as FrogAi's
-     * LongJumpToRandomPos, directed by the player instead of random AI.
-     * This is a proper FORWARD frog leap rather than player jumpFromGround.
-     * In water, Space is continuous swim-up, not a jump.
+     * Aim the vanilla frog's long-jump projectile solver in the rider's
+     * direction. Use the same high launch angles as FrogAi (65–80 degrees),
+     * rather than a shallow player-style jump. Prefer a full leap but try
+     * shorter distances when the frog does not have enough clear space.
+     * Every candidate is collision-tested by LongJumpUtil.
      */
     @Override
     public void prettyfrogs$controlledHop() {
         if (!prettyfrogs$isControlActive() || !this.isAlive()
-                || this.isInWater() || !this.onGround()
+                || this.isInWater() || this.isInLava() || !this.onGround()
                 || prettyfrogs$inLongJump || prettyfrogs$jumpCooldown > 0) {
             return;
         }
+
         Frog frog = (Frog)(Object)this;
         Player controller = (Player)this.getFirstPassenger();
         float yaw = controller.getYRot() * (float)(Math.PI / 180.0);
@@ -151,20 +155,40 @@ public abstract class FrogControlMixin extends Animal
         Vec3 direction = facing.scale(forward).add(strafe.scale(side));
         if (direction.lengthSqr() < 0.001) direction = facing;
         direction = direction.normalize();
-        // ~2.5-block horizontal leap, with the actual frog animation, arc,
-        // landing resistance and sounds. The vanilla solver checks obstacles.
-        Vec3 target = frog.position().add(direction.scale(2.65));
+
         float maxVelocity = (float)(this.getAttributeValue(Attributes.JUMP_STRENGTH) * 3.5714288F);
-        var launch = LongJumpUtil.calculateJumpVectorForAngle(frog, target, maxVelocity, 45, true);
-        if (launch.isEmpty()) {
-            // No clear frog-sized arc: don't clip through low ceilings.
-            return;
+        Vec3 velocity = null;
+        // FrogAi's four native angles, with shorter fallback hops for small
+        // platforms and nearby obstacles. Never bypass the collision check.
+        int[] frogAngles = {65, 70, 75, 80};
+        double[] hopDistances = {3.6, 3.0, 2.4, 1.8, 1.2};
+        for (double distance : hopDistances) {
+            Vec3 target = frog.position().add(direction.scale(distance));
+            for (int angle : frogAngles) {
+                var candidate = LongJumpUtil.calculateJumpVectorForAngle(
+                        frog, target, maxVelocity, angle, true);
+                if (candidate.isPresent()) {
+                    velocity = candidate.get();
+                    break;
+                }
+            }
+            if (velocity != null) break;
         }
-        this.setDeltaMovement(launch.get());
+        if (velocity == null) return; // No unobstructed frog-sized leap.
+
+        // Match the vanilla long-jump behavior when jump boost is active.
+        double speed = velocity.length();
+        if (speed > 0.0001) {
+            velocity = velocity.scale((speed + this.getJumpBoostPower()) / speed);
+        }
+        this.getNavigation().stop();
+        this.setDeltaMovement(velocity);
         this.setDiscardFriction(true);
         this.needsSync = true;
         prettyfrogs$inLongJump = true;
-        prettyfrogs$jumpCooldown = 12;
+        prettyfrogs$leftGroundAfterJump = false;
+        prettyfrogs$jumpAge = 0;
+        prettyfrogs$jumpCooldown = 10;
         frog.setPose(Pose.LONG_JUMPING);
         if (!level().isClientSide()) {
             level().playSound(null, frog, SoundEvents.FROG_LONG_JUMP,
@@ -235,20 +259,31 @@ public abstract class FrogControlMixin extends Animal
 
     @Unique
     private void prettyfrogs$finishJumpPose() {
+        if (!prettyfrogs$inLongJump) return;
         Frog frog = (Frog)(Object)this;
-        if (prettyfrogs$inLongJump && (frog.onGround() || frog.isInWater())) {
-            prettyfrogs$inLongJump = false;
-            this.setDiscardFriction(false);
-            if (frog.onGround()) {
-                Vec3 movement = frog.getDeltaMovement();
-                frog.setDeltaMovement(movement.x * 0.1, movement.y, movement.z * 0.1);
-                if (!level().isClientSide()) {
-                    level().playSound(null, frog, SoundEvents.FROG_STEP,
-                            SoundSource.NEUTRAL, 1.0F, 1.0F);
-                }
+        prettyfrogs$jumpAge++;
+
+        // onGround may remain true briefly immediately after applying an
+        // upward velocity. Wait for actual airtime so the vanilla jump
+        // animation is not stopped on the takeoff tick.
+        if (!frog.onGround()) prettyfrogs$leftGroundAfterJump = true;
+        boolean landed = frog.onGround()
+                && (prettyfrogs$leftGroundAfterJump || prettyfrogs$jumpAge >= 6);
+        if (!landed && !frog.isInWater() && prettyfrogs$jumpAge < 100) return;
+
+        prettyfrogs$inLongJump = false;
+        prettyfrogs$leftGroundAfterJump = false;
+        prettyfrogs$jumpAge = 0;
+        this.setDiscardFriction(false);
+        if (landed) {
+            Vec3 movement = frog.getDeltaMovement();
+            frog.setDeltaMovement(movement.x * 0.1, movement.y, movement.z * 0.1);
+            if (!level().isClientSide()) {
+                level().playSound(null, frog, SoundEvents.FROG_STEP,
+                        SoundSource.NEUTRAL, 1.0F, 1.0F);
             }
-            if (frog.getPose() == Pose.LONG_JUMPING) frog.setPose(Pose.STANDING);
         }
+        if (frog.getPose() == Pose.LONG_JUMPING) frog.setPose(Pose.STANDING);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
