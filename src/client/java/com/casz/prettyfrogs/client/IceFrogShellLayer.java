@@ -27,10 +27,13 @@ public final class IceFrogShellLayer extends RenderLayer<FrogRenderState, FrogMo
             return;
         }
 
+        poseStack.pushPose();
+        poseStack.scale(1.025F, 1.025F, 1.025F);
         collector.order(2).submitModel(
                 getParentModel(), state, poseStack,
                 RenderTypes.entityTranslucent(ICE_SHELL),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
+        poseStack.popPose();
     }
 }
