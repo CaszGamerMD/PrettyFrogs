@@ -67,9 +67,12 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
         }
 
         if (renderType != null) {
+            poseStack.pushPose();
+            poseStack.scale(1.012F, 1.012F, 1.012F);
             collector.order(1).submitModel(
                     getParentModel(), state, poseStack, renderType,
                     0xF000F0, OverlayTexture.NO_OVERLAY, -1, null, state.outlineColor, null);
+            poseStack.popPose();
         }
     }
 
@@ -78,8 +81,14 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
         float hue = hueValue % 1.0F;
         if (hue < 0.0F) hue += 1.0F;
         int color = ARGB.opaque(Mth.hsvToRgb(hue, 0.9F, 1.0F));
+        poseStack.pushPose();
+        // The emissive mask must sit just outside the base skin, not on the
+        // identical triangles. Disco passes get separate tiny depths too.
+        float scale = 1.012F + (order - 1) * 0.002F;
+        poseStack.scale(scale, scale, scale);
         collector.order(order).submitModel(
                 getParentModel(), state, poseStack, RenderTypes.eyes(mask),
                 0xF000F0, OverlayTexture.NO_OVERLAY, color, null, state.outlineColor, null);
+        poseStack.popPose();
     }
 }
