@@ -43,6 +43,9 @@ public final class Frog3DDetailsLayer extends RenderLayer<FrogRenderState, FrogM
         Frog3DDetailKind kind = Frog3DDetailKind.forForm(access.prettyfrogs$getForm());
         if (kind == Frog3DDetailKind.NONE) return;
         Frog3DDetailsModel model = models[kind.ordinal()];
+        // Avoid nearly coplanar decorative caps and the vanilla frog skin.
+        poseStack.pushPose();
+        poseStack.scale(1.008F, 1.008F, 1.008F);
 
         if (kind == Frog3DDetailKind.CRYSTALS) {
             // Match the same source cluster color as the existing crystal overlay.
@@ -58,5 +61,6 @@ public final class Frog3DDetailsLayer extends RenderLayer<FrogRenderState, FrogM
                     lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                     state.outlineColor, null);
         }
+        poseStack.popPose();
     }
 }

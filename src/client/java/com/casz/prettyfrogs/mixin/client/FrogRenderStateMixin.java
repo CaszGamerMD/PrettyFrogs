@@ -14,6 +14,8 @@ public abstract class FrogRenderStateMixin implements PrettyFrogRenderStateAcces
     @Unique
     private Identifier prettyfrogs$crystal = Identifier.withDefaultNamespace("amethyst_cluster");
     @Unique
+    private float prettyfrogs$wingSpread;
+    @Unique
     private int prettyfrogs$cakeCandles;
     @Unique
     private final int[] prettyfrogs$cakeCandleColors = new int[] {
@@ -33,6 +35,16 @@ public abstract class FrogRenderStateMixin implements PrettyFrogRenderStateAcces
     @Override
     public void prettyfrogs$setCrystal(Identifier crystal) {
         prettyfrogs$crystal = crystal;
+    }
+
+    @Override
+    public float prettyfrogs$getWingSpread() {
+        return prettyfrogs$wingSpread;
+    }
+
+    @Override
+    public void prettyfrogs$setWingSpread(float spread) {
+        prettyfrogs$wingSpread = spread;
     }
 
     @Override

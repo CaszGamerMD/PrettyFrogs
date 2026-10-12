@@ -17,11 +17,16 @@ import net.minecraft.resources.Identifier;
 public final class FrogAccessoryLayer extends RenderLayer<FrogRenderState, FrogModel> {
     private static final Identifier BUMBLE_WINGS = PrettyFrogs.id("textures/entity/frog/bumble_wings.png");
     private static final Identifier CACTUS_SPIKES = PrettyFrogs.id("textures/entity/frog/cactus_spikes.png");
-    private final FrogAccessoryModel model;
+    // Visibility is fixed per model because render submissions are deferred.
+    private final FrogAccessoryModel bumbleModel;
+    private final FrogAccessoryModel cactusModel;
 
     public FrogAccessoryLayer(RenderLayerParent<FrogRenderState, FrogModel> renderer, EntityModelSet modelSet) {
         super(renderer);
-        model = new FrogAccessoryModel(modelSet.bakeLayer(FrogAccessoryModel.LAYER_LOCATION));
+        bumbleModel = new FrogAccessoryModel(modelSet.bakeLayer(FrogAccessoryModel.LAYER_LOCATION));
+        bumbleModel.setForm(FrogFormRegistry.BUMBLE);
+        cactusModel = new FrogAccessoryModel(modelSet.bakeLayer(FrogAccessoryModel.LAYER_LOCATION));
+        cactusModel.setForm(FrogFormRegistry.CACTUS);
     }
 
     @Override
@@ -33,14 +38,17 @@ public final class FrogAccessoryLayer extends RenderLayer<FrogRenderState, FrogM
             return;
         }
 
-        model.setForm(form);
         boolean bumble = form.equals(FrogFormRegistry.BUMBLE);
+        FrogAccessoryModel model = bumble ? bumbleModel : cactusModel;
         Identifier texture = bumble ? BUMBLE_WINGS : CACTUS_SPIKES;
         RenderType type = bumble ? RenderTypes.entityTranslucent(texture) : RenderTypes.entityCutout(texture);
 
+        poseStack.pushPose();
+        poseStack.scale(1.008F, 1.008F, 1.008F);
         collector.order(3).submitModel(
                 model, state, poseStack, type,
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
+        poseStack.popPose();
     }
 }

@@ -61,8 +61,11 @@ public final class FrogEyeLayer extends RenderLayer<FrogRenderState, FrogModel> 
             overlay = OverlayTexture.NO_OVERLAY;
         }
 
+        poseStack.pushPose();
+        poseStack.scale(1.012F, 1.012F, 1.012F);
         collector.order(5).submitModel(
                 model, state, poseStack, type,
                 light, overlay, color, null, state.outlineColor, null);
+        poseStack.popPose();
     }
 }

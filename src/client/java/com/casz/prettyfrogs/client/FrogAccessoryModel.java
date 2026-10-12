@@ -11,12 +11,16 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.Identifier;
+import net.minecraft.client.renderer.entity.state.FrogRenderState;
+import net.minecraft.util.Mth;
 
 public final class FrogAccessoryModel extends FrogModel {
     public static final ModelLayerLocation LAYER_LOCATION =
             new ModelLayerLocation(PrettyFrogs.id("frog_accessories"), "main");
 
     private final ModelPart wings;
+    private final ModelPart leftWing;
+    private final ModelPart rightWing;
     private final ModelPart cactusBodySpikes;
     private final ModelPart cactusHeadSpikes;
 
@@ -25,6 +29,8 @@ public final class FrogAccessoryModel extends FrogModel {
         ModelPart body = root.getChild("root").getChild("body");
         ModelPart head = body.getChild("head");
         wings = body.getChild("bumble_wings");
+        leftWing = wings.getChild("left_wing");
+        rightWing = wings.getChild("right_wing");
         cactusBodySpikes = body.getChild("cactus_body_spikes");
         cactusHeadSpikes = head.getChild("cactus_head_spikes");
         setForm(FrogFormRegistry.NORMAL);
@@ -37,6 +43,23 @@ public final class FrogAccessoryModel extends FrogModel {
         cactusHeadSpikes.visible = cactus;
     }
 
+    @Override
+    public void setupAnim(FrogRenderState state) {
+        super.setupAnim(state);
+        // The vanilla model animates legs/head, but these two hinged parts
+        // belong to the bee outfit. Keep them folded and visible when still.
+        float spread = ((PrettyFrogRenderStateAccess)state).prettyfrogs$getWingSpread();
+        float beat = Mth.cos(state.ageInTicks * 2.1F);
+        leftWing.yRot = Mth.lerp(spread, -1.40F, -0.07F);
+        rightWing.yRot = Mth.lerp(spread, 1.40F, 0.07F);
+        leftWing.zRot = Mth.lerp(spread, -0.12F, -0.60F - beat * 0.58F);
+        rightWing.zRot = Mth.lerp(spread, 0.12F, 0.60F + beat * 0.58F);
+        // A small opposing sweep makes a wingbeat read like a bee instead
+        // of two stiff plates hinged at the back of the frog.
+        leftWing.xRot = spread * 0.13F * beat;
+        rightWing.xRot = -spread * 0.13F * beat;
+    }
+
     public static LayerDefinition createBodyLayer() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -47,10 +70,10 @@ public final class FrogAccessoryModel extends FrogModel {
         PartDefinition wings = body.addOrReplaceChild("bumble_wings", CubeListBuilder.create(), PartPose.ZERO);
         wings.addOrReplaceChild("left_wing",
                 CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -0.4F, -2.5F, 5.0F, 0.8F, 5.0F),
-                PartPose.offset(2.8F, -2.2F, -2.0F));
+                PartPose.offset(2.8F, -2.58F, -2.0F));
         wings.addOrReplaceChild("right_wing",
                 CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -0.4F, -2.5F, 5.0F, 0.8F, 5.0F),
-                PartPose.offset(-2.8F, -2.2F, -2.0F));
+                PartPose.offset(-2.8F, -2.58F, -2.0F));
 
         // Anchor each spike at the actual top surface (local Y=-2) and extend
         // upward from that contact point. Keeping every Z inside the body/head
