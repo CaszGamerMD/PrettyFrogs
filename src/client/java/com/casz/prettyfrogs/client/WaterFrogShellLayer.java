@@ -27,10 +27,14 @@ public final class WaterFrogShellLayer extends RenderLayer<FrogRenderState, Frog
             return;
         }
 
+        poseStack.pushPose();
+        // A true outer water skin instead of coplanar translucent faces.
+        poseStack.scale(1.025F, 1.025F, 1.025F);
         collector.order(2).submitModel(
                 getParentModel(), state, poseStack,
                 RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(WATER_SHELL)),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
+        poseStack.popPose();
     }
 }
