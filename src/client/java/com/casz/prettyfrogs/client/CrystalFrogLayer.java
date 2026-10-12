@@ -27,6 +27,10 @@ public final class CrystalFrogLayer extends RenderLayer<FrogRenderState, FrogMod
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
         if (!access.prettyfrogs$isForm(FrogFormRegistry.CRYSTAL) || state.isInvisible) return;
 
+        // Both the block-texture projection and fallback crystal tint need
+        // dedicated depth relative to the frog body.
+        poseStack.pushPose();
+        poseStack.scale(1.018F, 1.018F, 1.018F);
         Identifier crystal = access.prettyfrogs$getCrystal();
         Identifier source = findSourceTexture(crystal);
         if (source != null) {
@@ -34,6 +38,7 @@ public final class CrystalFrogLayer extends RenderLayer<FrogRenderState, FrogMod
                     getParentModel(), state, poseStack, RenderTypes.entityTranslucent(source),
                     lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                     0xF2FFFFFF, null, state.outlineColor, null);
+            poseStack.popPose();
             return;
         }
 
@@ -43,6 +48,7 @@ public final class CrystalFrogLayer extends RenderLayer<FrogRenderState, FrogMod
                 getParentModel(), state, poseStack, RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(FALLBACK_MASK)),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 color, null, state.outlineColor, null);
+        poseStack.popPose();
     }
 
     private static Identifier findSourceTexture(Identifier crystal) {
