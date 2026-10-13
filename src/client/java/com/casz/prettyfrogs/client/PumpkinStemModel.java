@@ -25,9 +25,12 @@ public final class PumpkinStemModel extends FrogModel {
         PartDefinition body = modelRoot.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -2.0F, 4.0F));
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -2.0F, -1.0F));
 
-        // Small blocky stem centered on top of the frog's head.
+        // Three connected steps give the vine a bent, tapered silhouette.
         head.addOrReplaceChild("stem",
-                CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -4.0F, -2.0F, 2.0F, 3.0F, 2.0F),
+                CubeListBuilder.create()
+                        .texOffs(0, 0).addBox(-1.0F, -2.8F, -2.0F, 2.0F, 1.8F, 2.0F)
+                        .texOffs(0, 0).addBox(-0.75F, -4.0F, -1.75F, 1.5F, 1.2F, 1.5F)
+                        .texOffs(0, 0).addBox(-0.25F, -4.8F, -1.5F, 1.0F, 0.8F, 1.0F),
                 PartPose.ZERO);
 
         PartDefinition eyes = head.addOrReplaceChild("eyes", CubeListBuilder.create(), PartPose.offset(-0.5F, 0.0F, 2.0F));
