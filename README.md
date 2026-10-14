@@ -33,7 +33,7 @@ The controlled tongue eats **size-1 Slimes/Magma Cubes** using vanilla frog atta
 | Water Bottle | Water Frog |
 | Magma Cream | Magma Frog |
 | Ice Block | Ice Frog |
-| Poisonous Potato | Random-color Dart Frog |
+| Poisonous Potato | Eight Dart Frog skins (re-use to cycle: lime striped, golden yellow, green banded, bronze/turquoise, blue spotted, orange/blue, pastel mint/pink, black/magenta) |
 | `colorful_rods:rgb_end_rod` | Rainbow Frog |
 | Pink Petals | Cherry Blossom Frog |
 | Honeycomb | Bumblefrog |
