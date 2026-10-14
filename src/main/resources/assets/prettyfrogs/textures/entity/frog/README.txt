@@ -3,7 +3,7 @@ PrettyFrogs frog texture resources (48x48)
 Base forms:
 - watermelon.png, pumpkin.png, red_eyed_tree.png, skeleton.png
 - muddy.png, water.png, magma.png, ice.png
-- dart_red.png, dart_blue.png, dart_yellow.png, dart_green.png, dart_orange.png
+- dartfrog_1.png through dartfrog_8.png (eight replacement poisonous-potato variants)
 - rainbow.png, cherry_blossom.png
 - bumble.png, mushroom.png, moss.png, ender.png, ghost.png, glow.png
 - cactus.png, storm.png, soulfire.png, sculk.png, cake.png, slimy.png
