@@ -27,11 +27,26 @@ public final class FrogFormRegistry {
     public static final Identifier WATER = PrettyFrogs.id("water");
     public static final Identifier MAGMA = PrettyFrogs.id("magma");
     public static final Identifier ICE = PrettyFrogs.id("ice");
-    public static final Identifier DART_RED = PrettyFrogs.id("dart_red");
-    public static final Identifier DART_BLUE = PrettyFrogs.id("dart_blue");
-    public static final Identifier DART_YELLOW = PrettyFrogs.id("dart_yellow");
-    public static final Identifier DART_GREEN = PrettyFrogs.id("dart_green");
-    public static final Identifier DART_ORANGE = PrettyFrogs.id("dart_orange");
+    public static final Identifier DARTFROG_1 = PrettyFrogs.id("dartfrog_1");
+    public static final Identifier DARTFROG_2 = PrettyFrogs.id("dartfrog_2");
+    public static final Identifier DARTFROG_3 = PrettyFrogs.id("dartfrog_3");
+    public static final Identifier DARTFROG_4 = PrettyFrogs.id("dartfrog_4");
+    public static final Identifier DARTFROG_5 = PrettyFrogs.id("dartfrog_5");
+    public static final Identifier DARTFROG_6 = PrettyFrogs.id("dartfrog_6");
+    public static final Identifier DARTFROG_7 = PrettyFrogs.id("dartfrog_7");
+    public static final Identifier DARTFROG_8 = PrettyFrogs.id("dartfrog_8");
+    private static final Identifier[] DART_FORMS = {
+            DARTFROG_1, DARTFROG_2, DARTFROG_3, DARTFROG_4,
+            DARTFROG_5, DARTFROG_6, DARTFROG_7, DARTFROG_8
+    };
+    // Older worlds/buckets keep their custom frog instead of resetting to normal.
+    private static final Map<Identifier, Identifier> LEGACY_DART_FORMS = Map.of(
+            PrettyFrogs.id("dart_red"), DARTFROG_6,
+            PrettyFrogs.id("dart_blue"), DARTFROG_5,
+            PrettyFrogs.id("dart_yellow"), DARTFROG_2,
+            PrettyFrogs.id("dart_green"), DARTFROG_3,
+            PrettyFrogs.id("dart_orange"), DARTFROG_6
+    );
     public static final Identifier RAINBOW = PrettyFrogs.id("rainbow");
     public static final Identifier RAINBOW_DART = PrettyFrogs.id("rainbow_dart");
     public static final Identifier RAINBOW_EYES = PrettyFrogs.id("rainbow_eyes");
@@ -73,11 +88,9 @@ public final class FrogFormRegistry {
         register(WATER, "water");
         register(MAGMA, "magma");
         register(ICE, "ice");
-        register(DART_RED, "dart_red");
-        register(DART_BLUE, "dart_blue");
-        register(DART_YELLOW, "dart_yellow");
-        register(DART_GREEN, "dart_green");
-        register(DART_ORANGE, "dart_orange");
+        for (int i = 0; i < DART_FORMS.length; i++) {
+            register(DART_FORMS[i], "dartfrog_" + (i + 1));
+        }
         register(RAINBOW, "rainbow");
         register(RAINBOW_DART, "rainbow_dart");
         register(RAINBOW_EYES, "rainbow_eyes");
@@ -101,7 +114,7 @@ public final class FrogFormRegistry {
 
         TRANSFORM_ITEMS.put(Items.MELON_SLICE, WATERMELON);
         VARIANT_ITEMS.put(Items.MELON_SLICE, new Identifier[]{WATERMELON, WATERMELON_RED_TOP});
-        VARIANT_ITEMS.put(Items.POISONOUS_POTATO, new Identifier[]{DART_RED, DART_BLUE, DART_YELLOW, DART_GREEN, DART_ORANGE});
+        VARIANT_ITEMS.put(Items.POISONOUS_POTATO, DART_FORMS.clone());
         TRANSFORM_ITEMS.put(Items.CARVED_PUMPKIN, PUMPKIN);
         TRANSFORM_ITEMS.put(Items.TADPOLE_BUCKET, TADPOLE_COSTUME);
         TRANSFORM_ITEMS.put(Items.ENDER_PEARL, RED_EYED_TREE);
@@ -138,11 +151,11 @@ public final class FrogFormRegistry {
     }
 
     public static FrogForm get(Identifier id) {
-        return FORMS.getOrDefault(id, FORMS.get(NORMAL));
+        return FORMS.getOrDefault(LEGACY_DART_FORMS.getOrDefault(id, id), FORMS.get(NORMAL));
     }
 
     public static boolean isKnown(Identifier id) {
-        return FORMS.containsKey(id);
+        return FORMS.containsKey(id) || LEGACY_DART_FORMS.containsKey(id);
     }
 
     public static boolean isRgbEndRod(Item item) {
@@ -179,8 +192,8 @@ public final class FrogFormRegistry {
     }
 
     public static boolean isDart(Identifier form) {
-        return form.equals(DART_RED) || form.equals(DART_BLUE) || form.equals(DART_YELLOW)
-                || form.equals(DART_GREEN) || form.equals(DART_ORANGE);
+        for (Identifier dart : DART_FORMS) if (dart.equals(form)) return true;
+        return LEGACY_DART_FORMS.containsKey(form);
     }
 
     public static boolean isWatermelon(Identifier form) {
@@ -196,16 +209,15 @@ public final class FrogFormRegistry {
     }
 
     public static Identifier nextDart(Identifier current) {
-        Identifier[] colors = {DART_RED, DART_BLUE, DART_YELLOW, DART_GREEN, DART_ORANGE};
-        for (int i = 0; i < colors.length; i++) {
-            if (colors[i].equals(current)) return colors[(i + 1) % colors.length];
+        Identifier canonical = LEGACY_DART_FORMS.getOrDefault(current, current);
+        for (int i = 0; i < DART_FORMS.length; i++) {
+            if (DART_FORMS[i].equals(canonical)) return DART_FORMS[(i + 1) % DART_FORMS.length];
         }
-        return DART_RED;
+        return DART_FORMS[0];
     }
 
     public static Identifier randomDart(net.minecraft.util.RandomSource random) {
-        Identifier[] colors = {DART_RED, DART_BLUE, DART_YELLOW, DART_GREEN, DART_ORANGE};
-        return colors[random.nextInt(colors.length)];
+        return DART_FORMS[random.nextInt(DART_FORMS.length)];
     }
 
     public static boolean isResetItem(Item item) {
