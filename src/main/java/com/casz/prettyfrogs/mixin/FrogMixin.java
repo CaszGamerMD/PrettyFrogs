@@ -69,7 +69,7 @@ public abstract class FrogMixin implements PrettyFrogAccess {
             return;
         }
 
-        Identifier form = prettyfrogs$getForm();
+        Identifier form = FrogFormRegistry.familyOf(prettyfrogs$getForm());
         var random = frog.getRandom();
         double x = frog.getX() + (random.nextDouble() - 0.5) * frog.getBbWidth();
         double y = frog.getY() + random.nextDouble() * frog.getBbHeight();
@@ -194,7 +194,7 @@ public abstract class FrogMixin implements PrettyFrogAccess {
         Frog frog = (Frog)(Object)this;
         Identifier normalized = FrogFormRegistry.get(form).id();
         frog.getEntityData().set(PRETTYFROGS_FORM, normalized.toString());
-        if (!normalized.equals(FrogFormRegistry.CAKE)) {
+        if (!FrogFormRegistry.isFamily(normalized, FrogFormRegistry.CAKE)) {
             prettyfrogs$setCakeCandles(0);
         }
     }
@@ -202,10 +202,10 @@ public abstract class FrogMixin implements PrettyFrogAccess {
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void prettyfrogs$saveForm(ValueOutput output, CallbackInfo ci) {
         output.putString(PRETTYFROGS_SAVE_KEY, prettyfrogs$getForm().toString());
-        if (prettyfrogs$getForm().equals(FrogFormRegistry.CRYSTAL)) {
+        if (FrogFormRegistry.isFamily(prettyfrogs$getForm(), FrogFormRegistry.CRYSTAL)) {
             output.putString(PRETTYFROGS_CRYSTAL_SAVE_KEY, prettyfrogs$getCrystal().toString());
         }
-        if (prettyfrogs$getForm().equals(FrogFormRegistry.CAKE) && prettyfrogs$getCakeCandles() > 0) {
+        if (FrogFormRegistry.isFamily(prettyfrogs$getForm(), FrogFormRegistry.CAKE) && prettyfrogs$getCakeCandles() > 0) {
             output.putString(PRETTYFROGS_CAKE_CANDLES_SAVE_KEY, Integer.toString(prettyfrogs$getCakeCandles()));
             output.putString(PRETTYFROGS_CAKE_CANDLE_COLORS_SAVE_KEY,
                     prettyfrogs$getCakeCandleColor(0) + "," + prettyfrogs$getCakeCandleColor(1) + ","

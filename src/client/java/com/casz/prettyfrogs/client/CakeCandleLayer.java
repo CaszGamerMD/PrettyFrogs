@@ -41,14 +41,14 @@ public final class CakeCandleLayer extends RenderLayer<FrogRenderState, FrogMode
         for (int i = 0; i < Math.min(4, count); i++) {
             int color = 0xFF000000 | (access.prettyfrogs$getCakeCandleColor(i) & 0xFFFFFF);
             collector.order(3).submitModel(
-                    bodyModels[i], state, poseStack, RenderTypes.entityCutout(TEXTURE),
+                    bodyModels[i], state, poseStack, RenderTypes.entityCutout(FrogTextureResolver.selectTexture(TEXTURE, access.prettyfrogs$getForm())),
                     lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                     color, null, state.outlineColor, null);
         }
 
         flameModel.showFlames(count);
         collector.order(4).submitModel(
-                flameModel, state, poseStack, RenderTypes.entityCutout(TEXTURE),
+                flameModel, state, poseStack, RenderTypes.entityCutout(FrogTextureResolver.selectTexture(TEXTURE, access.prettyfrogs$getForm())),
                 0xF000F0, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
     }

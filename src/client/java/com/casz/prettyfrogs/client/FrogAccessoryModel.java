@@ -31,7 +31,7 @@ public final class FrogAccessoryModel extends FrogModel {
         wings = body.getChild("bumble_wings");
         leftWing = wings.getChild("left_wing");
         rightWing = wings.getChild("right_wing");
-        cactusBodySpikes = body.getChild("cactus_body_spikes");
+        cactusBodySpikes = head.getChild("cactus_body_spikes");
         cactusHeadSpikes = head.getChild("cactus_head_spikes");
         setForm(FrogFormRegistry.NORMAL);
     }
@@ -75,14 +75,14 @@ public final class FrogAccessoryModel extends FrogModel {
                 CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -0.4F, -2.5F, 5.0F, 0.8F, 5.0F),
                 PartPose.offset(-2.8F, -2.58F, -2.0F));
 
-        // Anchor each spike at the actual top surface (local Y=-2) and extend
-        // upward from that contact point. Keeping every Z inside the body/head
+        // Anchor each spike at the visible head surface (local Y=-2) and extend
+        // upward from that contact point. Keeping every Z inside the head
         // bounds prevents the old floating spikes behind the frog.
-        PartDefinition bodySpikes = body.addOrReplaceChild("cactus_body_spikes", CubeListBuilder.create(), PartPose.ZERO);
-        addSpike(bodySpikes, "back_1", -1.8F, -5.8F);
-        addSpike(bodySpikes, "back_2", 1.8F, -4.0F);
-        addSpike(bodySpikes, "back_3", -1.2F, -1.8F);
-        addSpike(bodySpikes, "back_4", 1.5F, 0.0F);
+        PartDefinition bodySpikes = head.addOrReplaceChild("cactus_body_spikes", CubeListBuilder.create(), PartPose.ZERO);
+        addSpike(bodySpikes, "back_1", -0.8F, -3.3F);
+        addSpike(bodySpikes, "back_2", 1.8F, -0.2F);
+        addSpike(bodySpikes, "back_3", -1.8F, 0.3F);
+        addSpike(bodySpikes, "back_4", 0.1F, 1.2F);
 
         PartDefinition headSpikes = head.addOrReplaceChild("cactus_head_spikes", CubeListBuilder.create(), PartPose.ZERO);
         addSpike(headSpikes, "head_1", -2.1F, -4.5F);

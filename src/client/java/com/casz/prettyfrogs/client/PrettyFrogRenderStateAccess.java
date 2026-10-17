@@ -16,6 +16,6 @@ public interface PrettyFrogRenderStateAccess {
     void prettyfrogs$setCakeCandleColor(int index, int color);
 
     default boolean prettyfrogs$isForm(Identifier form) {
-        return prettyfrogs$getForm().equals(form);
+        return FrogFormRegistry.isFamily(prettyfrogs$getForm(), form);
     }
 }

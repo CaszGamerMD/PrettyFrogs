@@ -22,6 +22,17 @@ public final class FrogTextureResolver {
         return selectTexture(form.texture());
     }
 
+    /** Polished variants own their layer artwork; the legacy HD toggle never changes it. */
+    public static Identifier selectTexture(Identifier texture, Identifier formId) {
+        if (texture != null && FrogFormRegistry.isPolished(formId)
+                && PrettyFrogs.MOD_ID.equals(texture.getNamespace())
+                && texture.getPath().startsWith(FROG_FOLDER)) {
+            String name = texture.getPath().substring(FROG_FOLDER.length());
+            if (!name.contains("/")) return PrettyFrogs.id(FROG_FOLDER + "polished/" + name);
+        }
+        return selectTexture(texture);
+    }
+
     /**
      * Select HD or classic assets for the few textures changed by the merge.
      * The rest of the frogs, including the custom skeleton/ghost/costume, are

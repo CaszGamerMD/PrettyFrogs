@@ -16,6 +16,7 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 
 public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, FrogModel> {
+    private static final Identifier SCULK_GLOW = PrettyFrogs.id("textures/entity/frog/sculk_glow.png");
     private static final Identifier MAGMA_GLOW = PrettyFrogs.id("textures/entity/frog/magma_glow.png");
     private static final Identifier RAINBOW_GLOW = PrettyFrogs.id("textures/entity/frog/rainbow_glow.png");
     private static final Identifier RAINBOW_DART_GLOW = PrettyFrogs.id("textures/entity/frog/rainbow_dart_glow.png");
@@ -57,13 +58,17 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
 
         RenderType renderType = null;
         if (access.prettyfrogs$isForm(FrogFormRegistry.MAGMA)) {
-            renderType = RenderTypes.eyes(MAGMA_GLOW);
+            renderType = RenderTypes.eyes(FrogTextureResolver.selectTexture(MAGMA_GLOW, access.prettyfrogs$getForm()));
         } else if (access.prettyfrogs$isForm(FrogFormRegistry.GLOW)) {
-            renderType = RenderTypes.eyes(GLOW_GLOW);
+            renderType = RenderTypes.eyes(FrogTextureResolver.selectTexture(GLOW_GLOW, access.prettyfrogs$getForm()));
         } else if (access.prettyfrogs$isForm(FrogFormRegistry.SOULFIRE)) {
-            renderType = RenderTypes.eyes(SOULFIRE_GLOW);
+            renderType = RenderTypes.eyes(FrogTextureResolver.selectTexture(SOULFIRE_GLOW, access.prettyfrogs$getForm()));
         } else if (access.prettyfrogs$isForm(FrogFormRegistry.STORM)) {
-            renderType = RenderTypes.eyes(STORM_GLOW);
+            renderType = RenderTypes.eyes(FrogTextureResolver.selectTexture(STORM_GLOW, access.prettyfrogs$getForm()));
+        }
+
+        if (access.prettyfrogs$isForm(FrogFormRegistry.SCULK) && FrogFormRegistry.isPolished(access.prettyfrogs$getForm())) {
+            renderType = RenderTypes.eyes(FrogTextureResolver.selectTexture(SCULK_GLOW, access.prettyfrogs$getForm()));
         }
 
         if (renderType != null) {
@@ -87,7 +92,7 @@ public final class PrettyFrogGlowLayer extends RenderLayer<FrogRenderState, Frog
         float scale = 1.012F + (order - 1) * 0.002F;
         poseStack.scale(scale, scale, scale);
         collector.order(order).submitModel(
-                getParentModel(), state, poseStack, RenderTypes.eyes(mask),
+                getParentModel(), state, poseStack, RenderTypes.eyes(FrogTextureResolver.selectTexture(mask, ((PrettyFrogRenderStateAccess)state).prettyfrogs$getForm())),
                 0xF000F0, OverlayTexture.NO_OVERLAY, color, null, state.outlineColor, null);
         poseStack.popPose();
     }

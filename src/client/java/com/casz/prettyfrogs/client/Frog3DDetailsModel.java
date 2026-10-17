@@ -36,14 +36,14 @@ public final class Frog3DDetailsModel extends FrogModel {
         ModelPart body = modelRoot.getChild("body");
         ModelPart head = body.getChild("head");
         crystalHead = head.getChild("crystal_head");
-        crystalBack = body.getChild("crystal_back");
+        crystalBack = head.getChild("crystal_back");
         mushroomHead = head.getChild("mushroom_head");
-        mushroomBack = body.getChild("mushroom_back");
+        mushroomBack = head.getChild("mushroom_back");
         balloonKnot = body.getChild("balloon_knot");
         frostingHead = head.getChild("frosting_head");
-        frostingBack = body.getChild("frosting_back");
+        frostingBack = head.getChild("frosting_back");
         snowHead = head.getChild("snow_head");
-        snowBack = body.getChild("snow_back");
+        snowBack = head.getChild("snow_back");
         setDetail(Frog3DDetailKind.NONE);
     }
 
@@ -74,15 +74,16 @@ public final class Frog3DDetailsModel extends FrogModel {
         head.addOrReplaceChild("crystal_head",
                 CubeListBuilder.create()
                         .texOffs(0, 0).addBox(-1.0F, -6.0F, -3.0F, 2.0F, 4.0F, 2.0F)
-                        .texOffs(10, 0).addBox(-2.7F, -4.5F, -2.7F, 1.0F, 2.0F, 1.0F)
+                        .texOffs(10, 0).addBox(-2.7F, -4.0F, -2.7F, 1.0F, 2.0F, 1.0F)
                         .texOffs(16, 0).addBox(1.7F, -4.0F, -1.8F, 1.0F, 2.0F, 1.0F),
                 PartPose.ZERO);
-        // More crystals protrude from the back, leaving the frog's face clear.
-        body.addOrReplaceChild("crystal_back",
+        // The visible dorsal surface belongs to the head (Y=-2, Z=-7..2).
+        // Rear decorations must share that parent to follow its animation.
+        head.addOrReplaceChild("crystal_back",
                 CubeListBuilder.create()
-                        .texOffs(0, 11).addBox(-2.1F, -4.0F, 1.5F, 1.5F, 3.0F, 1.5F)
-                        .texOffs(10, 11).addBox(0.8F, -3.5F, 2.3F, 1.5F, 2.5F, 1.5F)
-                        .texOffs(20, 11).addBox(-0.7F, -3.7F, 5.0F, 1.4F, 2.7F, 1.4F),
+                        .texOffs(0, 11).addBox(-2.7F, -4.8F, 0.0F, 1.3F, 2.8F, 1.3F)
+                        .texOffs(10, 11).addBox(1.4F, -4.2F, 0.2F, 1.3F, 2.2F, 1.3F)
+                        .texOffs(20, 11).addBox(-0.6F, -3.8F, 0.5F, 1.2F, 1.8F, 1.2F),
                 PartPose.ZERO);
 
         // Tiny mushroom on the crown: ivory stalk, spotted red cap and off-white dot.
@@ -93,12 +94,12 @@ public final class Frog3DDetailsModel extends FrogModel {
                         .texOffs(56, 0).addBox(1.0F, -4.35F, -1.9F, 0.7F, 0.25F, 0.7F),
                 PartPose.ZERO);
         // Two different-size little mushrooms on the back.
-        body.addOrReplaceChild("mushroom_back",
+        head.addOrReplaceChild("mushroom_back",
                 CubeListBuilder.create()
-                        .texOffs(32, 7).addBox(-2.3F, -3.0F, 2.0F, 1.0F, 2.0F, 1.0F)
-                        .texOffs(40, 7).addBox(-3.2F, -3.5F, 1.2F, 2.8F, 1.0F, 2.8F)
-                        .texOffs(32, 15).addBox(1.3F, -3.8F, 4.2F, 1.0F, 2.6F, 1.0F)
-                        .texOffs(40, 15).addBox(0.3F, -4.3F, 3.3F, 3.0F, 1.0F, 3.0F),
+                        .texOffs(32, 7).addBox(-2.1F, -3.7F, 0.2F, 0.8F, 1.8F, 0.8F)
+                        .texOffs(40, 7).addBox(-2.9F, -4.2F, -0.5F, 2.4F, 0.8F, 2.4F)
+                        .texOffs(32, 15).addBox(0.3F, -3.2F, 0.8F, 0.7F, 1.3F, 0.7F)
+                        .texOffs(40, 15).addBox(-0.2F, -3.6F, 0.3F, 1.8F, 0.65F, 1.8F),
                 PartPose.ZERO);
 
         // Water/Balloon frog: tied off at the underside of the frog, with a
@@ -119,11 +120,11 @@ public final class Frog3DDetailsModel extends FrogModel {
                         .texOffs(32, 24).addBox(-3.18F, -1.72F, -6.68F, 0.55F, 0.75F, 6.35F)
                         .texOffs(32, 24).addBox(2.63F, -1.72F, -6.68F, 0.55F, 0.75F, 6.35F),
                 PartPose.ZERO);
-        body.addOrReplaceChild("frosting_back",
+        head.addOrReplaceChild("frosting_back",
                 CubeListBuilder.create()
-                        .texOffs(32, 24).addBox(-3.45F, -1.70F, -0.65F, 6.9F, 0.9F, 7.4F)
-                        .texOffs(32, 24).addBox(-3.38F, -0.90F, 0.1F, 0.55F, 0.8F, 5.9F)
-                        .texOffs(32, 24).addBox(2.83F, -0.90F, 0.9F, 0.55F, 0.65F, 4.8F),
+                        .texOffs(32, 24).addBox(-3.25F, -2.55F, -0.25F, 6.5F, 0.9F, 2.5F)
+                        .texOffs(32, 24).addBox(-3.18F, -1.72F, -0.33F, 0.55F, 0.6F, 2.5F)
+                        .texOffs(32, 24).addBox(2.63F, -1.72F, -0.33F, 0.55F, 0.5F, 2.5F),
                 PartPose.ZERO);
 
         // Ice Frog: an uneven layer of settled snow over the same top-half
@@ -135,11 +136,11 @@ public final class Frog3DDetailsModel extends FrogModel {
                         .texOffs(32, 44).addBox(-2.45F, -3.05F, -5.45F, 2.2F, 0.55F, 2.1F)
                         .texOffs(32, 44).addBox(0.55F, -2.95F, -3.35F, 2.0F, 0.45F, 2.0F),
                 PartPose.ZERO);
-        body.addOrReplaceChild("snow_back",
+        head.addOrReplaceChild("snow_back",
                 CubeListBuilder.create()
-                        .texOffs(32, 44).addBox(-3.40F, -1.73F, -0.62F, 6.8F, 0.88F, 7.3F)
-                        .texOffs(32, 44).addBox(-2.5F, -2.20F, 1.1F, 2.3F, 0.55F, 2.0F)
-                        .texOffs(32, 44).addBox(0.45F, -2.12F, 3.65F, 2.45F, 0.5F, 2.1F),
+                        .texOffs(32, 44).addBox(-3.22F, -2.58F, -0.28F, 6.44F, 0.88F, 2.5F)
+                        .texOffs(32, 44).addBox(-2.5F, -3.02F, -0.1F, 2.3F, 0.55F, 2.0F)
+                        .texOffs(32, 44).addBox(0.45F, -2.97F, 0.0F, 2.45F, 0.5F, 2.1F),
                 PartPose.ZERO);
 
         // Required vanilla model children: zero geometry, but correct hierarchy

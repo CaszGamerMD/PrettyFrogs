@@ -34,7 +34,7 @@ public final class GhostFrogLayer extends RenderLayer<FrogRenderState, FrogModel
         poseStack.pushPose();
         poseStack.translate(0.0F, -0.12F + Mth.sin(state.ageInTicks * 0.12F) * 0.018F, 0.0F);
         collector.order(2).submitModel(
-                model, state, poseStack, RenderTypes.entityTranslucent(TEXTURE),
+                model, state, poseStack, RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(TEXTURE, access.prettyfrogs$getForm())),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
         // The glow mask uses the pupils' dedicated UV tile, so the rest of
@@ -44,7 +44,7 @@ public final class GhostFrogLayer extends RenderLayer<FrogRenderState, FrogModel
         // ghost geometry, without scaling the actual ghost silhouette.
         poseStack.scale(1.013F, 1.013F, 1.013F);
         collector.order(4).submitModel(
-                model, state, poseStack, RenderTypes.eyes(GLOW_MASK),
+                model, state, poseStack, RenderTypes.eyes(FrogTextureResolver.selectTexture(GLOW_MASK, access.prettyfrogs$getForm())),
                 0xF000F0, OverlayTexture.NO_OVERLAY,
                 0xFFB4FFF3, null, state.outlineColor, null);
         poseStack.popPose();

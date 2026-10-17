@@ -29,7 +29,7 @@ public final class SkeletonFrogLayer extends RenderLayer<FrogRenderState, FrogMo
         if (!access.prettyfrogs$isForm(FrogFormRegistry.SKELETON) || state.isInvisible) return;
 
         collector.order(3).submitModel(
-                model, state, poseStack, RenderTypes.entityCutout(TEXTURE),
+                model, state, poseStack, RenderTypes.entityCutout(FrogTextureResolver.selectTexture(TEXTURE, access.prettyfrogs$getForm())),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
     }

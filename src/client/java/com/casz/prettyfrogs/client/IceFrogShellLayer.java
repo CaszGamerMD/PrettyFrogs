@@ -31,7 +31,7 @@ public final class IceFrogShellLayer extends RenderLayer<FrogRenderState, FrogMo
         poseStack.scale(1.025F, 1.025F, 1.025F);
         collector.order(2).submitModel(
                 getParentModel(), state, poseStack,
-                RenderTypes.entityTranslucent(ICE_SHELL),
+                RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(ICE_SHELL, access.prettyfrogs$getForm())),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
         poseStack.popPose();
