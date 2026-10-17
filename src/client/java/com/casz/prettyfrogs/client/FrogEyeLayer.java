@@ -31,7 +31,7 @@ public final class FrogEyeLayer extends RenderLayer<FrogRenderState, FrogModel> 
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords,
                        FrogRenderState state, float yRot, float xRot) {
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
-        Identifier form = access.prettyfrogs$getForm();
+        Identifier form = FrogFormRegistry.familyOf(access.prettyfrogs$getForm());
         // Most frogs now use the eyes painted directly on their own 48x48
         // textures; the generic eye overlay was covering that custom artwork.
         // Retain only the intentionally animated RGB-eyes form and Sculk's
@@ -42,7 +42,7 @@ public final class FrogEyeLayer extends RenderLayer<FrogRenderState, FrogModel> 
             return;
         }
 
-        Identifier texture = rgbEyes ? RGB_EYES : EYES;
+        Identifier texture = FrogTextureResolver.selectTexture(rgbEyes ? RGB_EYES : EYES, access.prettyfrogs$getForm());
         int color = -1;
         RenderType type = RenderTypes.entityCutout(texture);
         int light = lightCoords;

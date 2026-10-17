@@ -15,6 +15,7 @@ public final class FrogFormRegistry {
     private static final Map<Identifier, FrogForm> FORMS = new LinkedHashMap<>();
     private static final Map<Item, Identifier> TRANSFORM_ITEMS = new LinkedHashMap<>();
     private static final Map<Item, Identifier[]> VARIANT_ITEMS = new LinkedHashMap<>();
+    private static final Map<Identifier, Identifier> POLISHED_BASES = new LinkedHashMap<>();
 
     public static final Identifier NORMAL = PrettyFrogs.id("normal");
     public static final Identifier WATERMELON = PrettyFrogs.id("watermelon");
@@ -75,6 +76,7 @@ public final class FrogFormRegistry {
         FORMS.clear();
         TRANSFORM_ITEMS.clear();
         VARIANT_ITEMS.clear();
+        POLISHED_BASES.clear();
 
         register(NORMAL, null);
         register(WATERMELON, "watermelon");
@@ -112,6 +114,17 @@ public final class FrogFormRegistry {
         // Crystal keeps the vanilla frog base; the crystal appearance is a translucent tinted overlay.
         register(CRYSTAL, null);
 
+        // Add identities rather than replacing assets or migrating existing frogs.
+        // Snapshot the originals before adding their counterparts.
+        for (FrogForm original : FORMS.values().toArray(FrogForm[]::new)) {
+            if (original.id().equals(NORMAL)) continue;
+            Identifier variant = polished(original.id());
+            Identifier texture = original.texture() == null ? null
+                    : PrettyFrogs.id("textures/entity/frog/polished/" + original.id().getPath() + ".png");
+            FORMS.put(variant, new FrogForm(variant, texture));
+            POLISHED_BASES.put(variant, original.id());
+        }
+
         TRANSFORM_ITEMS.put(Items.MELON_SLICE, WATERMELON);
         VARIANT_ITEMS.put(Items.MELON_SLICE, new Identifier[]{WATERMELON, WATERMELON_RED_TOP});
         VARIANT_ITEMS.put(Items.POISONOUS_POTATO, DART_FORMS.clone());
@@ -141,6 +154,37 @@ public final class FrogFormRegistry {
         if (rgbRod != null && rgbRod != Items.AIR) {
             VARIANT_ITEMS.put(rgbRod, new Identifier[]{RAINBOW, RAINBOW_DART, RAINBOW_EYES, RAINBOW_SOLID, RAINBOW_DISCO});
         }
+        TRANSFORM_ITEMS.forEach((item, form) -> VARIANT_ITEMS.putIfAbsent(item, new Identifier[]{form}));
+        VARIANT_ITEMS.replaceAll((item, originals) -> {
+            Identifier[] pool = java.util.Arrays.copyOf(originals, originals.length * 2);
+            for (int i = 0; i < originals.length; i++) pool[originals.length + i] = polished(originals[i]);
+            return pool;
+        });
+    }
+
+    public static Identifier polished(Identifier original) {
+        return PrettyFrogs.id(original.getPath() + "_polished");
+    }
+
+    public static boolean isPolished(Identifier form) {
+        return POLISHED_BASES.containsKey(form);
+    }
+
+    /** Resolve behavior only. Never use this value when saving a frog's identity. */
+    public static Identifier familyOf(Identifier form) {
+        Identifier canonical = LEGACY_DART_FORMS.getOrDefault(form, form);
+        return POLISHED_BASES.getOrDefault(canonical, canonical);
+    }
+
+    public static boolean isFamily(Identifier form, Identifier family) {
+        return family.equals(familyOf(form));
+    }
+
+    public static Identifier crystalVariantForUse(Identifier current, Identifier oldCrystal, Identifier newCrystal) {
+        if (isFamily(current, CRYSTAL) && oldCrystal.equals(newCrystal)) {
+            return isPolished(current) ? CRYSTAL : polished(CRYSTAL);
+        }
+        return isPolished(current) && isFamily(current, CRYSTAL) ? polished(CRYSTAL) : CRYSTAL;
     }
 
     private static void register(Identifier id, String textureName) {
@@ -183,6 +227,7 @@ public final class FrogFormRegistry {
     }
 
     public static Identifier variantForUse(Item item, Identifier current, net.minecraft.util.RandomSource random) {
+        current = LEGACY_DART_FORMS.getOrDefault(current, current);
         Identifier[] variants = VARIANT_ITEMS.get(item);
         if (variants == null || variants.length == 0) return fromItem(item);
         for (int i = 0; i < variants.length; i++) {
@@ -192,32 +237,39 @@ public final class FrogFormRegistry {
     }
 
     public static boolean isDart(Identifier form) {
+        form = familyOf(form);
         for (Identifier dart : DART_FORMS) if (dart.equals(form)) return true;
         return LEGACY_DART_FORMS.containsKey(form);
     }
 
     public static boolean isWatermelon(Identifier form) {
+        form = familyOf(form);
         return form.equals(WATERMELON) || form.equals(WATERMELON_RED_TOP);
     }
 
     public static Identifier randomWatermelon(net.minecraft.util.RandomSource random) {
-        return random.nextBoolean() ? WATERMELON : WATERMELON_RED_TOP;
+        return variantForUse(Items.MELON_SLICE, NORMAL, random);
     }
 
     public static Identifier nextWatermelon(Identifier current) {
-        return current.equals(WATERMELON) ? WATERMELON_RED_TOP : WATERMELON;
+        return nextVariant(Items.MELON_SLICE, current);
     }
 
     public static Identifier nextDart(Identifier current) {
-        Identifier canonical = LEGACY_DART_FORMS.getOrDefault(current, current);
-        for (int i = 0; i < DART_FORMS.length; i++) {
-            if (DART_FORMS[i].equals(canonical)) return DART_FORMS[(i + 1) % DART_FORMS.length];
-        }
-        return DART_FORMS[0];
+        return nextVariant(Items.POISONOUS_POTATO, current);
     }
 
     public static Identifier randomDart(net.minecraft.util.RandomSource random) {
-        return DART_FORMS[random.nextInt(DART_FORMS.length)];
+        return variantForUse(Items.POISONOUS_POTATO, NORMAL, random);
+    }
+
+    private static Identifier nextVariant(Item item, Identifier current) {
+        Identifier canonical = LEGACY_DART_FORMS.getOrDefault(current, current);
+        Identifier[] pool = VARIANT_ITEMS.get(item);
+        for (int i = 0; i < pool.length; i++) {
+            if (pool[i].equals(canonical)) return pool[(i + 1) % pool.length];
+        }
+        return pool[0];
     }
 
     public static boolean isResetItem(Item item) {

@@ -1,6 +1,7 @@
 name: Minecraft client startup smoke
 
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -26,6 +27,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.7.0'
+      - name: Compile and resolve dependencies before timed startup
+        run: gradle classes clientClasses --no-daemon --console=plain
       - name: Run modded Minecraft client under virtual X display
         shell: bash
         env:

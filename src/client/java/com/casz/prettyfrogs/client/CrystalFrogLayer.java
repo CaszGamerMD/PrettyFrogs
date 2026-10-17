@@ -33,7 +33,7 @@ public final class CrystalFrogLayer extends RenderLayer<FrogRenderState, FrogMod
         poseStack.scale(1.018F, 1.018F, 1.018F);
         Identifier crystal = access.prettyfrogs$getCrystal();
         Identifier source = findSourceTexture(crystal);
-        if (source != null) {
+        if (source != null && !FrogFormRegistry.isPolished(access.prettyfrogs$getForm())) {
             collector.order(2).submitModel(
                     getParentModel(), state, poseStack, RenderTypes.entityTranslucent(source),
                     lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
@@ -45,7 +45,7 @@ public final class CrystalFrogLayer extends RenderLayer<FrogRenderState, FrogMod
         int rgb = CrystalFrogColors.color(crystal);
         int color = ARGB.color(220, (rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255);
         collector.order(2).submitModel(
-                getParentModel(), state, poseStack, RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(FALLBACK_MASK)),
+                getParentModel(), state, poseStack, RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(FALLBACK_MASK, access.prettyfrogs$getForm())),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 color, null, state.outlineColor, null);
         poseStack.popPose();

@@ -29,7 +29,7 @@ public final class GhostSlimeFrogLayer extends RenderLayer<FrogRenderState, Frog
         // Prevent the translucent slime from competing with the opaque skin.
         poseStack.scale(1.03F, 1.03F, 1.03F);
         collector.order(2).submitModel(
-                getParentModel(), state, poseStack, RenderTypes.entityTranslucent(SLIME_SHELL),
+                getParentModel(), state, poseStack, RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(SLIME_SHELL, access.prettyfrogs$getForm())),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
         poseStack.popPose();

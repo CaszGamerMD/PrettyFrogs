@@ -70,9 +70,9 @@ public abstract class FrogRendererMixin extends net.minecraft.client.renderer.en
             renderAccess.prettyfrogs$setCakeCandleColor(i, access.prettyfrogs$getCakeCandleColor(i));
         }
         Identifier customTexture;
-        if (form.equals(com.casz.prettyfrogs.frog.FrogFormRegistry.SKELETON)) {
+        if (renderAccess.prettyfrogs$isForm(com.casz.prettyfrogs.frog.FrogFormRegistry.SKELETON)) {
             customTexture = com.casz.prettyfrogs.PrettyFrogs.id("textures/entity/frog/skeleton_base.png");
-        } else if (form.equals(com.casz.prettyfrogs.frog.FrogFormRegistry.GHOST)) {
+        } else if (renderAccess.prettyfrogs$isForm(com.casz.prettyfrogs.frog.FrogFormRegistry.GHOST)) {
             customTexture = com.casz.prettyfrogs.PrettyFrogs.id("textures/entity/frog/ghost_base.png");
         } else if (form.equals(com.casz.prettyfrogs.frog.FrogFormRegistry.SCULK)) {
             customTexture = Identifier.withDefaultNamespace("textures/block/sculk.png");
@@ -80,7 +80,7 @@ public abstract class FrogRendererMixin extends net.minecraft.client.renderer.en
             customTexture = FrogTextureResolver.customTexture(form);
         }
         if (customTexture != null) {
-            state.texture = customTexture;
+            state.texture = FrogTextureResolver.selectTexture(customTexture, form);
         }
     }
 }

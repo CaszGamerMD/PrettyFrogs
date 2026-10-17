@@ -56,5 +56,6 @@ public final class FrogGuideEntries {
 
     private static void add(List<Entry> entries, Identifier form, Item trigger, String name) {
         entries.add(new Entry(form, trigger, name));
+        entries.add(new Entry(FrogFormRegistry.polished(form), trigger, name + " - Polished"));
     }
 }

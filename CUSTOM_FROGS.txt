@@ -12,7 +12,9 @@ GENERAL RULES
 - The underlying vanilla warm/temperate/cold frog identity is preserved.
 - Forms are cosmetic and are not inherited through breeding.
 - Froglight behavior still uses the underlying vanilla variant.
-- Reapplying a single-version form does not consume another item.
+- Every original appearance has an additional Polished appearance. All new textures and accessory atlases are 48x48.
+- Existing frogs keep their saved appearance. No original form IDs are replaced.
+- Reapplying the trigger cycles through the original appearances first, then their Polished counterparts; Survival consumes the trigger normally.
 - If one trigger item has multiple frog variants, using that item again cycles to the next variant and consumes the item normally.
 - Survival consumes transformation items where appropriate; Creative does not.
 - Milk Bucket removes the custom form and restores the normal appearance.
@@ -23,7 +25,7 @@ CUSTOM FROGS
 
 1. Watermelon Frog
    Trigger: Melon Slice
-   Variants: 2. The first Melon Slice randomly selects one; additional Melon Slices cycle between them.
+   Variants: 4. First use selects randomly; repeated uses cycle original green, original red, polished green, polished red.
    - Green striped top / red-pink seeded belly
    - Red-pink seeded top / green striped belly
 
@@ -60,15 +62,15 @@ CUSTOM FROGS
 
 9. Dart Frog
    Trigger: Poisonous Potato
-   Result: First use selects a random Dart Frog color. Additional Poisonous Potatoes cycle through:
-   - Red
-   - Blue
-   - Yellow
-   - Green
-   - Orange
+   Result: First use selects a random Dart Frog. Additional Poisonous Potatoes cycle through:
+   - Original dartfrog_1 through dartfrog_8, in order
+   - Polished dartfrog_1 through dartfrog_8, in the same order
+   Total: 16 appearances. Legacy red/blue/yellow/green/orange IDs still resolve to their existing equivalents.
 
 10. Rainbow Frog
     Trigger: colorful_rods:rgb_end_rod
+    Variants: Rainbow, Dart, Eyes, Solid, Disco, then their five Polished counterparts (10 total).
+    Requires the Colorful Rods item to be installed.
     Look: Animated RGB/fullbright appearance.
     Effect: End Rod particles.
 
@@ -138,6 +140,7 @@ CUSTOM FROGS
     Trigger: Any item in #prettyfrogs:crystal_clusters
     Look: Shared crystal overlay tinted to the exact cluster used.
     Exact crystal identity is persisted and synchronized.
+    Reapplying the same cluster toggles Original / Polished. A different cluster changes the material while retaining the current style.
 
     Built-in supported clusters:
     Minecraft:
@@ -164,6 +167,22 @@ CUSTOM FROGS
     Other mods/datapacks can extend Crystal Frog support through:
     #prettyfrogs:crystal_clusters
 
+25. Tadpole Costume
+    Trigger: Tadpole Bucket
+    Variants: Original and Polished.
+    Look: Animated tadpole costume over the underlying vanilla frog.
+    Survival returns an empty bucket.
+
+POLISHED APPEARANCES
+====================
+- All 37 original appearances gain a distinct ID ending in _polished.
+- All 37 originals remain available, giving 74 custom appearances across 25 trigger families.
+- Polished glow masks follow the new skin markings; RGB masks retain runtime color animation.
+- Polished water, ice and slime shells match their corresponding skins.
+- Cake candles, crystal material, particles, bucket storage and vanilla frog variants continue to work.
+- The Field Guide lists each original beside its Polished counterpart.
+- The appearance-resolution toggle continues to control original textures; Polished assets remain 48x48 in either setting.
+
 RESET
 =====
 Milk Bucket
@@ -180,6 +199,7 @@ When adding, renaming, removing, or changing a frog:
 5. Keep special families (Watermelon, Dart Frog, and Crystal Frog) represented accurately in the guide.
 6. When multiple variants share one trigger item, repeated uses of that item must cycle through the variants.
 
-Current main forms: 24
-Dart Frog colors: 5
+Current trigger families: 25
+Custom appearances: 74 (37 original + 37 Polished)
+Dart Frog appearances: 16 (8 original + 8 Polished)
 Crystal Frog appearances: determined by the exact supported crystal cluster.

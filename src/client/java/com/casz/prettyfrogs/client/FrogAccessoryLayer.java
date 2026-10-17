@@ -33,14 +33,14 @@ public final class FrogAccessoryLayer extends RenderLayer<FrogRenderState, FrogM
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords,
                        FrogRenderState state, float yRot, float xRot) {
         PrettyFrogRenderStateAccess access = (PrettyFrogRenderStateAccess) state;
-        Identifier form = access.prettyfrogs$getForm();
+        Identifier form = FrogFormRegistry.familyOf(access.prettyfrogs$getForm());
         if (state.isInvisible || (!form.equals(FrogFormRegistry.BUMBLE) && !form.equals(FrogFormRegistry.CACTUS))) {
             return;
         }
 
         boolean bumble = form.equals(FrogFormRegistry.BUMBLE);
         FrogAccessoryModel model = bumble ? bumbleModel : cactusModel;
-        Identifier texture = bumble ? BUMBLE_WINGS : CACTUS_SPIKES;
+        Identifier texture = FrogTextureResolver.selectTexture(bumble ? BUMBLE_WINGS : CACTUS_SPIKES, access.prettyfrogs$getForm());
         RenderType type = bumble ? RenderTypes.entityTranslucent(texture) : RenderTypes.entityCutout(texture);
 
         poseStack.pushPose();

@@ -19,6 +19,13 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.7.0'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate 48px frog assets
+        run: |
+          python -m pip install Pillow
+          python tools/validate_polished_assets.py
       - run: gradle build --stacktrace
       - uses: actions/upload-artifact@v4
         with:
@@ -33,6 +40,7 @@ jobs:
           ROOT="blockbench_exports/textures"
           mkdir -p "$ROOT/frog_textures" "$ROOT/model_references"
           cp src/main/resources/assets/prettyfrogs/textures/entity/frog/*.png "$ROOT/frog_textures/"
+          cp -r src/main/resources/assets/prettyfrogs/textures/entity/frog/polished "$ROOT/frog_textures/"
           cp src/main/resources/assets/prettyfrogs/textures/entity/frog/README.txt "$ROOT/"
           cp src/main/java/com/casz/prettyfrogs/frog/FrogFormRegistry.java "$ROOT/model_references/"
           printf '%s\n' 'PrettyFrogs texture workspace' 'Frog base skins and most masks are 48x48 PNG.' '3D model atlases may be 64x64 or 128x128; check the corresponding LayerDefinition.' 'Keep UV coordinates and transparency when editing in Blockbench.' > "$ROOT/README_BLOCKBENCH.txt"
@@ -48,6 +56,7 @@ jobs:
           cp src/client/java/com/casz/prettyfrogs/client/*Model.java "$ROOT/java_models/"
           cp src/client/java/com/casz/prettyfrogs/client/*Layer.java "$ROOT/render_layers/"
           cp src/main/resources/assets/prettyfrogs/textures/entity/frog/*.png "$ROOT/textures/"
+          cp -r src/main/resources/assets/prettyfrogs/textures/entity/frog/polished "$ROOT/textures/"
           cp src/client/java/com/casz/prettyfrogs/mixin/client/FrogRendererMixin.java "$ROOT/guide/"
           cp docs/COSTUME_HOODS.md "$ROOT/guide/"
           cp FROG_3D_DETAILS.md "$ROOT/guide/"

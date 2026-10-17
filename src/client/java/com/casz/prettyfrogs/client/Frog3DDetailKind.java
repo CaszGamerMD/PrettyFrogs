@@ -17,6 +17,7 @@ public enum Frog3DDetailKind {
     SNOW_CAP;
 
     public static Frog3DDetailKind forForm(Identifier form) {
+        form = FrogFormRegistry.familyOf(form);
         if (FrogFormRegistry.CRYSTAL.equals(form)) return CRYSTALS;
         if (FrogFormRegistry.MUSHROOM.equals(form)) return MUSHROOMS;
         if (FrogFormRegistry.WATER.equals(form)) return BALLOON_KNOT;

@@ -33,7 +33,7 @@ public final class TadpoleCostumeLayer extends RenderLayer<FrogRenderState, Frog
             return;
         }
         collector.order(3).submitModel(
-                model, state, poseStack, RenderTypes.entityCutout(TEXTURE),
+                model, state, poseStack, RenderTypes.entityCutout(FrogTextureResolver.selectTexture(TEXTURE, access.prettyfrogs$getForm())),
                 lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                 state.outlineColor, null);
     }

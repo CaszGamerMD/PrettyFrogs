@@ -46,7 +46,7 @@ public final class FrogInteractionHandler {
                 return InteractionResult.SUCCESS;
             }
 
-            if (current.equals(FrogFormRegistry.CAKE) && isCandle(stack)) {
+            if (FrogFormRegistry.isFamily(current, FrogFormRegistry.CAKE) && isCandle(stack)) {
                 int candles = access.prettyfrogs$getCakeCandles();
                 if (candles >= 4) {
                     return InteractionResult.PASS;
@@ -82,26 +82,20 @@ public final class FrogInteractionHandler {
             boolean crystalCluster = FrogFormRegistry.isCrystalCluster(stack);
             Identifier requested;
             if (crystalCluster) {
-                requested = FrogFormRegistry.CRYSTAL;
-            } else if (stack.is(Items.MELON_SLICE) || stack.is(Items.POISONOUS_POTATO)
-                    || FrogFormRegistry.isRgbEndRod(stack.getItem())) {
-                requested = FrogFormRegistry.variantForUse(stack.getItem(), current, frog.getRandom());
+                requested = FrogFormRegistry.crystalVariantForUse(current, access.prettyfrogs$getCrystal(),
+                        FrogFormRegistry.crystalId(stack.getItem()));
             } else {
-                requested = FrogFormRegistry.fromItem(stack.getItem());
+                requested = FrogFormRegistry.variantForUse(stack.getItem(), current, frog.getRandom());
             }
-            if (requested != null && requested.equals(FrogFormRegistry.WATER)
+            if (requested != null && FrogFormRegistry.isFamily(requested, FrogFormRegistry.WATER)
                     && !stack.is(Items.POTION)) {
                 requested = null;
             }
-            if (requested != null && requested.equals(FrogFormRegistry.WATER)
+            if (requested != null && FrogFormRegistry.isFamily(requested, FrogFormRegistry.WATER)
                     && !stack.getOrDefault(net.minecraft.core.component.DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER)) {
                 requested = null;
             }
             if (requested == null) {
-                return InteractionResult.PASS;
-            }
-            if (crystalCluster && current.equals(FrogFormRegistry.CRYSTAL)
-                    && access.prettyfrogs$getCrystal().equals(FrogFormRegistry.crystalId(stack.getItem()))) {
                 return InteractionResult.PASS;
             }
             if (!crystalCluster && FrogTransformationLogic.isAlreadyTransformed(current, requested)) {
@@ -117,9 +111,9 @@ public final class FrogInteractionHandler {
                 frog.getNavigation().stop();
                 level.broadcastEntityEvent(frog, (byte) 20);
                 if (!player.getAbilities().instabuild) {
-                    if (requested.equals(FrogFormRegistry.WATER)) {
+                    if (FrogFormRegistry.isFamily(requested, FrogFormRegistry.WATER)) {
                         player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
-                    } else if (requested.equals(FrogFormRegistry.TADPOLE_COSTUME)) {
+                    } else if (FrogFormRegistry.isFamily(requested, FrogFormRegistry.TADPOLE_COSTUME)) {
                         // Filled bucket is consumed, not its reusable container.
                         player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                     } else {

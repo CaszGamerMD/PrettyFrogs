@@ -52,12 +52,12 @@ public final class Frog3DDetailsLayer extends RenderLayer<FrogRenderState, FrogM
             int rgb = CrystalFrogColors.color(access.prettyfrogs$getCrystal());
             int tint = ARGB.color(228, (rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255);
             collector.order(3).submitModel(
-                    model, state, poseStack, RenderTypes.entityTranslucent(ATLAS),
+                    model, state, poseStack, RenderTypes.entityTranslucent(FrogTextureResolver.selectTexture(ATLAS, access.prettyfrogs$getForm())),
                     lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                     tint, null, state.outlineColor, null);
         } else {
             collector.order(3).submitModel(
-                    model, state, poseStack, RenderTypes.entityCutout(ATLAS),
+                    model, state, poseStack, RenderTypes.entityCutout(FrogTextureResolver.selectTexture(ATLAS, access.prettyfrogs$getForm())),
                     lightCoords, LivingEntityRenderer.getOverlayCoords(state, 0.0F),
                     state.outlineColor, null);
         }
